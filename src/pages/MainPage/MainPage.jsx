@@ -6,7 +6,6 @@ export const MainPage = () => {
     const data = await  fetch('https://shopping-list-backend-wine.vercel.app/products')
     const parsedData = await data.json();
     setData(parsedData.data);
-    console.log(parsedData);
   }
 
   useEffect(() => {
