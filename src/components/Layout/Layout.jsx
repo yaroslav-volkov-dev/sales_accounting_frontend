@@ -4,9 +4,11 @@ import { Sidebar } from '../Sidebar/Sidebar.jsx';
 export const Layout = () => {
 
   return (
-  <div className="h-screen">
-    <Sidebar/>
-    <Outlet/>
-  </div>
-  )
-}
+    <div className="h-screen flex gap-5">
+      <Sidebar/>
+      <div className="w-full px-5 py-10">
+        <Outlet/>
+      </div>
+    </div>
+  );
+};
