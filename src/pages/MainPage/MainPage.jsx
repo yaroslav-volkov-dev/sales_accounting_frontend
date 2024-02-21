@@ -7,7 +7,6 @@ export const MainPage = () => {
   const selectedProducts = useProductsStore(state => state.selectedProducts);
   const fetchProducts = useProductsStore(state => state.fetchProducts);
   const toggleProduct = useProductsStore(state => state.toggleProduct);
-  const isSuccess = useProductsStore(state => state.isSuccess);
 
   useEffect(() => {
     fetchProducts();

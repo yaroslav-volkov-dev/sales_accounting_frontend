@@ -17,18 +17,24 @@ export const Sidebar = () => {
   return (
     <div className="w-80 h-full flex flex-col bg-green-200 shrink-0 p-4">
       <div className="grow">
-        <h2
-          className="font-[600] text-center text-[24px] flex flex-col after:w-full after:h-[1px] after:bg-black after:mt-3">
-          Shopping list
-        </h2>
+        <NavLink to="/">
+          <h2
+            className="font-[600] text-center text-[24px] flex flex-col after:w-full after:h-[1px] after:bg-black after:mt-3"
+          >
+            Shopping list
+          </h2>
+        </NavLink>
+        <div className="flex flex-col mt-3 after:w-full after:h-[1px] after:bg-black after:mt-3 font-bold">
+          <NavLink to="/edit-database">Edit database</NavLink>
+        </div>
         <div className="flex flex-col gap-2">
           {categories.map(({ name, slug }) => (
             <NavLink to={slug} key={slug}>{name}</NavLink>
           ))}
         </div>
       </div>
-      <BasketButton openBasket={() => setIsModalOpen(true)}/>
-      <Basket isModalOpen={isModalOpen} closeModal={() => setIsModalOpen(false)}/>
+      <BasketButton openBasket={() => setIsModalOpen(true)} />
+      <Basket isModalOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} />
     </div>
   );
 };

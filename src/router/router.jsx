@@ -1,19 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { MainPage } from '../pages/MainPage/MainPage.jsx';
 import { Layout } from '../components/Layout/Layout.jsx';
+import { EditDatabasePage } from '../pages/EditDatabasePage/EditDatabasePage.jsx';
 
 export const router = createBrowserRouter([
   {
-    element: <Layout/>,
+    element: <Layout />,
     path: '/',
     children: [
       {
         index: true,
-        element: <MainPage/>,
+        element: <MainPage />,
       },
       {
         path: '/edit-database',
-        element: <h1> /edit-database </h1>,
+        element: <EditDatabasePage />,
       },
       {
         path: 'categories/:slug',
