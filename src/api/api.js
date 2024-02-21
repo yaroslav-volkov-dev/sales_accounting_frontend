@@ -1,13 +1,6 @@
 import { axiosInstance } from './axiosInstance.js';
 
-export const getProducts = async ({ onSuccess }) => {
-  try {
-    const response = await axiosInstance.get('/products');
-    onSuccess(response);
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const getProducts = async () => await axiosInstance.get('/products');
 
 export const getCategories = async ({ onSuccess }) => {
   try {

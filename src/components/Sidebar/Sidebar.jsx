@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { getCategories } from '../../api/api.js';
-import { ModalWindow } from '../ModalWindow/ModalWindow.jsx';
+import { Basket } from '../Basket/Basket.jsx';
 
 export const Sidebar = () => {
   const [categories, setCategories] = useState([]);
@@ -27,14 +27,7 @@ export const Sidebar = () => {
         </div>
       </div>
       <button onClick={() => setIsModalOpen(true)}>OPEN MODAL</button>
-      <ModalWindow isOpen={isModalOpen}>
-        <div className="w-[1000px] min-h-[300px] flex flex-col items-center">
-          <div className="flex w-full justify-between">
-            <h4>Products</h4>
-            <button onClick={() => setIsModalOpen(false)} className="text-[30px]">X</button>
-          </div>
-        </div>
-      </ModalWindow>
+      <Basket isModalOpen={isModalOpen} closeModal={() => setIsModalOpen(false)}/>
     </div>
   );
 };
