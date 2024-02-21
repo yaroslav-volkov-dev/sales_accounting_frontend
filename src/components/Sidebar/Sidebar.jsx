@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { getCategories } from '../../api/api.js';
 import { Basket } from '../Basket/Basket.jsx';
+import { BasketButton } from '../BasketButton/BasketButton.jsx';
 
 export const Sidebar = () => {
   const [categories, setCategories] = useState([]);
@@ -26,7 +27,7 @@ export const Sidebar = () => {
           ))}
         </div>
       </div>
-      <button onClick={() => setIsModalOpen(true)}>OPEN MODAL</button>
+      <BasketButton openBasket={() => setIsModalOpen(true)}/>
       <Basket isModalOpen={isModalOpen} closeModal={() => setIsModalOpen(false)}/>
     </div>
   );

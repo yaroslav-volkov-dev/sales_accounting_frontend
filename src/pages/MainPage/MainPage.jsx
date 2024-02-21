@@ -7,13 +7,14 @@ export const MainPage = () => {
   const selectedProducts = useProductsStore(state => state.selectedProducts);
   const fetchProducts = useProductsStore(state => state.fetchProducts);
   const toggleProduct = useProductsStore(state => state.toggleProduct);
+  const isSuccess = useProductsStore(state => state.isSuccess);
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
   return (
-    <div className="grid grid-cols-10 gap-3">
+    <div className="grid 2xl:grid-cols-10 xl:grid-cols-8 lg:grid-cols-5 sm:grid-cols-3 gap-3">
       {products.map((product) => (
         <ProductCard
           toggleProduct={() => toggleProduct(product)}
