@@ -1,9 +1,20 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
-export const useAuthStore = create((set) => ({
+const initialState = {
   username: '',
   email: '',
-  isAuth: false,
-  token: '',
-  setUserData: (data) => set(data)
-}));
+  token: null,
+};
+
+export const useAuthStore = create(
+  persist(
+    (set) => ({
+      ...initialState,
+      setUserData: (data) => set(data),
+      removeUserData: () => set(initialState)
+    }),
+    {
+      name: 'global',
+      storage: createJSONStorage(() => localStorage),
+    }));
