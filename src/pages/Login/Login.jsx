@@ -23,7 +23,6 @@ export const Login = () => {
             errorMessage={errors.email?.message}
             {...register('email', {
               required: errorMessageRequired,
-              pattern: { value: /\S+@\S+\.\S+/, message: 'This field must be email' }
             })}
           />
           <Input
@@ -32,7 +31,6 @@ export const Login = () => {
             errorMessage={errors.password?.message}
             {...register('password', {
               required: errorMessageRequired,
-              minLength: { value: 5, message: 'The min length is 5 characters' },
             })}
           />
           <div className="mt-5 flex justify-center">

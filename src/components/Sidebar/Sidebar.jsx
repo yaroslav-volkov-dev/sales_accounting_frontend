@@ -34,7 +34,9 @@ export const Sidebar = () => {
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { logout, isAuth } = useAuth();
+  const { logout, isAuth, userData } = useAuth();
+
+  const { username } = userData;
 
   useEffect(() => {
     void getCategories({
@@ -46,13 +48,20 @@ export const Sidebar = () => {
   return (
     <div className="w-80 h-full flex flex-col bg-green-200 shrink-0 p-4">
       <div className="grow">
-        <NavLink to="/">
-          <h2
-            className="font-[600] text-center text-[24px] flex flex-col after:w-full after:h-[1px] after:bg-black after:mt-3"
-          >
-            Shopping list
-          </h2>
-        </NavLink>
+        <div className="border-b border-black pb-3">
+          <NavLink to="/">
+            <h2
+              className="font-[600] text-center text-[24px] flex flex-col"
+            >
+              Shopping list
+            </h2>
+          </NavLink>
+          {username && (
+            <p className="text-center font-bold">
+              Hello, {userData.username}
+            </p>
+          )}
+        </div>
         <div className="flex flex-col gap-2 mt-3 after:w-full after:h-[1px] after:bg-black after:mt-3 font-bold">
           {isAuth ? renderLinks(authorizedLinks) : renderLinks(unauthorizedLinks)}
           {isAuth && (
