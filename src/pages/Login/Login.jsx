@@ -3,14 +3,17 @@ import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx'
 import { useForm } from 'react-hook-form';
 import { errorMessageRequired } from '../../utils/infoMessages.js';
 import { useAuth } from '../../hooks/useAuth.js';
+import { Navigate } from 'react-router-dom';
 
 export const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { login, isLoading } = useAuth();
+  const { register: registerField, handleSubmit, formState: { errors } } = useForm();
+  const { login, isLoading, isAuth } = useAuth();
 
   const onSubmit = async (data) => {
     await login(data);
   };
+
+  if (isAuth) return <Navigate to="/" />;
 
   return (
     <>
@@ -21,7 +24,7 @@ export const Login = () => {
             label="Enter your email"
             labelClassName="mt-2"
             errorMessage={errors.email?.message}
-            {...register('email', {
+            {...registerField('email', {
               required: errorMessageRequired,
             })}
           />
@@ -29,7 +32,7 @@ export const Login = () => {
             label="Enter your password"
             labelClassName="mt-2"
             errorMessage={errors.password?.message}
-            {...register('password', {
+            {...registerField('password', {
               required: errorMessageRequired,
             })}
           />
@@ -40,6 +43,5 @@ export const Login = () => {
       </div>
       <OverlayLoader show={isLoading} />
     </>
-
   );
 };

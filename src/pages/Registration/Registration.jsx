@@ -3,15 +3,18 @@ import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
 import { errorMessageRequired } from '../../utils/infoMessages.js';
 import { useAuth } from '../../hooks/useAuth.js';
+import { Navigate } from 'react-router-dom';
 
-export const RegistrationPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { register: handleRegistration, isLoading } = useAuth();
+export const Registration = () => {
+  const { register: registerField, handleSubmit, formState: { errors } } = useForm();
+  const { register, isLoading, isAuth } = useAuth();
 
   const onSubmit = async (data) => {
-    await handleRegistration(data);
+    await register(data);
   };
-  
+
+  if (isAuth) return <Navigate to="/" />;
+
   return (
     <>
       <h1>REGISTRATION PAGE</h1>
@@ -20,7 +23,7 @@ export const RegistrationPage = () => {
           <Input
             label="Enter your name"
             errorMessage={errors.username?.message}
-            {...register('username', {
+            {...registerField('username', {
               required: errorMessageRequired,
               minLength: { value: 3, message: 'The min length is 3 characters' }
             })}
@@ -29,7 +32,7 @@ export const RegistrationPage = () => {
             label="Enter your email"
             labelClassName="mt-2"
             errorMessage={errors.email?.message}
-            {...register('email', {
+            {...registerField('email', {
               required: errorMessageRequired,
               pattern: { value: /\S+@\S+\.\S+/, message: 'This field must be email' }
             })}
@@ -38,7 +41,7 @@ export const RegistrationPage = () => {
             label="Enter your password"
             labelClassName="mt-2"
             errorMessage={errors.password?.message}
-            {...register('password', {
+            {...registerField('password', {
               required: errorMessageRequired,
               minLength: { value: 5, message: 'The min length is 5 characters' },
             })}
@@ -47,7 +50,7 @@ export const RegistrationPage = () => {
             label="Enter your password again"
             labelClassName="mt-2"
             errorMessage={errors.confirmPassword?.message}
-            {...register('confirmPassword', {
+            {...registerField('confirmPassword', {
               validate: (value, formValues) => {
                 if (formValues.password !== value) {
                   return 'Your passwords do no match';
