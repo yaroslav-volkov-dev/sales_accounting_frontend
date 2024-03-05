@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 export const notify = (
   {
     message,
-    position,
+    position = 'bottom-right',
     type = 'success',
     duration = 1000,
   }) => {

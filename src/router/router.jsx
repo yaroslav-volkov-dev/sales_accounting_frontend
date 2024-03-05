@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { MainPage } from '../pages/MainPage/MainPage.jsx';
 import { Layout } from '../components/Layout/Layout.jsx';
-import { EditDatabasePage } from '../pages/EditDatabasePage/EditDatabasePage.jsx';
+import { EditDatabase } from '../pages/EditDatabase/EditDatabase.jsx';
 import { Registration } from '../pages/Registration/Registration.jsx';
 import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';
 import { Login } from '../pages/Login/Login.jsx';
@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: '/edit-database',
-            element: <EditDatabasePage />,
+            element: <EditDatabase />,
           },
           {
             path: '/profile',

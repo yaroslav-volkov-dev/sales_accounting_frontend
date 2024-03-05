@@ -3,7 +3,7 @@ import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
 import { errorMessageRequired } from '../../utils/infoMessages.js';
 import { useAuth } from '../../hooks/useAuth.js';
-import { Paper } from '../../components/Paper/Paper';
+import { Paper } from '../../components/Paper/Paper.jsx';
 import { Button } from '../../components/Button/Button.jsx';
 
 export const Registration = () => {

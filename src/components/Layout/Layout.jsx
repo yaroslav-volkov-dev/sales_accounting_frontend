@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
-import { Sidebar } from '../Sidebar/Sidebar.jsx';
+import { Header } from '../Header/Header.jsx';
 
 export const Layout = () => {
   return (
-    <div className="h-screen flex gap-5">
-      <Sidebar />
-      <div className="w-full px-5 py-10">
+    <div className="h-screen flex flex-col gap-4">
+      <Header />
+      <div className="w-full px-5">
         <Outlet />
       </div>
     </div>
