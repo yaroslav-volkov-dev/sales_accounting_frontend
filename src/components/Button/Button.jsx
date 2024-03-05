@@ -9,7 +9,7 @@ export const Button = ({ children, className, color = 'primary', ...props }) => 
 
   return (
     <button
-      className={twMerge(clsx('px-3 py-1 rounded text-white', colorScheme[color], className))}
+      className={twMerge(clsx('flex justify-center items-center px-3 py-1 rounded text-white', colorScheme[color], className))}
       {...props}
     >
       {children}
