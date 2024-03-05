@@ -46,7 +46,7 @@ export const Sidebar = () => {
 
 
   return (
-    <div className="w-80 h-full flex flex-col bg-green-200 shrink-0 p-4">
+    <div className="w-80 h-full flex flex-col bg-primary shrink-0 p-4">
       <div className="grow">
         <div className="border-b border-black pb-3">
           <NavLink to="/">

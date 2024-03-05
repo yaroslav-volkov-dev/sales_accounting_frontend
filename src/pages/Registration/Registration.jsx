@@ -3,23 +3,22 @@ import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
 import { errorMessageRequired } from '../../utils/infoMessages.js';
 import { useAuth } from '../../hooks/useAuth.js';
-import { Navigate } from 'react-router-dom';
+import { Paper } from '../../components/Paper/Paper';
+import { Button } from '../../components/Button/Button.jsx';
 
 export const Registration = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
-  const { register, isLoading, isAuth } = useAuth();
+  const { register, isLoading } = useAuth();
 
   const onSubmit = async (data) => {
     await register(data);
   };
 
-  if (isAuth) return <Navigate to="/" />;
-
   return (
-    <>
-      <h1>REGISTRATION PAGE</h1>
-      <div className="w-full flex justify-center">
-        <form className="w-[700px] bg-green-200 flex flex-col p-5 rounded-xl" onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex flex-col items-center gap-6">
+      <h1 className="text-center">REGISTRATION</h1>
+      <Paper className="w-[700px]">
+        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             label="Enter your name"
             errorMessage={errors.username?.message}
@@ -52,18 +51,16 @@ export const Registration = () => {
             errorMessage={errors.confirmPassword?.message}
             {...registerField('confirmPassword', {
               validate: (value, formValues) => {
-                if (formValues.password !== value) {
-                  return 'Your passwords do no match';
-                }
+                if (formValues.password !== value) return 'Your passwords do no match';
               },
             })}
           />
           <div className="mt-5 flex justify-center">
-            <button type="submit" className="border border-black rounded px-3 py-1">Submit</button>
+            <Button color="secondary" type="submit" className="text-lg">Submit</Button>
           </div>
         </form>
-      </div>
+      </Paper>
       <OverlayLoader show={isLoading} />
-    </>
+    </div>
   );
 };

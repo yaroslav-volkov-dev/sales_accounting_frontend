@@ -2,8 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+@layer base {
+    h1 {
+        @apply text-[36px];
+    }
+
+    h2 {
+        @apply text-[32px];
+    }
+
+    h3 {
+        @apply text-[28px];
+    }
+
+    h4 {
+        @apply text-[24px];
+    }
+
+    h5 {
+        @apply text-[20px];
+    }
+
+    h6 {
+        @apply text-[16px]
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-[500]
+    }
+
+    p, label, span, a, button {
+        @apply font-[500]
+    }
 }

@@ -3,23 +3,21 @@ import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx'
 import { useForm } from 'react-hook-form';
 import { errorMessageRequired } from '../../utils/infoMessages.js';
 import { useAuth } from '../../hooks/useAuth.js';
-import { Navigate } from 'react-router-dom';
 
 export const Login = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
-  const { login, isLoading, isAuth } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const onSubmit = async (data) => {
     await login(data);
   };
 
-  if (isAuth) return <Navigate to="/" />;
 
   return (
     <>
-      <h1>LOGIN PAGE</h1>
+      <h1 className="text-center">LOGIN</h1>
       <div className="w-full flex justify-center">
-        <form className="w-[700px] bg-green-200 flex flex-col p-5 rounded-xl" onSubmit={handleSubmit(onSubmit)}>
+        <form className="w-[700px] bg-primary flex flex-col p-5 rounded-xl" onSubmit={handleSubmit(onSubmit)}>
           <Input
             label="Enter your email"
             labelClassName="mt-2"

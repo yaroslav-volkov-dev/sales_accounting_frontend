@@ -49,7 +49,6 @@ export const useAuthStore = create(
           await axiosInstance.get('/auth/me');
         } catch (error) {
           console.log(error);
-          notify({ message: 'Cannot auth', type: 'error' });
           set(() => initialState);
         } finally {
           set({ isLoading: false });
