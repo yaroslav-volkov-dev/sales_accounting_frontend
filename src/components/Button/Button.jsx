@@ -2,8 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 
 const colorScheme = {
-  primary: 'bg-primary',
-  secondary: 'bg-secondary',
+  primary: 'bg-button-primary',
 };
 
 export const Button = ({ children, className, color = 'primary', ...props }) => {

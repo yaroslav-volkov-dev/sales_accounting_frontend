@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { getCategories } from '../../api/api.js';
 import { Basket } from '../Basket/Basket.jsx';
 import { BasketButton } from '../BasketButton/BasketButton.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
+import { Link } from '../Link/Link.jsx';
 
 const authorizedLinks = [
   {
@@ -28,7 +28,15 @@ const unauthorizedLinks = [
 ];
 
 
-const renderLinks = (links) => links.map(({ to, label }) => <NavLink to={to} key={to}>{label}</NavLink>);
+const renderLinks = (links) => links.map(({ to, label }) => (
+  <Link
+    to={to}
+    key={to}
+    className={({ isActive }) => isActive && 'text-button-primary'}
+  >
+    {label}
+  </Link>
+));
 
 export const Sidebar = () => {
   const [categories, setCategories] = useState([]);
@@ -46,16 +54,16 @@ export const Sidebar = () => {
 
 
   return (
-    <div className="w-80 h-full flex flex-col bg-primary shrink-0 p-4">
+    <aside className="w-80 h-full flex flex-col bg-primary shrink-0 p-4">
       <div className="grow">
         <div className="border-b border-black pb-3">
-          <NavLink to="/">
+          <Link to="/">
             <h2
               className="font-[600] text-center text-[24px] flex flex-col"
             >
               Shopping list
             </h2>
-          </NavLink>
+          </Link>
           {username && (
             <p className="text-center font-bold">
               Hello, {userData.username}
@@ -71,11 +79,17 @@ export const Sidebar = () => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          {categories.map(({ name, slug }) => <NavLink to={slug} key={slug}>{name}</NavLink>)}
+          {categories.map(({ name, slug }) => (
+            <Link
+              to={slug} key={slug}
+            >
+              {name}
+            </Link>
+          ))}
         </div>
       </div>
       <BasketButton openBasket={() => setIsModalOpen(true)} />
       <Basket isModalOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} />
-    </div>
+    </aside>
   );
 };

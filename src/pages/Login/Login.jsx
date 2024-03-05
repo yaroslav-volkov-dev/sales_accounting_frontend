@@ -3,6 +3,7 @@ import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx'
 import { useForm } from 'react-hook-form';
 import { errorMessageRequired } from '../../utils/infoMessages.js';
 import { useAuth } from '../../hooks/useAuth.js';
+import { Button } from '../../components/Button/Button.jsx';
 
 export const Login = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
@@ -35,7 +36,7 @@ export const Login = () => {
             })}
           />
           <div className="mt-5 flex justify-center">
-            <button type="submit" className="border border-black rounded px-3 py-1">Submit</button>
+            <Button type="submit">Submit</Button>
           </div>
         </form>
       </div>

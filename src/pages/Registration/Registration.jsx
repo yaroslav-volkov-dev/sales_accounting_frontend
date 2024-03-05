@@ -56,7 +56,7 @@ export const Registration = () => {
             })}
           />
           <div className="mt-5 flex justify-center">
-            <Button color="secondary" type="submit" className="text-lg">Submit</Button>
+            <Button type="submit" className="text-lg">Submit</Button>
           </div>
         </form>
       </Paper>
