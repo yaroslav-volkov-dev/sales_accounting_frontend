@@ -1,24 +1,21 @@
 import { create } from 'zustand';
 import { axiosInstance } from '../api/axiosInstance.js';
+import { notify } from '../utils/notify.js';
 
 export const useProductsStore = create((set, get) => ({
   products: [],
   selectedProducts: [],
   isLoading: false,
-  isSuccess: false,
-  error: null,
   fetchProducts: async () => {
-    if (get().isSuccess) return;
-
-    set({ loading: true });
+    set({ isLoading: true });
 
     try {
       const { data: products } = await axiosInstance.get('/products');
-      set({ products, isSuccess: true });
-    } catch (error) {
-      set({ error });
+      set({ products });
+    } catch {
+      notify({ message: 'Something went wrong, cannot fetch categories data', type: 'error' });
     } finally {
-      set({ loading: false });
+      set({ isLoading: false });
     }
   },
   toggleProduct: (product) => {

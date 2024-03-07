@@ -1,31 +1,42 @@
-import { useState } from 'react';
+import { CategoriesList } from '../../components/CategoriesList/CategoriesList.jsx';
+import { useProductsStore } from '../../store/useProductsStore.js';
 import { Paper } from '../../components/Paper/Paper.jsx';
+import { Image } from '../../components/Image/Image.jsx';
+
+const EditableProductCard = ({ name, img }) => {
+  return (
+    <li className="flex justify-between items-center pl-2 border border-white rounded overflow-hidden">
+      <div className="overflow-hidden">
+        <p>{name}</p>
+      </div>
+      <div className="h-[50px] w-[50px] float-left shrink-0 ml-2">
+        <Image img={img} className="object-cover" />
+      </div>
+    </li>
+  );
+
+};
+
 
 export const EditDatabase = () => {
-  const [productName, setProductName] = useState('');
-  const [productCategory, setProductCategory] = useState('');
+  const products = useProductsStore(state => state.products);
 
   return (
-    <div className="flex flex-col items-center">
-      <h1>Edit database</h1>
-      <Paper className="w-[700px] flex justify-center">
-        <form className="w-full flex flex-col">
-          <label className="w-full">
-            <p>Product Name</p>
-            <input
-              value={productName} onChange={(event) => setProductName(event.target.value)}
-              className="border rounded w-full"
-            />
-          </label>
-          <label className="mt-4">
-            <p>Product category</p>
-            <input
-              value={productCategory} onChange={(event) => setProductCategory(event.target.value)}
-              className="border rounded w-full"
-            />
-          </label>
-        </form>
-      </Paper>
-    </div>
+    <>
+      <h1 className="text-center">Edit database</h1>
+      <div className="flex gap-10 mt-10">
+        <div className="min-h-[300px] w-[200px] bg-primary rounded-xl p-4 shrink-0">
+          <CategoriesList />
+        </div>
+        <Paper>
+          <ul
+            className="w-full gap-2 grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-4 sm:grid-cols-3 bg-primary rounded-xl">
+            {products.map(({ name, img, _id }) => (
+              <EditableProductCard name={name} img={img} key={_id} />
+            ))}
+          </ul>
+        </Paper>
+      </div>
+    </>
   );
 };

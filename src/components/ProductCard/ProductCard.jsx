@@ -12,7 +12,7 @@ export const ProductCard = ({ name, toggleProduct, isSelected, img = defaultImag
       className={clsx('w-full p-2 border rounded cursor-pointer overflow-hidden', isSelected ? 'bg-green-600' : 'bg-white')}
       onClick={toggleProduct}
     >
-      <Image img={img}/>
+      <Image img={img} />
       {name}
     </div>
   );
