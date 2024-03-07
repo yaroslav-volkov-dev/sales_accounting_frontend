@@ -6,12 +6,13 @@ export const useProductsStore = create((set, get) => ({
   products: [],
   selectedProducts: [],
   isLoading: false,
+  isSuccess: false,
   fetchProducts: async () => {
     set({ isLoading: true });
 
     try {
       const { data: products } = await axiosInstance.get('/products');
-      set({ products });
+      set({ products, isSuccess: true });
     } catch {
       notify({ message: 'Something went wrong, cannot fetch categories data', type: 'error' });
     } finally {

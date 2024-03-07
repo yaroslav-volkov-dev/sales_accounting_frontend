@@ -1,7 +1,7 @@
 import { CategoriesList } from '../../components/CategoriesList/CategoriesList.jsx';
-import { useProductsStore } from '../../store/useProductsStore.js';
 import { Paper } from '../../components/Paper/Paper.jsx';
 import { Image } from '../../components/Image/Image.jsx';
+import { useProductsQuery } from '../../hooks/useProductsQuery.js';
 
 const EditableProductCard = ({ name, img }) => {
   return (
@@ -19,7 +19,7 @@ const EditableProductCard = ({ name, img }) => {
 
 
 export const EditDatabase = () => {
-  const products = useProductsStore(state => state.products);
+  const { products } = useProductsQuery();
 
   return (
     <>
