@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: ':slug',
-                element: <h1> :id </h1>
+                element: <EditDatabase />,
               }
             ]
           },
