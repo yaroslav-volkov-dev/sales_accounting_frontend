@@ -27,6 +27,12 @@ export const router = createBrowserRouter([
           {
             path: '/edit-database',
             element: <EditDatabase />,
+            children: [
+              {
+                path: ':slug',
+                element: <h1> :id </h1>
+              }
+            ]
           },
           {
             path: '/profile',
