@@ -6,9 +6,7 @@ export const ModalWindow = ({ children, isOpen = false }) => {
 
   return createPortal((
     <div className="fixed top-0 bg-black flex justify-center items-center bg-opacity-50 w-screen h-screen">
-      <div className="bg-white p-4 rounded-lg">
-        {children}
-      </div>
+      {children}
     </div>
   ), document.getElementById('modal'));
 };
