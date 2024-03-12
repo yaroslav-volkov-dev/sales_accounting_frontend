@@ -19,11 +19,12 @@ export const EditDatabase = () => {
   const { slug = '' } = useParams();
   console.log(slug);
 
+
   const filteredProducts = products.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase()));
 
   return (
     <>
-      <h1 className="text-center">Edit database</h1>
+      <h1>Edit database</h1>
       <div className="flex gap-10 mt-10 min-h-[500px]">
         <div className="flex flex-col gap-3">
           <Input onChange={(event) => setCategoryFilter(event.target.value)} />

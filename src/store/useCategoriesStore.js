@@ -2,9 +2,13 @@ import { create } from 'zustand';
 import { axiosInstance } from '../api/axiosInstance.js';
 import { notify } from '../utils/notify.js';
 
-export const useCategoriesStore = create((set) => ({
+const initialState = {
   categories: [],
   isLoading: false,
+};
+
+export const useCategoriesStore = create((set) => ({
+  ...initialState,
   fetchCategories: async () => {
     set({ isLoading: true });
     try {

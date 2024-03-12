@@ -6,6 +6,8 @@ export const CategoriesList = ({ filter }) => {
   const fetchCategories = useCategoriesStore(state => state.fetchCategories);
   const categories = useCategoriesStore(state => state.categories);
 
+  console.log(categories);
+
   useEffect(() => {
     fetchCategories();
   }, []);
