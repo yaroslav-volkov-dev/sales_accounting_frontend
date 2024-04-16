@@ -1,16 +1,11 @@
 import { useProductsStore } from '../../store/useProductsStore.js';
-import { axiosInstance } from '../../api/axiosInstance.js';
-import { useQuery } from '@tanstack/react-query';
 import { ProductCard } from '../../components/ProductCard/ProductCard.jsx';
+import { useProductsQuery } from '../../hooks/useProductsQuery.js';
+
 
 export const MainPage = () => {
-  const { data: products = [] } = useQuery({
-    queryKey: 'products',
-    queryFn: async () => {
-      return await axiosInstance.get('/products');
-    },
-  });
-  console.log(products);
+  const { products } = useProductsQuery('/products');
+
   const selectedProducts = useProductsStore(state => state.selectedProducts);
   const toggleProduct = useProductsStore(state => state.toggleProduct);
 

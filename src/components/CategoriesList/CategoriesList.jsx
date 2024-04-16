@@ -1,18 +1,10 @@
 import { Link } from '../Link/Link.jsx';
-import { useEffect } from 'react';
-import { useCategoriesStore } from '../../store/useCategoriesStore.js';
+import { useCategoriesQuery } from '../../hooks/useCategoriesQuery.js';
 
 export const CategoriesList = ({ filter }) => {
-  const fetchCategories = useCategoriesStore(state => state.fetchCategories);
-  const categories = useCategoriesStore(state => state.categories);
+  const { categories } = useCategoriesQuery();
 
-  console.log(categories);
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const filteredCategories = filter ? categories.filter(({ name }) => name.toLowerCase().includes(filter.toLowerCase())) : categories;
+  const filteredCategories = filter ? categories?.filter(({ name }) => name.toLowerCase().includes(filter.toLowerCase())) : categories;
 
   return (
     <ul className="flex flex-col gap-2">

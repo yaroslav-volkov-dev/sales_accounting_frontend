@@ -20,7 +20,7 @@ export const EditDatabase = () => {
   console.log(slug);
 
 
-  const filteredProducts = products.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase()));
+  const filteredProducts = products?.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase()));
 
   return (
     <>
@@ -40,7 +40,7 @@ export const EditDatabase = () => {
           <Paper className="grow">
             <ul
               className="w-full gap-2 grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-4 sm:grid-cols-3 bg-primary rounded-xl">
-              {filteredProducts.map(({ name, img, _id }) => (
+              {filteredProducts?.map(({ name, img, _id }) => (
                 <EditableProductCard name={name} img={img} key={_id} />
               ))}
             </ul>

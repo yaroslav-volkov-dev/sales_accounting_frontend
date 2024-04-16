@@ -6,7 +6,6 @@ export const useAuth = () => {
   const removeUserData = useAuthStore(state => state.removeUserData);
   const login = useAuthStore((state) => state.login);
   const register = useAuthStore((state) => state.register);
-  const authMe = useAuthStore((state) => state.authMe);
   const isLoading = useAuthStore((state) => state.isLoading);
   const userData = useAuthStore(state => state.userData);
 
@@ -22,6 +21,5 @@ export const useAuth = () => {
     login,
     logout,
     register,
-    authMe
   };
 };

@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 
 export const useProductsStore = create((set, get) => ({
-  products: [],
   selectedProducts: [],
-  isLoading: false,
-  isSuccess: false,
   toggleProduct: (product) => {
     const currentSelectedProducts = get().selectedProducts;
     const isProductExists = currentSelectedProducts.find(({ _id }) => _id === product._id);
