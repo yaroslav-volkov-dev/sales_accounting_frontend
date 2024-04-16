@@ -1,26 +1,31 @@
 import { CategoriesList } from '../../components/CategoriesList/CategoriesList.jsx';
 import { Paper } from '../../components/Paper/Paper.jsx';
-import { useProductsQuery } from '../../hooks/useProductsQuery.js';
-import { useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { EditableProductCard } from './components/EditableProductCard.jsx';
+import { forwardRef, useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
 import { ModalWindow } from '../../components/ModalWindow/ModalWindow.jsx';
+import { mutateFetcher, useAppQuery } from '../../api/swrConfig.js';
+import { ENDPOINTS } from '../../constants/endpoints.js';
+import { EditableProductCard } from './components/EditableProductCard.jsx';
+import { useForm } from 'react-hook-form';
 
-const Input = ({ className, ...props }) => {
-  return <input className={`h-[36px] px-3 py-1 border border-black rounded-lg ${className}`} {...props} />;
-};
+const Input = forwardRef(({ className, ...props }, ref) => {
+  return <input className={`h-[36px] px-3 py-1 border border-black rounded-lg ${className}`} {...props} ref={ref} />;
+});
 
 export const EditDatabase = () => {
+  const { register, handleSubmit, formState } = useForm();
+
   const [productFilter, setProductFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
-  const { products } = useProductsQuery();
-  const { slug = '' } = useParams();
-  console.log(slug);
+  const { data = [], mutate } = useAppQuery(ENDPOINTS.PRODUCTS);
 
+  const addProduct = async (data) => {
+    await mutate(mutateFetcher(ENDPOINTS.PRODUCTS, { arg: data }));
+    setIsAddProductModalOpen(false);
+  };
 
-  const filteredProducts = products?.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase()));
+  const filteredProducts = data?.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase()));
 
   return (
     <>
@@ -32,7 +37,7 @@ export const EditDatabase = () => {
             <CategoriesList filter={categoryFilter} />
           </Paper>
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 grow">
           <div className="flex gap-4">
             <Input className="grow" onChange={(event) => setProductFilter(event.target.value)} />
             <Button onClick={() => setIsAddProductModalOpen(true)}>Add product</Button>
@@ -48,16 +53,18 @@ export const EditDatabase = () => {
         </div>
       </div>
       <ModalWindow isOpen={isAddProductModalOpen}>
-        <Paper className="flex flex-col w-[600px] gap-3">
-          <h2>Add product</h2>
-          <Input placeholder="Name" />
-          <Input placeholder="Price" />
-          <Input placeholder="Description" />
-          <Input placeholder="Image" />
-          <div className="flex justify-center gap-4">
-            <Button>Add product</Button>
-            <Button onClick={() => setIsAddProductModalOpen(false)}>Cancel</Button>
-          </div>
+        <Paper className="w-[600px]">
+          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit(addProduct)}>
+            <h2>Add product</h2>
+            <Input placeholder="Name" {...register('name', { required: true })} />
+            <Input placeholder="Price" />
+            <Input placeholder="Description" />
+            <Input placeholder="Image" />
+            <div className="flex justify-center gap-4">
+              <Button type="submit">Add product</Button>
+              <Button onClick={() => setIsAddProductModalOpen(false)}>Cancel</Button>
+            </div>
+          </form>
         </Paper>
       </ModalWindow>
     </>

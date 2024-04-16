@@ -8,12 +8,12 @@ export const Basket = ({ isModalOpen, closeModal }) => {
   const selectedProducts = useProductsStore(state => state.selectedProducts);
   const toggleProduct = useProductsStore(state => state.toggleProduct);
   const ref = useRef(null);
-  
+
   useClickOutside(ref, closeModal);
 
   return (
     <ModalWindow isOpen={isModalOpen}>
-      <div className="w-[1000px] min-h-[300px] flex flex-col items-center" ref={ref}>
+      <div className="w-[1000px] min-h-[300px] flex flex-col items-center bg-white px-10 py-5 rounded-md" ref={ref}>
         <div className="flex w-full justify-between">
           <h4>Products</h4>
           <button onClick={closeModal} className="text-[30px]">X</button>
