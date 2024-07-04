@@ -16,7 +16,8 @@ export const Input = forwardRef((
         ref={ref}
         className={clsx('h-10 border rounded w-full p-2', props.className)}
       />
-      <p className={clsx('text-red-500 text-[12px] h-[25px]', !errorMessage && 'invisible')}>{errorMessage}</p>
+      {errorMessage &&
+        <p className={clsx('text-red-500 text-[12px] h-[25px]', !errorMessage && 'invisible')}>{errorMessage}</p>}
     </label>
   );
 });
