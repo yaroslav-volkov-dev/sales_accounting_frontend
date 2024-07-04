@@ -3,14 +3,14 @@ import { Paper } from '../../components/Paper/Paper.jsx';
 import { useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
 import { ModalWindow } from '../../components/ModalWindow/ModalWindow.jsx';
-import { deleteFetcher, mutateFetcher, useAppQuery } from '../../api/swrConfig.js';
 import { ENDPOINTS } from '../../constants/endpoints.js';
 import { EditableProductCard } from './components/EditableProductCard.jsx';
 import { useForm } from 'react-hook-form';
-import { SelectInput } from '../../components/SelectInput/SelectInput.jsx';
 import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
-
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { axiosInstance } from '../../api/axiosInstance.js';
+import { SelectInput } from '../../components/SelectInput/SelectInput.jsx';
 
 export const EditDatabase = () => {
   const { register, handleSubmit } = useForm();
@@ -19,10 +19,30 @@ export const EditDatabase = () => {
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [deletableProduct, setDeletableProduct] = useState(null);
 
-  const { data: productsData = [], isValidating, isLoading, mutate } = useAppQuery(ENDPOINTS.PRODUCTS);
-  const { data: categoriesData = [] } = useAppQuery(ENDPOINTS.CATEGORIES);
+  const { data: productsData } = useQuery({
+    queryKey: [ENDPOINTS.PRODUCTS],
+    queryFn: async () => axiosInstance.get(ENDPOINTS.PRODUCTS).then(res => res.data)
+  });
+
+  const { data: categoriesData } = useQuery({
+    queryKey: [ENDPOINTS.CATEGORIES],
+    queryFn: async () => axiosInstance.get(ENDPOINTS.CATEGORIES).then(res => res.data)
+  });
+
+  const client = useQueryClient();
+
+  const { mutate: addProductMutation } = useMutation({
+    mutationFn: (newProduct) => axiosInstance.post(ENDPOINTS.PRODUCTS, newProduct),
+    onSuccess: () => client.invalidateQueries([ENDPOINTS.PRODUCTS])
+  });
+
+  const { mutate: deleteProductMutation } = useMutation({
+    mutationFn: (_id) => axiosInstance.delete(ENDPOINTS.PRODUCTS, { data: { _id } }),
+    onSuccess: () => client.invalidateQueries([ENDPOINTS.PRODUCTS])
+  });
 
   const categoriesOptions = categoriesData?.map(({ name, _id }) => ({ value: _id, label: name }));
+
 
   const openDeleteModalWindow = (product) => {
     if (!product) return;
@@ -31,13 +51,16 @@ export const EditDatabase = () => {
   };
 
   const addProduct = async (data) => {
-    await mutate(mutateFetcher(ENDPOINTS.PRODUCTS, { arg: data }));
+    await addProductMutation(data);
     setIsAddProductModalOpen(false);
   };
 
-  const deleteProduct = async (_id) => {
+  const deleteProduct = async () => {
+    const { _id } = deletableProduct;
 
-    await mutate(deleteFetcher(ENDPOINTS.PRODUCTS, { arg: { data: { _id } } }));
+    if (!_id) return;
+
+    await deleteProductMutation(_id);
     setDeletableProduct(null);
   };
 
@@ -45,7 +68,7 @@ export const EditDatabase = () => {
 
   return (
     <>
-      <OverlayLoader show={isValidating || isLoading} />
+      <OverlayLoader show={false} />
       <h1>Edit database</h1>
       <div className="flex gap-10 mt-10 min-h-[500px]">
         <div className="flex flex-col gap-3">
@@ -67,7 +90,7 @@ export const EditDatabase = () => {
                   name={product?.name}
                   img={product?.img}
                   key={product?._id}
-                  openDeleteModalWindow={() => deleteProduct(product._id)}
+                  openDeleteModalWindow={() => openDeleteModalWindow(product)}
                 />
               ))}
             </ul>
