@@ -3,14 +3,13 @@ import { ProductCard } from '../../components/ProductCard/ProductCard.jsx';
 import { Basket } from '../../components/Basket/Basket.jsx';
 import { useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
-import { ENDPOINTS } from '../../constants/endpoints.js';
-import { useAppQuery } from '../../api/swrConfig.js';
+import { useProductsQuery } from '../../api/hooks.js';
 
 
 export const MainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data } = useAppQuery(ENDPOINTS.PRODUCTS);
+  const { data } = useProductsQuery();
   const selectedProducts = useProductsStore(state => state.selectedProducts);
   const toggleProduct = useProductsStore(state => state.toggleProduct);
 

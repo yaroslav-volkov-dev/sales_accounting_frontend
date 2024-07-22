@@ -3,14 +3,15 @@ import { Paper } from '../../components/Paper/Paper.jsx';
 import { useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
 import { ModalWindow } from '../../components/ModalWindow/ModalWindow.jsx';
-import { ENDPOINTS } from '../../constants/endpoints.js';
+import { ENDPOINTS } from '../../api/endpoints.js';
 import { EditableProductCard } from './components/EditableProductCard.jsx';
 import { useForm } from 'react-hook-form';
 import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { axiosInstance } from '../../api/axiosInstance.js';
+import { useMutation, useQueryClient } from 'react-query';
+import { axiosInstance } from '../../api/axiosConfig.js';
 import { SelectInput } from '../../components/SelectInput/SelectInput.jsx';
+import { useCategoriesQuery, useProductsQuery } from '../../api/hooks.js';
 
 export const EditDatabase = () => {
   const { register, handleSubmit } = useForm();
@@ -19,15 +20,8 @@ export const EditDatabase = () => {
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [deletableProduct, setDeletableProduct] = useState(null);
 
-  const { data: productsData } = useQuery({
-    queryKey: [ENDPOINTS.PRODUCTS],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.PRODUCTS).then(res => res.data)
-  });
-
-  const { data: categoriesData } = useQuery({
-    queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.CATEGORIES).then(res => res.data)
-  });
+  const { data: productsData } = useProductsQuery();
+  const { data: categoriesData } = useCategoriesQuery();
 
   const client = useQueryClient();
 
@@ -38,7 +32,7 @@ export const EditDatabase = () => {
 
   const { mutate: deleteProductMutation } = useMutation({
     mutationFn: (_id) => axiosInstance.delete(ENDPOINTS.PRODUCTS, { data: { _id } }),
-    onSuccess: () => client.invalidateQueries([ENDPOINTS.PRODUCTS])
+    onSuccess: () => client.invalidateQueries([ENDPOINTS.PRODUCTS]),
   });
 
   const categoriesOptions = categoriesData?.map(({ name, _id }) => ({ value: _id, label: name }));

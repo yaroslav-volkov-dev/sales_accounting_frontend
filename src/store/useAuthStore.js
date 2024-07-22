@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { axiosInstance } from '../api/axiosInstance.js';
+import { axiosInstance } from '../api/axiosConfig.js';
 import { notify } from '../utils/notify.js';
 
 const initialState = {
@@ -21,8 +21,10 @@ export const useAuthStore = create(
         set({ isLoading: true });
         try {
           const response = await axiosInstance.post('/auth/login', data);
-          const { username, email, token } = response.data;
+          const { username, email, token } = response;
+
           set({ userData: { username, email, token } });
+
           notify({ message: 'Successfully logged in' });
         } catch (error) {
           notify({ message: error, type: 'error' });
@@ -34,7 +36,7 @@ export const useAuthStore = create(
         set({ isLoading: true });
         try {
           const response = await axiosInstance.post('/auth/register', data);
-          const { username, email, token } = response.data;
+          const { username, email, token } = response;
           set({ userData: { username, email, token } });
           notify({ message: 'Successfully registered' });
         } catch (error) {

@@ -1,8 +1,8 @@
 import { Link } from '../Link/Link.jsx';
-import { useCategoriesQuery } from '../../hooks/useCategoriesQuery.js';
+import { useCategoriesQuery } from '../../api/hooks.js';
 
 export const CategoriesList = ({ filter }) => {
-  const { categories } = useCategoriesQuery();
+  const { data: categories = [] } = useCategoriesQuery();
 
   const filteredCategories = filter ? categories?.filter(({ name }) => name.toLowerCase().includes(filter.toLowerCase())) : categories;
 

@@ -11,3 +11,7 @@ axiosInstance.interceptors.request.use((config) => {
   config.headers.Authorization = JSON.parse(window.localStorage.getItem('user')).state.userData.token;
   return config;
 });
+
+axiosInstance.interceptors.response.use((response) => {
+  return response.data;
+});
