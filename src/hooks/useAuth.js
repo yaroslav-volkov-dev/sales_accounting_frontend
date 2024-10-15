@@ -1,25 +1,49 @@
-import { useAuthStore } from '../store/useAuthStore.js';
 import { notify } from '../utils/notify.js';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { ENDPOINTS } from '../api/endpoints.js';
+import { axiosInstance } from '../api/axiosConfig.js';
 
 export const useAuth = () => {
-  const isAuth = !!useAuthStore((state) => state.userData.token);
-  const removeUserData = useAuthStore(state => state.removeUserData);
-  const login = useAuthStore((state) => state.login);
-  const register = useAuthStore((state) => state.register);
-  const isLoading = useAuthStore((state) => state.isLoading);
-  const userData = useAuthStore(state => state.userData);
+  const queryClient = useQueryClient();
+  const token = localStorage.getItem('token');
 
-  const logout = () => {
-    removeUserData();
-    notify({ message: 'Successfully logged out', type: 'success' });
-  };
+  const { data: userData, isLoading: isUserDataLoading } = useQuery({
+    queryKey: [ENDPOINTS.AUTH_ME],
+    queryFn: () => {
+      if (!token) throw new Error('No token found');
+
+      return axiosInstance.get(ENDPOINTS.AUTH_ME);
+    },
+    enabled: !!token,
+  });
+
+  console.log(userData);
+
+  const { mutate: login } = useMutation({
+    mutationFn: (userData) => axiosInstance.post(ENDPOINTS.LOGIN, userData),
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token);
+      queryClient.invalidateQueries([ENDPOINTS.AUTH_ME]);
+      notify({ message: 'Successfully logged in' });
+    },
+  });
+
+  const { mutate: registration } = useMutation({
+    mutationFn: (userData) => axiosInstance.post(ENDPOINTS.REGISTER, userData),
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token);
+      queryClient.invalidateQueries([ENDPOINTS.AUTH_ME]);
+      notify({ message: 'Successfully registered' });
+    }
+  });
+
 
   return {
-    isAuth,
-    userData,
-    isLoading,
+    isAuth: !!token,
     login,
-    logout,
-    register,
+    registration,
+    userData,
+    isUserDataLoading,
+    logout: () => null
   };
 };

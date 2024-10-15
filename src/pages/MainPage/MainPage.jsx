@@ -15,7 +15,6 @@ export const MainPage = () => {
 
   const closeModal = () => setIsModalOpen(false);
 
-
   return (
     <>
       <Basket isModalOpen={isModalOpen} closeModal={closeModal} />
@@ -28,7 +27,7 @@ export const MainPage = () => {
             BASKET
           </Button>
         </div>
-        <div className="grid 2xl:grid-cols-10 xl:grid-cols-8 lg:grid-cols-5 sm:grid-cols-3 gap-3 mt-5">
+        <div className="grid 2xl:grid-cols-10 xl:grid-cols-8 lg:grid-cols-5 sm:grid-cols-3 gap-3 mt-5 mt">
           {data?.map((product) => (
             <ProductCard
               toggleProduct={() => toggleProduct(product)}

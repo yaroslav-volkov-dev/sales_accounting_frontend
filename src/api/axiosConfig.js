@@ -8,7 +8,7 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  config.headers.Authorization = JSON.parse(window.localStorage.getItem('user')).state.userData.token;
+  config.headers.Authorization = window.localStorage.getItem('token');
   return config;
 });
 

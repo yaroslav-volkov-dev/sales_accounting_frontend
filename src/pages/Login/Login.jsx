@@ -7,12 +7,11 @@ import { Button } from '../../components/Button/Button.jsx';
 
 export const Login = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
-  const { login, isLoading } = useAuth();
+  const { login, isUserDataLoading } = useAuth();
 
   const onSubmit = async (data) => {
     await login(data);
   };
-
 
   return (
     <>
@@ -40,7 +39,7 @@ export const Login = () => {
           </div>
         </form>
       </div>
-      <OverlayLoader show={isLoading} />
+      <OverlayLoader show={isUserDataLoading} />
     </>
   );
 };
