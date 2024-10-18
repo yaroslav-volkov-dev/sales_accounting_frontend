@@ -3,8 +3,7 @@ import { Paper } from '../../components/Paper/Paper.jsx';
 import { useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
 import { ModalWindow } from '../../components/ModalWindow/ModalWindow.jsx';
-import { ENDPOINTS } from '../../api/endpoints.js';
-import { EditableProductCard } from './components/EditableProductCard.jsx';
+import { EditableProductRow } from './components/EditableProductCard.jsx';
 import { useForm } from 'react-hook-form';
 import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
@@ -12,9 +11,10 @@ import { useMutation, useQueryClient } from 'react-query';
 import { axiosInstance } from '../../api/axiosConfig.js';
 import { SelectInput } from '../../components/SelectInput/SelectInput.jsx';
 import { useCategoriesQuery, useProductsQuery } from '../../api/hooks.js';
+import { ENDPOINTS } from '../../constants/endpoints.js';
 
 export const EditDatabase = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset: resetCreatingForm } = useForm();
   const [productFilter, setProductFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
@@ -27,38 +27,38 @@ export const EditDatabase = () => {
 
   const { mutate: addProductMutation } = useMutation({
     mutationFn: (newProduct) => axiosInstance.post(ENDPOINTS.PRODUCTS, newProduct),
-    onSuccess: () => client.invalidateQueries([ENDPOINTS.PRODUCTS])
+    onSuccess: () => {
+      client.invalidateQueries([ENDPOINTS.PRODUCTS]);
+      setIsAddProductModalOpen(false);
+      resetCreatingForm();
+    }
   });
 
   const { mutate: deleteProductMutation } = useMutation({
     mutationFn: (_id) => axiosInstance.delete(ENDPOINTS.PRODUCTS, { data: { _id } }),
-    onSuccess: () => client.invalidateQueries([ENDPOINTS.PRODUCTS]),
+    onSuccess: () => {
+      client.invalidateQueries([ENDPOINTS.PRODUCTS]);
+      setDeletableProduct(null);
+    },
   });
 
-  const categoriesOptions = categoriesData?.map(({ name, _id }) => ({ value: _id, label: name }));
-
+  const categoriesOptions = categoriesData?.map(({ name, _id }) => ({ value: _id, label: name })) || [];
 
   const openDeleteModalWindow = (product) => {
     if (!product) return;
-
     setDeletableProduct(product);
   };
 
-  const addProduct = async (data) => {
-    await addProductMutation(data);
-    setIsAddProductModalOpen(false);
-  };
 
-  const deleteProduct = async () => {
+  const deleteProduct = () => {
     const { _id } = deletableProduct;
 
     if (!_id) return;
 
-    await deleteProductMutation(_id);
-    setDeletableProduct(null);
+    deleteProductMutation(_id);
   };
 
-  const filteredProducts = productsData?.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase()));
+  const filteredProducts = productsData?.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase())) || [];
 
   return (
     <>
@@ -67,7 +67,7 @@ export const EditDatabase = () => {
       <div className="flex gap-10 mt-10 min-h-[500px]">
         <div className="flex flex-col gap-3">
           <Input onChange={(event) => setCategoryFilter(event.target.value)} />
-          <Paper className="w-[200px] grow bg-primary p-4 shrink-0">
+          <Paper className="w-full grow bg-primary p-4 shrink-0">
             <CategoriesList filter={categoryFilter} />
           </Paper>
         </div>
@@ -78,12 +78,11 @@ export const EditDatabase = () => {
           </div>
           <Paper className="grow">
             <ul
-              className="w-full gap-2 grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-4 sm:grid-cols-3 bg-primary rounded-xl">
-              {filteredProducts?.map((product) => (
-                <EditableProductCard
-                  name={product?.name}
-                  img={product?.img}
-                  key={product?._id}
+              className="w-full flex flex-col gap-2 bg-primary rounded-xl">
+              {filteredProducts.map((product) => (
+                <EditableProductRow
+                  productData={product}
+                  key={product._id}
                   openDeleteModalWindow={() => openDeleteModalWindow(product)}
                 />
               ))}
@@ -93,10 +92,9 @@ export const EditDatabase = () => {
       </div>
       <ModalWindow isOpen={isAddProductModalOpen}>
         <Paper className="w-[600px]">
-          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit(addProduct)}>
+          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit(addProductMutation)}>
             <h2>Add product</h2>
             <Input placeholder="Name" {...register('name', { required: true })} />
-            <Input placeholder="Image" />
             <SelectInput options={categoriesOptions} />
             <div className="flex justify-center gap-4">
               <Button type="submit">Add product</Button>

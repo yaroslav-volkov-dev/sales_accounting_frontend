@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { ENDPOINTS } from './endpoints.js';
 import { axiosInstance } from './axiosConfig.js';
+import { ENDPOINTS } from '../constants/endpoints.js';
 
 export const useProductsQuery = () => useQuery({
   queryKey: [ENDPOINTS.PRODUCTS],
