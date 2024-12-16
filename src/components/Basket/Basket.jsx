@@ -22,10 +22,10 @@ export const Basket = ({ isModalOpen, closeModal }) => {
           {selectedProducts.map((product) => (
             <ProductCard
               toggleProduct={() => toggleProduct(product)}
-              key={product._id}
+              key={product.id}
               name={product.name}
               img={product.img}
-              isSelected={selectedProducts.find(({ _id }) => _id === product._id)}
+              isSelected={selectedProducts.find(({ id }) => id === product.id)}
             />
           ))}
         </div>

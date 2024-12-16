@@ -25,16 +25,6 @@ export const router = createBrowserRouter([
         element: <AuthorizedRoutes />,
         children: [
           {
-            path: '/edit-database',
-            element: <EditDatabase />,
-            children: [
-              {
-                path: ':slug',
-                element: <EditDatabase />,
-              }
-            ]
-          },
-          {
             path: '/profile',
             element: <Profile />
           }
@@ -50,6 +40,10 @@ export const router = createBrowserRouter([
           {
             path: '/login',
             element: <Login />
+          },
+          {
+            path: '/edit-database',
+            element: <EditDatabase />,
           },
         ]
       },

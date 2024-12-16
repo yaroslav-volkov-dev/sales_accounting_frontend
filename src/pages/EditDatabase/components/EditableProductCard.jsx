@@ -16,7 +16,7 @@ export const EditableProductRow = ({ productData, openDeleteModalWindow }) => {
   });
 
   const { mutate: editProductMutation } = useMutation({
-    mutationFn: (updatedProduct) => axiosInstance.put(ENDPOINTS.PRODUCTS, updatedProduct)
+    mutationFn: (updatedProduct) => axiosInstance.put(`${ENDPOINTS.PRODUCTS}/${updatedProduct.id}`, updatedProduct)
   });
 
   const enableEditMode = () => setIsEditMode(true);
@@ -24,7 +24,7 @@ export const EditableProductRow = ({ productData, openDeleteModalWindow }) => {
   const saveUpdateProduct = () => {
     const editableData = getValues();
 
-    if (!editableData._id) return;
+    if (!editableData.id) return;
 
     editProductMutation(editableData);
     setIsEditMode(false);
@@ -35,14 +35,13 @@ export const EditableProductRow = ({ productData, openDeleteModalWindow }) => {
     setIsEditMode(false);
   };
 
-
   return (
     <li className="flex justify-between items-center gap-3 p-2 border border-white rounded overflow-hidden">
       {isEditMode ? <Input  {...register('name', { required: true })} /> : <p>{productData.name}</p>}
       <div className="flex gap-2">
-        {isEditMode && (<Button color="error" onClick={cancelEditing}>Cancel Editing</Button>)}
         <Button onClick={isEditMode ? saveUpdateProduct : enableEditMode}>{isEditMode ? 'Save' : 'Edit'}</Button>
-        <Button onClick={openDeleteModalWindow} className="bg-red-600">X</Button>
+        {isEditMode && (<Button color="error" onClick={cancelEditing}>Cancel Editing</Button>)}
+        {!isEditMode && (<Button onClick={openDeleteModalWindow} className="bg-red-600">Delete</Button>)}
       </div>
     </li>
   );

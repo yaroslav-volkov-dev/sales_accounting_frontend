@@ -1,5 +1,4 @@
-import { useMutation } from 'react-query';
-
-export const useProductUpdateMutation = (product) => useMutation({
-  queryKey: []
-});
+export const productsQueryKey = {
+  all: ['all'],
+  category: (category) => [...productsQueryKey.all, category]
+};

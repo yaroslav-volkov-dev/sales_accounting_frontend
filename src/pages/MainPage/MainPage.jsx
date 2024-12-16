@@ -3,13 +3,12 @@ import { ProductCard } from '../../components/ProductCard/ProductCard.jsx';
 import { Basket } from '../../components/Basket/Basket.jsx';
 import { useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
-import { useProductsQuery } from '../../api/hooks.js';
 
 
 export const MainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data } = useProductsQuery();
+  const data = [];
   const selectedProducts = useProductsStore(state => state.selectedProducts);
   const toggleProduct = useProductsStore(state => state.toggleProduct);
 
@@ -31,10 +30,10 @@ export const MainPage = () => {
           {data?.map((product) => (
             <ProductCard
               toggleProduct={() => toggleProduct(product)}
-              key={product._id}
+              key={product.id}
               name={product.name}
               img={product.img}
-              isSelected={selectedProducts.find(({ _id }) => _id === product._id)}
+              isSelected={selectedProducts.find(({ id }) => id === product.id)}
             />
           ))}
         </div>
