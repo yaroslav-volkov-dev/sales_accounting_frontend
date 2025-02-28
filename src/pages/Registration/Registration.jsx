@@ -8,10 +8,10 @@ import { Button } from '../../components/Button/Button.jsx';
 
 export const Registration = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
-  const { register, isLoading } = useAuth();
+  const { registration, isLoading } = useAuth();
 
   const onSubmit = async (data) => {
-    await register(data);
+    await registration(data);
   };
 
   return (

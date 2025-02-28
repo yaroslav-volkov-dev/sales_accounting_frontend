@@ -44,7 +44,7 @@ export const Header = () => {
       <div className="flex items-center">
         <Link to="/">
           <h2 className="font-[600] text-center text-[24px] flex flex-col">
-            Shopping list
+            Sales accounting
           </h2>
         </Link>
       </div>

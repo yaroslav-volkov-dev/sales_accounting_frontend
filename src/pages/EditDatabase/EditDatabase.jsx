@@ -14,12 +14,14 @@ import { useCategoriesQuery } from '../../api/hooks.js';
 import { ENDPOINTS } from '../../constants/endpoints.js';
 import { productsQueryKey } from './queries.js';
 import { useQueryParams } from '../../hooks/useQueryParams.js';
+import { AddCategoryModal } from './components/AddCategoryModal.jsx';
 
 export const EditDatabase = () => {
   const { register, handleSubmit, reset: resetCreatingForm } = useForm();
   const [productFilter, setProductFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [deletableProduct, setDeletableProduct] = useState(null);
 
   const { searchParams } = useQueryParams();
@@ -88,6 +90,7 @@ export const EditDatabase = () => {
           <div className="flex gap-4">
             <Input className="grow" onChange={(event) => setProductFilter(event.target.value)} />
             <Button onClick={() => setIsAddProductModalOpen(true)}>Add product</Button>
+            <Button onClick={() => setIsAddCategoryModalOpen(true)}>Add Category</Button>
           </div>
           <Paper className="grow">
             <ul
@@ -116,6 +119,7 @@ export const EditDatabase = () => {
           </form>
         </Paper>
       </ModalWindow>
+      <AddCategoryModal isOpen={isAddCategoryModalOpen} onClose={() => setIsAddCategoryModalOpen(false)} />
       <ModalWindow isOpen={!!deletableProduct}>
         <Paper className="w-[600px] flex flex-col gap-3 items-center">
           <h6>Do you really want to delete this product?</h6>

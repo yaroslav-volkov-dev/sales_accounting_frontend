@@ -1,8 +1,8 @@
 export const ENDPOINTS = Object.freeze({
   REGISTER: '/auth/register',
   LOGIN: '/auth/login',
-  AUTH_ME: '/auth/me',
-  ME: '/auth/me',
+  REFRESH_SESSION: '/auth/refresh',
+  LOGOUT: '/auth/logout',
   UPLOAD: '/upload',
   PRODUCTS: '/products',
   CATEGORIES: '/categories',

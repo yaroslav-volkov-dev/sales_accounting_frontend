@@ -18,16 +18,16 @@ export const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: 'categories/:slug',
-        element: <h1> categories/:slug </h1>,
-      },
-      {
         element: <AuthorizedRoutes />,
         children: [
           {
             path: '/profile',
             element: <Profile />
-          }
+          },
+          {
+            path: '/edit-database',
+            element: <EditDatabase />,
+          },
         ]
       },
       {
@@ -40,10 +40,6 @@ export const router = createBrowserRouter([
           {
             path: '/login',
             element: <Login />
-          },
-          {
-            path: '/edit-database',
-            element: <EditDatabase />,
           },
         ]
       },
