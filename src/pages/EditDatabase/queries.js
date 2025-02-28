@@ -6,3 +6,7 @@ export const productsQueryKey = {
 export const categoriesQueryKey = {
   all: ['all']
 };
+
+export const suppliersQueryKey = {
+  all: ['all']
+};

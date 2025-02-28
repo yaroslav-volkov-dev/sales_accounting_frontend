@@ -27,7 +27,7 @@ export const useAuth = () => {
     enabled: !!token,
   });
 
-  const { mutate: login } = useMutation({
+  const { mutate: login, isLoading: isLoginLoading } = useMutation({
     mutationFn: (userData) => axiosInstance.post(ENDPOINTS.LOGIN, userData),
     onSuccess: (data) => {
       localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, data.access_token);
@@ -76,6 +76,7 @@ export const useAuth = () => {
     userData,
     isUserDataLoading,
     logout,
-    refreshSession
+    refreshSession,
+    isLoginLoading
   };
 };

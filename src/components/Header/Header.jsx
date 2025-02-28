@@ -4,10 +4,6 @@ import { useAuth } from '../../hooks/useAuth.js';
 
 const authorizedLinks = [
   {
-    label: 'Your profile',
-    to: '/profile'
-  },
-  {
     label: 'Edit database',
     to: '/edit-database',
   }

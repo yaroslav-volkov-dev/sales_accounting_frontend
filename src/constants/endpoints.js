@@ -6,4 +6,5 @@ export const ENDPOINTS = Object.freeze({
   UPLOAD: '/upload',
   PRODUCTS: '/products',
   CATEGORIES: '/categories',
+  SUPPLIERS: '/suppliers',
 });

@@ -7,7 +7,7 @@ import { Button } from '../../components/Button/Button.jsx';
 
 export const Login = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
-  const { login, isUserDataLoading } = useAuth();
+  const { login, isUserDataLoading, isLoginLoading } = useAuth();
 
   const onSubmit = async (data) => {
     await login(data);
@@ -35,7 +35,7 @@ export const Login = () => {
             })}
           />
           <div className="mt-5 flex justify-center">
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={isLoginLoading}>Submit</Button>
           </div>
         </form>
       </div>

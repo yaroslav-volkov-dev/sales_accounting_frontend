@@ -1,10 +1,8 @@
-import { CategoriesList } from '../../components/CategoriesList/CategoriesList.jsx';
 import { Paper } from '../../components/Paper/Paper.jsx';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '../../components/Button/Button.jsx';
 import { ModalWindow } from '../../components/ModalWindow/ModalWindow.jsx';
-import { EditableProductRow } from './components/EditableProductCard.jsx';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../../components/Input/Input.jsx';
 import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -12,14 +10,15 @@ import { axiosInstance } from '../../api/axiosConfig.js';
 import { SelectInput } from '../../components/SelectInput/SelectInput.jsx';
 import { useCategoriesQuery } from '../../api/hooks.js';
 import { ENDPOINTS } from '../../constants/endpoints.js';
-import { productsQueryKey } from './queries.js';
+import { productsQueryKey, suppliersQueryKey } from './queries.js';
 import { useQueryParams } from '../../hooks/useQueryParams.js';
 import { AddCategoryModal } from './components/AddCategoryModal.jsx';
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
+const columnHelper = createColumnHelper();
 
 export const EditDatabase = () => {
-  const { register, handleSubmit, reset: resetCreatingForm } = useForm();
-  const [productFilter, setProductFilter] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const { register, handleSubmit, reset: resetCreatingForm, control } = useForm();
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [deletableProduct, setDeletableProduct] = useState(null);
@@ -36,6 +35,10 @@ export const EditDatabase = () => {
   });
 
   const { data: categoriesData } = useCategoriesQuery();
+  const { data: suppliersData } = useQuery({
+    queryKey: [suppliersQueryKey.all],
+    queryFn: async () => axiosInstance.get(ENDPOINTS.SUPPLIERS),
+  });
 
   const client = useQueryClient();
 
@@ -45,7 +48,8 @@ export const EditDatabase = () => {
       client.invalidateQueries([productsQueryKey.all]);
       setIsAddProductModalOpen(false);
       resetCreatingForm();
-    }
+    },
+
   });
 
   const { mutate: deleteProductMutation, isLoading: isDeleteProductLoading } = useMutation({
@@ -57,6 +61,7 @@ export const EditDatabase = () => {
   });
 
   const categoriesOptions = categoriesData?.map(({ name, id }) => ({ value: id, label: name })) || [];
+  const suppliersOptions = suppliersData?.map(({ name, id }) => ({ value: id, label: name })) || [];
 
   const openDeleteModalWindow = (product) => {
     if (!product) return;
@@ -65,6 +70,7 @@ export const EditDatabase = () => {
 
 
   const deleteProduct = () => {
+    console.log(deletableProduct);
     const { id } = deletableProduct;
 
     if (!id) return;
@@ -72,37 +78,88 @@ export const EditDatabase = () => {
     deleteProductMutation(id);
   };
 
+  const columns = useMemo(() => [
+    columnHelper.accessor('name', {
+      header: 'Name',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.accessor('price', {
+      header: 'Price',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.accessor((originalRow) => originalRow?.category?.name, {
+      header: 'Category',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.accessor((originalRow) => originalRow?.supplier?.name, {
+      header: 'Supplier',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <Button
+          onClick={() => openDeleteModalWindow(row.original)}
+          className="bg-red-600">
+          Delete
+        </Button>
+      ),
+    }),
+  ], []);
 
-  const filteredProducts = productsData?.filter(({ name }) => name.toLowerCase().includes(productFilter.toLowerCase())) || [];
+
+  const tableInstance = useReactTable({
+    data: productsData || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  const rows = useMemo(() => tableInstance.getRowModel().rows, [productsData]);
+  const headerGroups = useMemo(() => tableInstance.getHeaderGroups(), [productsData]);
 
   return (
     <>
       <OverlayLoader show={false} />
       <h1>Edit database</h1>
       <div className="flex gap-10 mt-10 min-h-[500px]">
-        <div className="flex flex-col gap-3">
-          <Input onChange={(event) => setCategoryFilter(event.target.value)} />
-          <Paper className="w-full grow bg-primary p-4 shrink-0">
-            <CategoriesList filter={categoryFilter} />
-          </Paper>
-        </div>
         <div className="flex flex-col gap-3 grow">
           <div className="flex gap-4">
-            <Input className="grow" onChange={(event) => setProductFilter(event.target.value)} />
             <Button onClick={() => setIsAddProductModalOpen(true)}>Add product</Button>
             <Button onClick={() => setIsAddCategoryModalOpen(true)}>Add Category</Button>
           </div>
           <Paper className="grow">
-            <ul
-              className="w-full flex flex-col gap-2 bg-primary rounded-xl">
-              {filteredProducts.map((product) => (
-                <EditableProductRow
-                  productData={product}
-                  key={product.id}
-                  openDeleteModalWindow={() => openDeleteModalWindow(product)}
-                />
-              ))}
-            </ul>
+            <div className="h-full bg-white border border-gray-300 rounded">
+              <table className="w-full border-collapse table-fixed">
+                <thead className="border-b border-gray-300">
+                {headerGroups.map(headerGroup => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                      <th key={header.id} align="left" className="px-3 py-2 border-r border-gray-300 last:border-none">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+                </thead>
+                <tbody>
+                {rows.map(row => (
+                  <tr key={row.id} className="border-b border-gray-300">
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id} className="px-3 py-2 border-r border-gray-300 last:border-none">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            </div>
           </Paper>
         </div>
       </div>
@@ -111,7 +168,21 @@ export const EditDatabase = () => {
           <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit(addProductMutation)}>
             <h2>Add product</h2>
             <Input placeholder="Name" {...register('name', { required: true })} />
-            <SelectInput options={categoriesOptions} />
+            <Input type="number" placeholder="Price" {...register('price', { required: true })} />
+            <Controller
+              control={control}
+              name="categoryId"
+              render={({ field }) => (
+                <SelectInput options={categoriesOptions} onChange={({ value }) => field.onChange(value)} />
+              )}
+            />
+            <Controller
+              control={control}
+              name="supplierId"
+              render={({ field }) => (
+                <SelectInput options={suppliersOptions} onChange={({ value }) => field.onChange(value)} />
+              )}
+            />
             <div className="flex justify-center gap-4">
               <Button type="submit">Add product</Button>
               <Button onClick={() => setIsAddProductModalOpen(false)}>Cancel</Button>

@@ -6,7 +6,6 @@ import { Registration } from '../pages/Registration/Registration.jsx';
 import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';
 import { Login } from '../pages/Login/Login.jsx';
 import { UnauthorizedRoutes } from './UnauthorizedRoutes.jsx';
-import { Profile } from '../pages/Profile/Profile.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -20,10 +19,6 @@ export const router = createBrowserRouter([
       {
         element: <AuthorizedRoutes />,
         children: [
-          {
-            path: '/profile',
-            element: <Profile />
-          },
           {
             path: '/edit-database',
             element: <EditDatabase />,
