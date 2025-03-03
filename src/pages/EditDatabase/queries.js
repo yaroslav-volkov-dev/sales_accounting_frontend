@@ -4,7 +4,8 @@ export const productsQueryKey = {
 };
 
 export const categoriesQueryKey = {
-  all: ['all']
+  all: ['all'],
+  includeCount: (includeCount) => [...categoriesQueryKey.all, includeCount]
 };
 
 export const suppliersQueryKey = {

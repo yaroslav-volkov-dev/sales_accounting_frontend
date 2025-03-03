@@ -1,11 +1,12 @@
 import { Link } from '../Link/Link.jsx';
 import { Button } from '../Button/Button.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
+import { NavLink } from 'react-router-dom';
 
 const authorizedLinks = [
   {
     label: 'Edit database',
-    to: '/edit-database',
+    to: '/edit-database/products',
   }
 ];
 
@@ -22,13 +23,13 @@ const unauthorizedLinks = [
 
 
 const renderLinks = (links) => links.map(({ to, label }) => (
-  <Link
+  <NavLink
     to={to}
     key={to}
-    className={({ isActive }) => isActive && 'text-button-primary'}
+    className={({ isActive }) => isActive ? 'text-button-primary' : undefined}
   >
     {label}
-  </Link>
+  </NavLink>
 ));
 
 export const Header = () => {
