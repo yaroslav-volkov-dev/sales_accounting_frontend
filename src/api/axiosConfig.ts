@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOCAL_STORAGE_KEY } from '../constants/localStorageKeys.js';
+import { LOCAL_STORAGE_KEY } from '../constants/localStorageKeys.ts';
 
 // export const BASE_URL = 'https://shopping-list-backend-wine.vercel.app';
 export const BASE_URL = 'http://localhost:3000/';

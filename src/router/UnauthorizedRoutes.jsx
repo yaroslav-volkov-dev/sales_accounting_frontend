@@ -1,4 +1,4 @@
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../hooks/useAuth.ts';
 import { Navigate, Outlet } from 'react-router-dom';
 
 export const UnauthorizedRoutes = () => {

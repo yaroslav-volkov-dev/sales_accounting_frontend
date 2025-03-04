@@ -1,8 +1,9 @@
 import { notify } from '../utils/notify.js';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { ENDPOINTS } from '../constants/endpoints.js';
-import { axiosInstance } from '../api/axiosConfig.js';
-import { LOCAL_STORAGE_KEY } from '../constants/localStorageKeys.js';
+import { DefaultError, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ENDPOINTS } from '../constants/endpoints.ts';
+import { axiosInstance } from '../api/axiosConfig.ts';
+import { LOCAL_STORAGE_KEY } from '../constants/localStorageKeys.ts';
+import { LoginRequest, LoginResponse, RefreshSessionResponse, RegistrationResponse } from "@/types/auth.types.ts";
 
 const queryKey = {
   auth: ['auth']
@@ -27,29 +28,29 @@ export const useAuth = () => {
     enabled: !!token,
   });
 
-  const { mutate: login, isLoading: isLoginLoading } = useMutation({
+  const { mutate: login, isPending: isLoginLoading } = useMutation<LoginResponse, DefaultError, LoginRequest>({
     mutationFn: (userData) => axiosInstance.post(ENDPOINTS.LOGIN, userData),
     onSuccess: (data) => {
       localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, data.access_token);
-      queryClient.invalidateQueries([queryKey.auth]);
+      queryClient.invalidateQueries({ queryKey: [queryKey.auth] });
       notify({ message: 'Successfully logged in' });
     },
   });
 
-  const { mutate: registration } = useMutation({
+  const { mutate: registration } = useMutation<RegistrationResponse>({
     mutationFn: (userData) => axiosInstance.post(ENDPOINTS.REGISTER, userData),
     onSuccess: (data) => {
       localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, data.access_token);
-      queryClient.invalidateQueries([queryKey.auth]);
+      queryClient.invalidateQueries({ queryKey: [queryKey.auth] });
       notify({ message: 'Successfully registered' });
     }
   });
 
-  const { mutate: refreshSession } = useMutation({
+  const { mutate: refreshSession } = useMutation<RefreshSessionResponse>({
     mutationFn: () => axiosInstance.post(ENDPOINTS.REFRESH_SESSION, {}, { withCredentials: true }),
     onSuccess: (data) => {
       localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, data.access_token);
-      queryClient.invalidateQueries([queryKey.auth]);
+      queryClient.invalidateQueries({ queryKey: [queryKey.auth] });
     },
     onError: () => {
       localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);

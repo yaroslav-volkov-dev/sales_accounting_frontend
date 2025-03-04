@@ -1,15 +1,15 @@
-import { Paper } from '../../../components/Paper/Paper.jsx';
-import { Button } from '../../../components/Button/Button.jsx';
+import { Paper } from '@/components/Paper/Paper.js';
+import { Button } from '@/components/Button/Button.js';
 import { useMemo, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { ENDPOINTS } from '../../../constants/endpoints.js';
-import { axiosInstance } from '../../../api/axiosConfig.js';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ENDPOINTS } from '@/constants/endpoints.js';
+import { axiosInstance } from '@/api/axiosConfig.js';
 import { AddCategoryModal } from '../components/AddCategoryModal.jsx';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { getQueryStringParams } from '../../../utils/getQueryStringParams.js';
-import { categoriesQueryKey } from '../queries.js';
-import { notify } from '../../../utils/notify.js';
-import { ConfirmationModal } from '../../../components/ConfirmationModal/ConfirmationModal.jsx';
+import { getQueryStringParams } from '@/utils/get-query-string-params.ts';
+import { categoriesQueryKey } from '../queries.ts';
+import { notify } from '@/utils/notify.js';
+import { ConfirmationModal } from '@/components/ConfirmationModal/ConfirmationModal.js';
 
 const columnHelper = createColumnHelper();
 
@@ -53,7 +53,7 @@ export const CategoriesPage = () => {
       cell: ({ getValue }) => getValue(),
     }),
     columnHelper.accessor((originalRow) => originalRow?._count?.Product, {
-      header: 'Products In Category',
+      header: 'products-page In Category',
       cell: ({ getValue }) => getValue(),
     }),
     columnHelper.display({

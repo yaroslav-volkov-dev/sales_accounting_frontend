@@ -4,10 +4,11 @@ import { Layout } from '../components/Layout/Layout.jsx';
 import { EditDatabase } from '../pages/EditDatabase/EditDatabase.jsx';
 import { Registration } from '../pages/Registration/Registration.jsx';
 import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';
-import { Login } from '../pages/Login/Login.jsx';
+import { Login } from '../pages/Login/Login.tsx';
 import { UnauthorizedRoutes } from './UnauthorizedRoutes.jsx';
-import { Products } from '../pages/EditDatabase/Products/Products.jsx';
-import { CategoriesPage } from '../pages/EditDatabase/Categories/CategoriesPage.jsx';
+import { ProductsPage } from '@/pages/EditDatabase/products-page/products-page.tsx';
+import { CategoriesPage } from '../pages/EditDatabase/CategoriesPage/CategoriesPage.jsx';
+import { SuppliersPage } from '../pages/EditDatabase/SuppliersPage/SuppliersPage.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -27,11 +28,12 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Navigate to="products" replace />,
+                element: <Navigate to="products"
+                                   replace />,
               },
               {
                 path: 'products',
-                element: <Products />,
+                element: <ProductsPage />,
               },
               {
                 path: 'categories',
@@ -39,7 +41,7 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'suppliers',
-                element: null,
+                element: <SuppliersPage />,
               },
             ],
           },

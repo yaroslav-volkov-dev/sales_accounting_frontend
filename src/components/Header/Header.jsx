@@ -1,7 +1,7 @@
 import { Link } from '../Link/Link.jsx';
-import { Button } from '../Button/Button.jsx';
-import { useAuth } from '../../hooks/useAuth.js';
+import { useAuth } from '@/hooks/useAuth.ts';
 import { NavLink } from 'react-router-dom';
+import { Button } from '@/components/ui/button.js';
 
 const authorizedLinks = [
   {
@@ -34,10 +34,11 @@ const renderLinks = (links) => links.map(({ to, label }) => (
 
 export const Header = () => {
   const { logout, isAuth, userData } = useAuth();
+
   const { username } = userData || {};
 
   return (
-    <header className="w-full h-16 flex items-center bg-primary shrink-0 justify-between px-16">
+    <header className="w-full h-16 flex items-center bg-blue-200 shrink-0 justify-between px-16">
       <div className="flex items-center">
         <Link to="/">
           <h2 className="font-[600] text-center text-[24px] flex flex-col">

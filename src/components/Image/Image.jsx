@@ -1,4 +1,4 @@
-import { BASE_URL } from '../../api/axiosConfig.js';
+import { BASE_URL } from '../../api/axiosConfig.ts';
 
 export const Image = (props) => {
   const { img: { alt, title, url } } = props;

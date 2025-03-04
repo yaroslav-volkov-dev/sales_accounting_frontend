@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { Input } from '../../components/Input/Input.jsx';
-import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.jsx';
-import { errorMessageRequired } from '../../utils/infoMessages.js';
-import { useAuth } from '../../hooks/useAuth.js';
-import { Paper } from '../../components/Paper/Paper.jsx';
-import { Button } from '../../components/Button/Button.jsx';
+import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.tsx';
+import { errorMessageRequired } from '../../utils/infoMessages.ts';
+import { useAuth } from '../../hooks/useAuth.ts';
+import { Paper } from '../../components/Paper/Paper.tsx';
+import { Button } from '../../components/Button/Button.tsx';
 
 export const Registration = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();

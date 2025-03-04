@@ -1,9 +1,9 @@
-import { Button } from '../../../components/Button/Button.jsx';
+import { Button } from '../../../components/Button/Button.tsx';
 import { useMutation } from 'react-query';
-import { axiosInstance } from '../../../api/axiosConfig.js';
+import { axiosInstance } from '../../../api/axiosConfig.ts';
 import { useState } from 'react';
 import { Input } from '../../../components/Input/Input.jsx';
-import { ENDPOINTS } from '../../../constants/endpoints.js';
+import { ENDPOINTS } from '../../../constants/endpoints.ts';
 import { useForm } from 'react-hook-form';
 
 export const EditableProductRow = ({ productData, openDeleteModalWindow }) => {

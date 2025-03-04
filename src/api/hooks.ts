@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
-import { axiosInstance } from './axiosConfig.js';
-import { ENDPOINTS } from '../constants/endpoints.js';
+import { axiosInstance } from './axiosConfig.ts';
+import { ENDPOINTS } from '../constants/endpoints.ts';
+import { useQuery } from '@tanstack/react-query';
 
 export const useCategoriesQuery = () => useQuery({
   queryKey: [ENDPOINTS.CATEGORIES],

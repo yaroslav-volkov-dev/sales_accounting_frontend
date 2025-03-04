@@ -1,7 +1,15 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { createPortal } from 'react-dom';
+import { RefObject } from "react";
 
-export const OverlayLoader = ({ show, parentRef, className, opacity = 0.5 }) => {
+type OverlayLoaderProps = {
+  show: boolean;
+  parentRef?: RefObject<HTMLElement>;
+  className?: string;
+  opacity?: number
+}
+
+export const OverlayLoader = ({ show, parentRef, className, opacity = 0.5 }: OverlayLoaderProps) => {
   if (!show) return null;
 
   const parentElement = parentRef?.current;

@@ -6,16 +6,16 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '@/api/axiosConfig.js';
 import { ENDPOINTS } from '@/constants/endpoints.js';
-import { categoriesQueryKey } from '../queries.ts';
+import { suppliersQueryKey } from '../queries.ts';
 
-export const AddCategoryModal = ({ isOpen, onClose }) => {
+export const AddSupplierModal = ({ isOpen, onClose }) => {
   const { register, handleSubmit, reset } = useForm();
   const client = useQueryClient();
 
   const { mutate: addProductMutation } = useMutation({
-    mutationFn: (newCategory) => axiosInstance.post(ENDPOINTS.CATEGORIES, newCategory),
+    mutationFn: (newSupplier) => axiosInstance.post(ENDPOINTS.SUPPLIERS, newSupplier),
     onSuccess: () => {
-      client.invalidateQueries([categoriesQueryKey.all]);
+      client.invalidateQueries([suppliersQueryKey.all]);
       onClose();
       reset();
     }
@@ -25,7 +25,7 @@ export const AddCategoryModal = ({ isOpen, onClose }) => {
     <ModalWindow isOpen={isOpen}>
       <Paper className="w-[600px]">
         <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit(addProductMutation)}>
-          <h2>Add Category</h2>
+          <h2>Add Supplier</h2>
           <Input placeholder="Name" {...register('name', { required: true })} />
           <div className="flex justify-center gap-4">
             <Button type="submit">Save</Button>

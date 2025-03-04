@@ -1,9 +1,9 @@
-import { useProductsStore } from '../../store/useProductsStore.js';
+import { useProductsStore } from '@/store/useProductsStore.js';
 import { ProductCard } from '../../components/ProductCard/ProductCard.jsx';
-import { useQuery } from 'react-query';
-import { axiosInstance } from '../../api/axiosConfig.js';
-import { ENDPOINTS } from '../../constants/endpoints.js';
-import { productsQueryKey } from '../EditDatabase/queries.js';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '@/api/axiosConfig.js';
+import { ENDPOINTS } from '@/constants/endpoints.js';
+import { productsQueryKey } from '../EditDatabase/queries.ts';
 
 export const MainPage = () => {
 
