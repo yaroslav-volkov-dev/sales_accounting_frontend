@@ -13,22 +13,6 @@ const querySchema = z.object({
     .transform((val) => (val === "true"))
 });
 
-type QuerySchemaType = z.infer<typeof querySchema>
-
-const getCategoryFilters = (selectedIds: string[]): QuerySchemaType => {
-  if (selectedIds.includes('withoutCategory')) {
-    return {
-      withoutCategory: true,
-      categoriesIds: selectedIds.filter((selectedId) => selectedId !== 'withoutCategory')
-    };
-  }
-
-  return {
-    categoriesIds: selectedIds,
-    withoutCategory: false
-  };
-};
-
 export const useSelectedIds = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,12 +24,10 @@ export const useSelectedIds = () => {
 
 
   const updateCategoryFilters = (selectedIds: string[]) => {
-    const { categoriesIds, withoutCategory } = getCategoryFilters(selectedIds);
-
     const newQueryParams = queryString.stringify(
       {
-        categoriesIds: JSON.stringify(categoriesIds),
-        withoutCategory
+        categoriesIds: JSON.stringify(selectedIds.filter((selectedId) => selectedId !== 'withoutCategory')),
+        withoutCategory: selectedIds.includes('withoutCategory')
       },
       { encode: false }
     );

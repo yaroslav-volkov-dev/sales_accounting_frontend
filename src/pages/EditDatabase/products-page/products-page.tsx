@@ -120,8 +120,6 @@ export const ProductsPage = () => {
   const rows = useMemo(() => tableInstance.getRowModel().rows, [productsData]);
   const headerGroups = useMemo(() => tableInstance.getHeaderGroups(), [productsData]);
 
-  console.log(selectedIds);
-
   return (
     <>
       <OverlayLoader show={false} />
