@@ -51,14 +51,21 @@ export const FiltersController = <Group extends string>(
       return acc;
     }, {}), [options]);
 
-  const onCheckedChange = (id: string) => {
-    const isSelected = selectedOptionsIds.includes(id);
-    const updatedOptionsIds = isSelected ? selectedOptionsIds.filter((selectedOptionId) => id !== selectedOptionId) : [...selectedOptionsIds, id];
+  const onChange = (updatedOptionsIds: string[]) => {
     const data = prepareDetailedDataForSelectHandler(updatedOptionsIds, optionsMap);
 
     onSelect(data);
     setSelectedOptionsIds(updatedOptionsIds);
   };
+
+  const onSelectSingle = (id: string) => {
+    const isSelected = selectedOptionsIds.includes(id);
+    onChange(isSelected ? selectedOptionsIds.filter((selectedOptionId) => id !== selectedOptionId) : [...selectedOptionsIds, id]);
+  };
+
+  const selectAll = () => onChange(options.map(({ id }) => id));
+
+  const onDeselectAll = () => onChange([]);
 
   return (
     <Popover>
@@ -77,11 +84,20 @@ export const FiltersController = <Group extends string>(
               {label}
               <Checkbox
                 checked={selectedOptionsIds.includes(id)}
-                onCheckedChange={() => onCheckedChange(id)}
+                onCheckedChange={() => onSelectSingle(id)}
               />
             </li>
           ))}
         </ul>
+        <div className="flex justify-between mt-5 pt-3 border-t border-gray-200">
+          <Button onClick={selectAll}>Select All</Button>
+          <Button
+            onClick={onDeselectAll}
+            variant="secondary"
+          >
+            Deselect All
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
   );

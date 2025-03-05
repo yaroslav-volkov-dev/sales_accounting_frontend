@@ -53,7 +53,6 @@ export const ProductsPage = () => {
     },
   });
 
-
   const openDeleteModalWindow = (product: ProductsModel) => {
     if (!product) return;
     setDeletableProduct(product);
