@@ -120,14 +120,12 @@ export const ProductsPage = () => {
               onSelect={updateCategoryFilters}
               controllerName="Categories filters"
               initialOptionsIds={state.categoriesIds}
-              key={JSON.stringify(categoriesOptions)}
             />
             <FiltersController
               options={suppliersOptions}
               onSelect={updateSupplierFilters}
               controllerName="Suppliers filters"
               initialOptionsIds={state.suppliersIds}
-              key={JSON.stringify(suppliersOptions)}
             />
           </div>
           <div className="h-full bg-white border border-gray-300 rounded">

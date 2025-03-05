@@ -1,7 +1,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type Option<Group extends string> = {
   id: string;
@@ -22,22 +22,19 @@ type FiltersControllerProps<Group extends string> = {
   initialOptionsIds?: string[];
 }
 
-const prepareDetailedDataForSelectHandler = <Group extends string>(options: Option<Group>[]): DetailedFiltersState<Group> =>
-  options.reduce<DetailedFiltersState<Group>>((acc, {
-    group,
-    id
-  }) => {
+type OptionsMap<Group extends string> = Record<string, Option<Group>>
+
+const prepareDetailedDataForSelectHandler = <Group extends string>(updatedOptionsIds: string[], optionsMap: OptionsMap<Group>): DetailedFiltersState<Group> =>
+  updatedOptionsIds.reduce<DetailedFiltersState<Group>>((acc, item) => {
+    if (!(item in optionsMap)) return acc;
+    const { id, group } = optionsMap[item];
+
     if (!group) acc.ungroupedFilters.push(id);
     if (group) acc.groupedFilters[group] = [...(acc.groupedFilters[group] || []), id];
     acc.allFilters.push(id);
     return acc;
   }, { allFilters: [], ungroupedFilters: [], groupedFilters: {} as Record<Group, string[]> });
 
-const getInitialOptions = <Group extends string>(initialOptionsIds: string[], options: Option<Group>[]) =>
-  options.reduce<Option<Group>[]>((acc, option) => {
-    if (initialOptionsIds.includes(option.id)) acc.push(option);
-    return acc;
-  }, []);
 
 export const FiltersController = <Group extends string>(
   {
@@ -46,16 +43,21 @@ export const FiltersController = <Group extends string>(
     onSelect,
     initialOptionsIds = []
   }: FiltersControllerProps<Group>) => {
-  const [selectedOptions, setSelectedOptions] = useState<Option<Group>[]>(initialOptionsIds ? () => getInitialOptions(initialOptionsIds, options) : []);
-  const selectedIds = selectedOptions.map(({ id }) => id);
+  const [selectedOptionsIds, setSelectedOptionsIds] = useState<string[]>(initialOptionsIds || []);
 
-  const onCheckedChange = (option: Option<Group>) => {
-    const isSelected = selectedIds.includes(option.id);
-    const updatedOptions = isSelected ? selectedOptions.filter(({ id: selectedOptionId }) => option.id !== selectedOptionId) : [...selectedOptions, option];
-    const data = prepareDetailedDataForSelectHandler(updatedOptions);
+  const optionsMap = useMemo(
+    () => options.reduce<Record<string, Option<Group>>>((acc, option) => {
+      acc[option.id] = option;
+      return acc;
+    }, {}), [options]);
+
+  const onCheckedChange = (id: string) => {
+    const isSelected = selectedOptionsIds.includes(id);
+    const updatedOptionsIds = isSelected ? selectedOptionsIds.filter((selectedOptionId) => id !== selectedOptionId) : [...selectedOptionsIds, id];
+    const data = prepareDetailedDataForSelectHandler(updatedOptionsIds, optionsMap);
 
     onSelect(data);
-    setSelectedOptions(updatedOptions);
+    setSelectedOptionsIds(updatedOptionsIds);
   };
 
   return (
@@ -67,15 +69,15 @@ export const FiltersController = <Group extends string>(
       </PopoverTrigger>
       <PopoverContent>
         <ul className="flex flex-col gap-2">
-          {options.map((option) => (
+          {options.map(({ id, label }) => (
             <li
-              key={option.id}
+              key={id}
               className="flex items-center justify-between"
             >
-              {option.label}
+              {label}
               <Checkbox
-                checked={selectedIds.includes(option.id)}
-                onCheckedChange={() => onCheckedChange(option)}
+                checked={selectedOptionsIds.includes(id)}
+                onCheckedChange={() => onCheckedChange(id)}
               />
             </li>
           ))}
