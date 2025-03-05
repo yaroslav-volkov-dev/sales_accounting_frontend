@@ -35,7 +35,6 @@ const prepareDetailedDataForSelectHandler = <Group extends string>(updatedOption
     return acc;
   }, { allFilters: [], ungroupedFilters: [], groupedFilters: {} as Record<Group, string[]> });
 
-
 export const FiltersController = <Group extends string>(
   {
     options = [],

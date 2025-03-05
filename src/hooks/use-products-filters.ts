@@ -27,7 +27,6 @@ const querySchema = z.object({
 
 type ProductsFiltersQueryState = z.infer<typeof querySchema>
 
-
 export const useProductFiltersState = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,7 +79,7 @@ export const useProductFiltersState = () => {
     updateQueryState((state) => ({
       ...state,
       [ProductsQueryFilterKey.CATEGORIES_IDS]: ungroupedFilters,
-      [ProductsQueryFilterKey.WITHOUT_CATEGORY]: !!groupedFilters[ProductsQueryFilterKey.WITHOUT_CATEGORY]
+      [ProductsQueryFilterKey.WITHOUT_CATEGORY]: groupedFilters[ProductsQueryFilterKey.WITHOUT_CATEGORY] ? true : undefined
     }));
   };
 
@@ -90,7 +89,7 @@ export const useProductFiltersState = () => {
   }) => updateQueryState((state) => ({
     ...state,
     [ProductsQueryFilterKey.SUPPLIERS_IDS]: ungroupedFilters,
-    [ProductsQueryFilterKey.WITHOUT_SUPPLIER]: !!groupedFilters[ProductsQueryFilterKey.WITHOUT_SUPPLIER]
+    [ProductsQueryFilterKey.WITHOUT_SUPPLIER]: groupedFilters[ProductsQueryFilterKey.WITHOUT_SUPPLIER] ? true : undefined
   }));
 
 
