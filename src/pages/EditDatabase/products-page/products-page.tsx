@@ -1,6 +1,6 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { axiosInstance } from '@/api/axiosConfig.js';
-import { productsQueryKey, suppliersQueryKey } from '../queries.ts';
+import { productsQueryKey } from '../queries.ts';
 import { useMemo, useState } from 'react';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,10 +9,9 @@ import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
 import { ConfirmationModal } from '@/components/ConfirmationModal/ConfirmationModal.js';
 import { AddProductModal } from '../components/AddProductModal.tsx';
 import { FiltersController } from '@/components/filters-controller/filters-controller.js';
-import { CategoryModel, ProductsModel, SupplierModel } from "@/models";
+import { ProductsModel } from "@/models";
 import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/utils/get-query-string-params.ts";
-import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 
@@ -20,31 +19,31 @@ export const ProductsPage = () => {
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [deletableProduct, setDeletableProduct] = useState<ProductsModel | null>(null);
 
-  const { updateCategoryFilters, selectedIds, withoutCategory } = useProductFiltersState();
+  const {
+    updateCategoryFilters,
+    updateSupplierFilters,
+    state,
+    suppliersOptions,
+    categoriesOptions
+  } = useProductFiltersState();
+
+  console.log('state', state);
 
   const { data: productsData } = useQuery<ProductsModel[]>({
-    queryKey: [productsQueryKey.categories(selectedIds, withoutCategory)],
+    queryKey: [productsQueryKey.categories(state.categoriesIds, state.withoutCategory, state.suppliersIds, state.withoutSupplier)],
     queryFn: async () => {
       const url = getQueryStringParams(
         ENDPOINTS.PRODUCTS,
         {
-          categoryIds: selectedIds,
-          withoutCategory
+          categoryIds: state.categoriesIds,
+          suppliersIds: state.suppliersIds,
+          withoutCategory: state.withoutCategory,
+          withoutSupplier: state.withoutSupplier,
         },
         { arrayFormat: 'comma' }
       );
       return axiosInstance.get(url);
     },
-  });
-
-  const { data: categoriesData } = useQuery<CategoryModel[]>({
-    queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.CATEGORIES)
-  });
-
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
-    queryKey: [suppliersQueryKey.all],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.SUPPLIERS),
   });
 
   const client = useQueryClient();
@@ -57,22 +56,11 @@ export const ProductsPage = () => {
     },
   });
 
-  const categoriesOptions = [
-    ...(categoriesData?.map(({ name, id }) => ({ id: `${id}`, label: name })) || []),
-    {
-      label: 'Without Category',
-      id: 'withoutCategory',
-      group: ProductsQueryFilterKey.WITHOUT_CATEGORY
-    }
-  ];
-
-  const suppliersOptions = suppliersData?.map(({ name, id }) => ({ id: `${id}`, label: name })) || [];
 
   const openDeleteModalWindow = (product: ProductsModel) => {
     if (!product) return;
     setDeletableProduct(product);
   };
-
 
   const deleteProduct = () => {
     const { id } = deletableProduct || {};
@@ -112,7 +100,6 @@ export const ProductsPage = () => {
     }),
   ], []);
 
-
   const tableInstance = useReactTable({
     data: productsData || [],
     columns,
@@ -133,18 +120,12 @@ export const ProductsPage = () => {
             </Button>
             <FiltersController
               options={categoriesOptions}
-              onSelect={({ groupedFilters, ungroupedFilters }) => updateCategoryFilters({
-                ungroupedFilters,
-                groupedFilters
-              })}
+              onSelect={updateCategoryFilters}
               controllerName="Categories filters"
-              key={JSON.stringify(categoriesOptions)}
             />
             <FiltersController
               options={suppliersOptions}
-              onSelect={() => {
-                console.log('select');
-              }}
+              onSelect={updateSupplierFilters}
               controllerName="Suppliers filters"
             />
           </div>
