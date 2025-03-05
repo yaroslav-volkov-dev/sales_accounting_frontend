@@ -19,7 +19,7 @@ type FiltersControllerProps<Group extends string> = {
   controllerName: string;
   options: Option<Group>[];
   onSelect: (filtersState: DetailedFiltersState<Group>) => void;
-  initialOptions?: Option<Group>[];
+  initialOptionsIds?: string[];
 }
 
 const prepareDetailedDataForSelectHandler = <Group extends string>(options: Option<Group>[]): DetailedFiltersState<Group> =>
@@ -33,14 +33,20 @@ const prepareDetailedDataForSelectHandler = <Group extends string>(options: Opti
     return acc;
   }, { allFilters: [], ungroupedFilters: [], groupedFilters: {} as Record<Group, string[]> });
 
+const getInitialOptions = <Group extends string>(initialOptionsIds: string[], options: Option<Group>[]) =>
+  options.reduce<Option<Group>[]>((acc, option) => {
+    if (initialOptionsIds.includes(option.id)) acc.push(option);
+    return acc;
+  }, []);
+
 export const FiltersController = <Group extends string>(
   {
     options = [],
     controllerName = '',
     onSelect,
-    initialOptions = []
+    initialOptionsIds = []
   }: FiltersControllerProps<Group>) => {
-  const [selectedOptions, setSelectedOptions] = useState<Option<Group>[]>(initialOptions || []);
+  const [selectedOptions, setSelectedOptions] = useState<Option<Group>[]>(initialOptionsIds ? () => getInitialOptions(initialOptionsIds, options) : []);
   const selectedIds = selectedOptions.map(({ id }) => id);
 
   const onCheckedChange = (option: Option<Group>) => {

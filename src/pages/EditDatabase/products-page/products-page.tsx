@@ -26,9 +26,6 @@ export const ProductsPage = () => {
     suppliersOptions,
     categoriesOptions
   } = useProductFiltersState();
-
-  console.log('state', state);
-
   const { data: productsData } = useQuery<ProductsModel[]>({
     queryKey: [productsQueryKey.categories(state.categoriesIds, state.withoutCategory, state.suppliersIds, state.withoutSupplier)],
     queryFn: async () => {
@@ -122,11 +119,15 @@ export const ProductsPage = () => {
               options={categoriesOptions}
               onSelect={updateCategoryFilters}
               controllerName="Categories filters"
+              initialOptionsIds={state.categoriesIds}
+              key={JSON.stringify(categoriesOptions)}
             />
             <FiltersController
               options={suppliersOptions}
               onSelect={updateSupplierFilters}
               controllerName="Suppliers filters"
+              initialOptionsIds={state.suppliersIds}
+              key={JSON.stringify(suppliersOptions)}
             />
           </div>
           <div className="h-full bg-white border border-gray-300 rounded">
