@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
 import { z } from 'zod';
+import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 
 const querySchema = z.object({
   categoriesIds: z
@@ -13,21 +14,23 @@ const querySchema = z.object({
     .transform((val) => (val === "true"))
 });
 
-export const useSelectedIds = () => {
+export const useProductFiltersState = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const queryParams = queryString.parse(location.search);
   const parsedFilters = querySchema.safeParse(queryParams);
   const selectedIds = parsedFilters.success ? parsedFilters.data.categoriesIds : [];
-  const withoutCategory = parsedFilters.success ? parsedFilters.data.withoutCategory : false;
+  const withoutCategory = parsedFilters.success ? parsedFilters.data.withoutCategory : undefined;
 
-
-  const updateCategoryFilters = (selectedIds: string[]) => {
+  const updateCategoryFilters = ({ ungroupedFilters, groupedFilters }: {
+    groupedFilters: Record<ProductsQueryFilterKey, string[]>;
+    ungroupedFilters: string[]
+  }) => {
     const newQueryParams = queryString.stringify(
       {
-        categoriesIds: JSON.stringify(selectedIds.filter((selectedId) => selectedId !== 'withoutCategory')),
-        withoutCategory: selectedIds.includes('withoutCategory')
+        categoriesIds: JSON.stringify(ungroupedFilters),
+        withoutCategory: !!groupedFilters[ProductsQueryFilterKey.WITHOUT_CATEGORY]
       },
       { encode: false }
     );

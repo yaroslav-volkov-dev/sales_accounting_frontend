@@ -10,8 +10,9 @@ import { ConfirmationModal } from '@/components/ConfirmationModal/ConfirmationMo
 import { AddProductModal } from '../components/AddProductModal.tsx';
 import { FiltersController } from '@/components/filters-controller/filters-controller.js';
 import { CategoryModel, ProductsModel, SupplierModel } from "@/models";
-import { useSelectedIds } from "@/hooks/use-categories-filters.ts";
+import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/utils/get-query-string-params.ts";
+import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 
@@ -19,7 +20,7 @@ export const ProductsPage = () => {
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [deletableProduct, setDeletableProduct] = useState<ProductsModel | null>(null);
 
-  const { updateCategoryFilters, selectedIds, withoutCategory } = useSelectedIds();
+  const { updateCategoryFilters, selectedIds, withoutCategory } = useProductFiltersState();
 
   const { data: productsData } = useQuery<ProductsModel[]>({
     queryKey: [productsQueryKey.categories(selectedIds, withoutCategory)],
@@ -60,7 +61,8 @@ export const ProductsPage = () => {
     ...(categoriesData?.map(({ name, id }) => ({ id: `${id}`, label: name })) || []),
     {
       label: 'Without Category',
-      id: 'withoutCategory'
+      id: 'withoutCategory',
+      group: ProductsQueryFilterKey.WITHOUT_CATEGORY
     }
   ];
 
@@ -131,17 +133,20 @@ export const ProductsPage = () => {
             </Button>
             <FiltersController
               options={categoriesOptions}
-              onSelect={updateCategoryFilters}
+              onSelect={({ groupedFilters, ungroupedFilters }) => updateCategoryFilters({
+                ungroupedFilters,
+                groupedFilters
+              })}
               controllerName="Categories filters"
               key={JSON.stringify(categoriesOptions)}
             />
-            {/*<FiltersController*/}
-            {/*  options={suppliersOptions}*/}
-            {/*  onSelect={() => {*/}
-            {/*    console.log('select');*/}
-            {/*  }}*/}
-            {/*  controllerName="Supplier filters"*/}
-            {/*/>*/}
+            <FiltersController
+              options={suppliersOptions}
+              onSelect={() => {
+                console.log('select');
+              }}
+              controllerName="Suppliers filters"
+            />
           </div>
           <div className="h-full bg-white border border-gray-300 rounded">
             <table className="w-full border-collapse table-fixed">

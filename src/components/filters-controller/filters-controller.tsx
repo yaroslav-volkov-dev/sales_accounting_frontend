@@ -3,33 +3,51 @@ import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useState } from "react";
 
-type FiltersControllerProps = {
-  controllerName: string;
-  options: { id: string; label: string }[];
-  onSelect: (id: string[]) => void;
+type Option<Group extends string> = {
+  id: string;
+  label: string;
+  group?: Group;
 }
 
-export const FiltersController = (
+type DetailedFiltersState<Group extends string> = {
+  allFilters: string[];
+  groupedFilters: Record<Group, string[]>
+  ungroupedFilters: string[]
+}
+
+type FiltersControllerProps<Group extends string> = {
+  controllerName: string;
+  options: Option<Group>[];
+  onSelect: (filtersState: DetailedFiltersState<Group>) => void;
+}
+
+const prepareDetailedDataForSelectHandler = <Group extends string>(options: Option<Group>[]): DetailedFiltersState<Group> =>
+  options.reduce<DetailedFiltersState<Group>>((acc, {
+    group,
+    id
+  }) => {
+    if (!group) acc.ungroupedFilters.push(id);
+    if (group) acc.groupedFilters[group] = [...(acc.groupedFilters[group] || []), id];
+    acc.allFilters.push(id);
+    return acc;
+  }, { allFilters: [], ungroupedFilters: [], groupedFilters: {} as Record<Group, string[]> });
+
+export const FiltersController = <Group extends string>(
   {
     options = [],
     controllerName = '',
-    onSelect
-  }: FiltersControllerProps) => {
-  const [selectedIds, setSelectedIds] = useState<string[]>(options.map(({ id }) => id));
+    onSelect,
+  }: FiltersControllerProps<Group>) => {
+  const [selectedOptions, setSelectedOptions] = useState<Option<Group>[]>(options);
+  const selectedIds = selectedOptions.map(({ id }) => id);
 
-  const onCheckedChange = (id: string) => {
-    const isAlreadySelected = selectedIds.includes(id);
+  const onCheckedChange = (option: Option<Group>) => {
+    const isSelected = selectedIds.includes(option.id);
+    const updatedOptions = isSelected ? selectedOptions.filter(({ id: selectedOptionId }) => option.id !== selectedOptionId) : [...selectedOptions, option];
+    const data = prepareDetailedDataForSelectHandler(updatedOptions);
 
-    if (isAlreadySelected) {
-      const filteredState = selectedIds.filter((selectedId) => id !== selectedId);
-      setSelectedIds(filteredState);
-      onSelect(filteredState);
-      return;
-    }
-
-    const newSelectedIdsArray = [...selectedIds, id];
-    setSelectedIds(newSelectedIdsArray);
-    onSelect(newSelectedIdsArray);
+    onSelect(data);
+    setSelectedOptions(updatedOptions);
   };
 
   return (
@@ -41,15 +59,15 @@ export const FiltersController = (
       </PopoverTrigger>
       <PopoverContent>
         <ul className="flex flex-col gap-2">
-          {options.map(({ id, label }) => (
+          {options.map((option) => (
             <li
-              key={id}
+              key={option.id}
               className="flex items-center justify-between"
             >
-              {label}
+              {option.label}
               <Checkbox
-                checked={selectedIds.includes(id)}
-                onCheckedChange={() => onCheckedChange(id)}
+                checked={selectedIds.includes(option.id)}
+                onCheckedChange={() => onCheckedChange(option)}
               />
             </li>
           ))}
