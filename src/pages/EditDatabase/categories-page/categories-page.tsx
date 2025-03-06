@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { axiosInstance } from '@/api/axiosConfig.js';
@@ -11,6 +11,7 @@ import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation
 import { CategoryModel } from "@/models";
 import { Maybe } from "@/types/utility.types.ts";
 import { Button } from "@/components/ui/button.tsx";
+import { EditCategoryDialog } from "@/pages/EditDatabase/components/edit-category-dialog.tsx";
 
 const columnHelper = createColumnHelper<CategoryModel>();
 
@@ -31,14 +32,14 @@ export const CategoriesPage = () => {
     }
   });
 
-  const handleDeleteCategory = (categoryId: Maybe<number>) => {
+  const handleDeleteCategory = useCallback((categoryId: Maybe<number>) => {
     if (!categoryId) {
       notify({ type: 'error', message: 'Category ID is not provided' });
       return;
     }
 
     deleteCategory(categoryId);
-  };
+  }, [deleteCategory]);
 
   const columns = useMemo(() => [
     columnHelper.accessor('name', {
@@ -53,14 +54,18 @@ export const CategoriesPage = () => {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => (
-        <ConfirmationDialog
-          onConfirm={() => handleDeleteCategory(row.original?.id)}
-          message={`Do you really want to delete '${row.original?.name || ''}' category?`}
-          trigger={<Button variant="destructive">Delete</Button>}
-        />
+
+        <div className="flex gap-4">
+          <ConfirmationDialog
+            onConfirm={() => handleDeleteCategory(row.original?.id)}
+            message={`Do you really want to delete '${row.original?.name || ''}' category?`}
+            trigger={<Button variant="destructive">Delete</Button>}
+          />
+          <EditCategoryDialog category={row.original} />
+        </div>
       ),
     }),
-  ], []);
+  ], [handleDeleteCategory, categoriesData]);
 
 
   const tableInstance = useReactTable({

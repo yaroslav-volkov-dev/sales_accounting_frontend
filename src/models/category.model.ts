@@ -7,3 +7,5 @@ export type CategoryModel = {
 }
 
 export type CreateCategoryDto = Pick<CategoryModel, 'name'>
+
+export type EditCategoryDto = Pick<CategoryModel, 'name'>

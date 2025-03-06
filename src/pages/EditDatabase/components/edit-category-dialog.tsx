@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axiosConfig.js';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { categoriesQueryKey } from '../queries.ts';
-import { Input } from "@/components/ui/input.tsx";
-import { CreateCategoryDto } from "@/models/category.model.ts";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { CategoryModel, EditCategoryDto } from "@/models/category.model.ts";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { axiosInstance } from "@/api/axiosConfig.ts";
+import { ENDPOINTS } from "@/constants/endpoints.ts";
+import { categoriesQueryKey } from "@/pages/EditDatabase/queries.ts";
 import { notify } from "@/utils/notify.ts";
 import {
   Dialog,
@@ -15,19 +15,31 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { DialogClose } from "@radix-ui/react-dialog";
 
-export const AddCategoryDialog = () => {
+export type EditCategoryDialogProps = {
+  category: CategoryModel;
+}
+
+export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
   const [open, setOpen] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<CreateCategoryDto>();
+  const { register, handleSubmit, reset } = useForm<EditCategoryDto>({
+    defaultValues: {
+      name: category.name
+    }
+  });
+
   const client = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: (newCategory: CreateCategoryDto) => axiosInstance.post(ENDPOINTS.CATEGORIES, newCategory),
+    mutationFn: ({ id, body }: {
+      id: string | number;
+      body: EditCategoryDto
+    }) => axiosInstance.put(`${ENDPOINTS.CATEGORIES}/${id}`, body),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
       setOpen(false);
@@ -42,13 +54,13 @@ export const AddCategoryDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add category</Button>
+        <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((data) => mutate(data))}>
+        <form onSubmit={handleSubmit((body) => mutate({ id: category.id, body }))}>
           <DialogHeader>
-            <DialogTitle>Add Category</DialogTitle>
-            <DialogDescription>Add new category to the database.</DialogDescription>
+            <DialogTitle>Edit Category</DialogTitle>
+            <DialogDescription>{category.name} editing.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -61,7 +73,7 @@ export const AddCategoryDialog = () => {
           <DialogFooter>
             <Button type="submit">Save</Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
+              <Button variant="secondary" onClick={() => reset()}>
                 Cancel
               </Button>
             </DialogClose>
