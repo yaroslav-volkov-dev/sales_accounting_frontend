@@ -12,20 +12,20 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import { ReactElement } from "react";
 
-type ConfirmationModalProps = {
+type ConfirmationDialogProps = {
   onConfirm: () => void;
   message: string;
   onCancel?: () => void;
   trigger?: ReactElement
 }
 
-export const ConfirmationModal = (
+export const ConfirmationDialog = (
   {
     onConfirm,
     onCancel,
     message,
     trigger
-  }: ConfirmationModalProps) => (
+  }: ConfirmationDialogProps) => (
   <AlertDialog>
     <AlertDialogTrigger asChild>
       {trigger || <Button variant="outline">Show Dialog</Button>}

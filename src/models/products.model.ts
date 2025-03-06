@@ -15,3 +15,10 @@ export type CreateProductDto = {
   categoryId?: number;
   supplierId?: number
 }
+
+export type EditProductDto = {
+  name: string;
+  price: number;
+  categoryId?: number;
+  supplierId?: number
+}

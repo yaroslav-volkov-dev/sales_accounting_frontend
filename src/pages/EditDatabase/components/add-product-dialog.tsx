@@ -25,7 +25,7 @@ import { CreateProductDto } from "@/models/products.model.ts";
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false);
 
-  const { register, handleSubmit, reset: resetCreatingForm, control } = useForm<CreateProductDto>();
+  const { register, handleSubmit, reset, control } = useForm<CreateProductDto>();
   const client = useQueryClient();
 
   const { mutate } = useMutation({
@@ -33,7 +33,7 @@ export const AddProductDialog = () => {
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [productsQueryKey.all] });
       setOpen(false);
-      resetCreatingForm();
+      reset();
     },
   });
 

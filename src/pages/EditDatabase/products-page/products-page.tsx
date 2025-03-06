@@ -1,7 +1,7 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { axiosInstance } from '@/api/axiosConfig.js';
 import { productsQueryKey } from '../queries.ts';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button.tsx';
@@ -11,7 +11,8 @@ import { FiltersController } from '@/components/filters-controller/filters-contr
 import { ProductsModel } from "@/models";
 import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/utils/get-query-string-params.ts";
-import { ConfirmationModal } from "@/components/confirmation-modal/confirmation-modal.tsx";
+import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
+import { EditProductDialog } from "@/pages/EditDatabase/components/edit-product-dialog.tsx";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 
@@ -23,7 +24,7 @@ export const ProductsPage = () => {
     suppliersOptions,
     categoriesOptions
   } = useProductFiltersState();
-  
+
   const { data: productsData } = useQuery<ProductsModel[]>({
     queryKey: [productsQueryKey.categories(state.categoriesIds, state.withoutCategory, state.suppliersIds, state.withoutSupplier)],
     queryFn: async () => {
@@ -50,14 +51,13 @@ export const ProductsPage = () => {
     },
   });
 
-
-  const deleteProduct = (product: ProductsModel) => {
+  const deleteProduct = useCallback((product: ProductsModel) => {
     const { id } = product || {};
 
     if (!id) return;
 
     deleteProductMutation(id);
-  };
+  }, [deleteProductMutation]);
 
   const columns = useMemo(() => [
     columnHelper.accessor('name', {
@@ -79,15 +79,20 @@ export const ProductsPage = () => {
     columnHelper.display({
       id: 'actions',
       header: 'Actions',
-      cell: ({ row }) => (
-        <ConfirmationModal
-          onConfirm={() => deleteProduct(row.original)}
-          message={`Do you really want to delete '${row.original?.name || ''}' product?`}
-          trigger={<Button variant="destructive">Delete</Button>}
-        />
-      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-4">
+            <ConfirmationDialog
+              onConfirm={() => deleteProduct(row.original)}
+              message={`Do you really want to delete '${row.original?.name || ''}' product?`}
+              trigger={<Button variant="outline">Delete</Button>}
+            />
+            <EditProductDialog product={row.original} />
+          </div>
+        );
+      },
     }),
-  ], []);
+  ], [deleteProduct, productsData]);
 
   const tableInstance = useReactTable({
     data: productsData || [],

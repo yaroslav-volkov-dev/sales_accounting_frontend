@@ -7,7 +7,7 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '
 import { getQueryStringParams } from '@/utils/get-query-string-params.ts';
 import { categoriesQueryKey } from '../queries.ts';
 import { notify } from '@/utils/notify.ts';
-import { ConfirmationModal } from '@/components/confirmation-modal/confirmation-modal.tsx';
+import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx';
 import { CategoryModel } from "@/models";
 import { Maybe } from "@/types/utility.types.ts";
 import { Button } from "@/components/ui/button.tsx";
@@ -53,7 +53,7 @@ export const CategoriesPage = () => {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => (
-        <ConfirmationModal
+        <ConfirmationDialog
           onConfirm={() => handleDeleteCategory(row.original?.id)}
           message={`Do you really want to delete '${row.original?.name || ''}' category?`}
           trigger={<Button variant="destructive">Delete</Button>}
