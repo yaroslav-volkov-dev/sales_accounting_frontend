@@ -5,3 +5,5 @@ export type SupplierModel = {
     Product: number
   };
 }
+
+export type CreateSupplierDto = Pick<SupplierModel, 'name'>

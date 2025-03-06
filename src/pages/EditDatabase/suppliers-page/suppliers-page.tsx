@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { axiosInstance } from '@/api/axiosConfig.js';
@@ -7,18 +7,16 @@ import { getQueryStringParams } from '@/utils/get-query-string-params.ts';
 import { suppliersQueryKey } from '../queries.ts';
 import { notify } from '@/utils/notify.ts';
 import { ConfirmationModal } from '@/components/confirmation-modal/confirmation-modal.tsx';
-import { AddSupplierModal } from '../components/AddSupplierModal.jsx';
 import { SupplierModel } from "@/models";
 import { Button } from "@/components/ui/button.tsx";
 import { Maybe } from "@/types/utility.types.ts";
+import { AddSupplierDialog } from "@/pages/EditDatabase/components/add-supplier-dialog.tsx";
 
 const columnHelper = createColumnHelper<SupplierModel>();
+const includeCount = true;
 
 export const SuppliersPage = () => {
-  const [isAddSupplierModalOpen, setIsAddSuppliersModalOpen] = useState(false);
-
   const client = useQueryClient();
-  const includeCount = true;
 
   const { data: suppliersData } = useQuery<SupplierModel[]>({
     queryKey: [suppliersQueryKey.includeCount(includeCount)],
@@ -76,7 +74,7 @@ export const SuppliersPage = () => {
   return (
     <>
       <div className="flex flex-col items-start gap-3">
-        <Button onClick={() => setIsAddSuppliersModalOpen(true)}>Add supplier</Button>
+        <AddSupplierDialog />
         <div className="h-full bg-white border border-gray-300 rounded">
           <table className="w-full border-collapse table-fixed">
             <thead className="border-b border-gray-300">
@@ -109,7 +107,6 @@ export const SuppliersPage = () => {
           </table>
         </div>
       </div>
-      <AddSupplierModal isOpen={isAddSupplierModalOpen} onClose={() => setIsAddSuppliersModalOpen(false)} />
     </>
   );
 };
