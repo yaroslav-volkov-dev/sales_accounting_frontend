@@ -10,6 +10,7 @@ import { CategoryModel } from "@/models/category.model.ts";
 import { SupplierModel } from "@/models/supplier.model.ts";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -18,7 +19,6 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { CreateProductDto } from "@/models/products.model.ts";
 

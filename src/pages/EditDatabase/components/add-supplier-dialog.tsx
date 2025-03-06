@@ -57,6 +57,15 @@ export const AddSupplierDialog = () => {
               </Label>
               <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="phoneNumber" className="text-right">
+                Phone
+              </Label>
+              <Input
+                placeholder="Phone number" {...register('phoneNumber')}
+                className="col-span-3"
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button type="submit">Save</Button>

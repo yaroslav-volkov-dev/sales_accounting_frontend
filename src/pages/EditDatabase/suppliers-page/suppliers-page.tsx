@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { axiosInstance } from '@/api/axiosConfig.js';
@@ -11,6 +11,7 @@ import { SupplierModel } from "@/models";
 import { Button } from "@/components/ui/button.tsx";
 import { Maybe } from "@/types/utility.types.ts";
 import { AddSupplierDialog } from "@/pages/EditDatabase/components/add-supplier-dialog.tsx";
+import { EditSupplierDialog } from "@/pages/EditDatabase/components/edit-supplier-dialog.tsx";
 
 const columnHelper = createColumnHelper<SupplierModel>();
 const includeCount = true;
@@ -31,18 +32,22 @@ export const SuppliersPage = () => {
     }
   });
 
-  const handleDeleteSupplier = (supplierId: Maybe<number>) => {
+  const handleDeleteSupplier = useCallback((supplierId: Maybe<number>) => {
     if (!supplierId) {
       notify({ type: 'error', message: 'Supplier ID is not provided' });
       return;
     }
 
     deleteSupplier(supplierId);
-  };
+  }, [deleteSupplier]);
 
   const columns = useMemo(() => [
     columnHelper.accessor('name', {
       header: 'Name',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.accessor((originalRow) => originalRow?.phoneNumber, {
+      header: 'Phone',
       cell: ({ getValue }) => getValue(),
     }),
     columnHelper.accessor((originalRow) => originalRow?._count?.Product, {
@@ -53,14 +58,17 @@ export const SuppliersPage = () => {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => (
-        <ConfirmationDialog
-          onConfirm={() => handleDeleteSupplier(row.original?.id)}
-          message={`Do you really want to delete '${row.original?.name || ''}' category?`}
-          trigger={<Button variant="destructive">Delete</Button>}
-        />
+        <div className="flex gap-4">
+          <ConfirmationDialog
+            onConfirm={() => handleDeleteSupplier(row.original?.id)}
+            message={`Do you really want to delete '${row.original?.name || ''}' category?`}
+            trigger={<Button variant="outline">Delete</Button>}
+          />
+          <EditSupplierDialog supplier={row.original} />
+        </div>
       ),
     }),
-  ], []);
+  ], [handleDeleteSupplier, suppliersData]);
 
   const tableInstance = useReactTable({
     data: suppliersData || [],

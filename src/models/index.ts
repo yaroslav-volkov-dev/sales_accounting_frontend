@@ -1,3 +1,3 @@
-export type { ProductsModel } from './products.model.ts';
-export type { CategoryModel } from './category.model.ts';
-export type { SupplierModel } from './supplier.model.ts';
+export type { ProductsModel, EditProductDto, CreateProductDto } from './products.model.ts';
+export type { CategoryModel, EditCategoryDto, CreateCategoryDto } from './category.model.ts';
+export type { SupplierModel, CreateSupplierDto, EditSupplierDto } from './supplier.model.ts';

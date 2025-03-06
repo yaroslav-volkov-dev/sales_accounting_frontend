@@ -20,6 +20,7 @@ import { axiosInstance } from "@/api/axiosConfig.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { productsQueryKey, suppliersQueryKey } from "@/pages/EditDatabase/queries.ts";
 import { CategoryModel, SupplierModel } from "@/models";
+import { notify } from "@/utils/notify.ts";
 
 type EditProductDialogProps = {
   product: ProductsModel
@@ -48,7 +49,11 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
       client.invalidateQueries({ queryKey: [productsQueryKey.all] });
       setOpen(false);
       reset();
+      notify({ message: 'Product successfully edited!' });
     },
+    onError: () => {
+      notify({ type: 'error', message: 'Something went wrong. Cannot edit product.' });
+    }
   });
 
   const { data: categoriesData } = useQuery<CategoryModel[]>({

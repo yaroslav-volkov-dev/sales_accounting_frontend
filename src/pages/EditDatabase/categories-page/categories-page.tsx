@@ -59,7 +59,7 @@ export const CategoriesPage = () => {
           <ConfirmationDialog
             onConfirm={() => handleDeleteCategory(row.original?.id)}
             message={`Do you really want to delete '${row.original?.name || ''}' category?`}
-            trigger={<Button variant="destructive">Delete</Button>}
+            trigger={<Button variant="outline">Delete</Button>}
           />
           <EditCategoryDialog category={row.original} />
         </div>
