@@ -26,7 +26,7 @@ export const AddCategoryDialog = () => {
   const { register, handleSubmit, reset } = useForm<CreateCategoryDto>();
   const client = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (newCategory: CreateCategoryDto) => axiosInstance.post(ENDPOINTS.CATEGORIES, newCategory),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
@@ -59,7 +59,12 @@ export const AddCategoryDialog = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              isLoading={isPending}
+            >
+              Save
+            </Button>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Cancel

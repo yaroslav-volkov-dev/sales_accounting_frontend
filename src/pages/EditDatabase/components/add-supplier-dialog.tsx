@@ -26,7 +26,7 @@ export const AddSupplierDialog = () => {
   const { register, handleSubmit, reset } = useForm<CreateSupplierDto>();
   const client = useQueryClient();
 
-  const { mutate: addSupplierMutation } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (newSupplier: CreateSupplierDto) => axiosInstance.post(ENDPOINTS.SUPPLIERS, newSupplier),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [suppliersQueryKey.all] });
@@ -45,7 +45,7 @@ export const AddSupplierDialog = () => {
         <Button>Add supplier</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((data) => addSupplierMutation(data))}>
+        <form onSubmit={handleSubmit((data) => mutate(data))}>
           <DialogHeader>
             <DialogTitle>Add Supplier</DialogTitle>
             <DialogDescription>Add new supplier to the database.</DialogDescription>
@@ -68,7 +68,11 @@ export const AddSupplierDialog = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              isLoading={isPending}>
+              Save
+            </Button>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Cancel

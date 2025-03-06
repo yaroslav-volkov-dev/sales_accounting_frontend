@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button.tsx";
 import { Maybe } from "@/types/utility.types.ts";
 import { AddSupplierDialog } from "@/pages/EditDatabase/components/add-supplier-dialog.tsx";
 import { EditSupplierDialog } from "@/pages/EditDatabase/components/edit-supplier-dialog.tsx";
+import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
+import { NavLink } from "react-router-dom";
+import { EyeIcon } from "lucide-react";
 
 const columnHelper = createColumnHelper<SupplierModel>();
 const includeCount = true;
@@ -52,7 +55,24 @@ export const SuppliersPage = () => {
     }),
     columnHelper.accessor((originalRow) => originalRow?._count?.Product, {
       header: 'Suppliers products',
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue, row }) => {
+        const value = getValue();
+
+        const url = getQueryStringParams('/edit-database/products', {
+          [ProductsQueryFilterKey.SUPPLIERS_IDS]: row.original.id
+        });
+
+        return (
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-semibold">{value}</span>
+            {value > 0 && (
+              <NavLink to={url} className="relative top-[1px]">
+                <EyeIcon size={20} className="hover:text-blue-500" />
+              </NavLink>
+            )}
+          </div>
+        );
+      },
     }),
     columnHelper.display({
       id: 'actions',

@@ -9,13 +9,21 @@ type SelectInputProps = {
   onSelect: (value: string) => void
   triggerClassname?: string;
   defaultValue?: string
+  placeholder?: string;
 }
 
-export const SelectInput = ({ options, onSelect, triggerClassname, defaultValue }: SelectInputProps) => {
+export const SelectInput = (
+  {
+    options,
+    onSelect,
+    triggerClassname,
+    defaultValue,
+    placeholder = 'Select...'
+  }: SelectInputProps) => {
   return (
     <Select onValueChange={onSelect} defaultValue={defaultValue}>
       <SelectTrigger className={cn('w-full', triggerClassname)}>
-        <SelectValue placeholder="Theme" />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {options.map(({ value, label }) => (

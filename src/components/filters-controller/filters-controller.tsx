@@ -2,6 +2,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useMemo, useState } from "react";
+import { cn } from "@/lib/utils.ts";
 
 type Option<Group extends string> = {
   id: string;
@@ -71,6 +72,13 @@ export const FiltersController = <Group extends string>(
       <PopoverTrigger asChild>
         <Button variant="outline">
           {controllerName}
+          <div
+            className={cn('w-5 h-5 flex justify-center items-center border rounded text-xs font-semibold',
+              selectedOptionsIds.length > 0 ? 'border-blue-500 text-blue-500' : 'border-input'
+            )}
+          >
+            {selectedOptionsIds.length}
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent>

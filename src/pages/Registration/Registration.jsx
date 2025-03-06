@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
-import { Input } from '../../components/Input/Input.jsx';
-import { OverlayLoader } from '../../components/OverlayLoader/OverlayLoader.tsx';
-import { errorMessageRequired } from '../../utils/infoMessages.ts';
-import { useAuth } from '../../hooks/useAuth.ts';
-import { Paper } from '../../components/Paper/Paper.tsx';
-import { Button } from '../../components/Button/Button.tsx';
+import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
+import { errorMessageRequired } from '@/utils/infoMessages.js';
+import { useAuth } from '@/hooks/useAuth.js';
+import { Paper } from '@/components/Paper/Paper.js';
+import { Button } from '@/components/ui/button.js';
+import { Input } from '@/components/ui/input.js';
 
 export const Registration = () => {
   const { register: registerField, handleSubmit, formState: { errors } } = useForm();
@@ -51,7 +51,7 @@ export const Registration = () => {
             errorMessage={errors.confirmPassword?.message}
             {...registerField('confirmPassword', {
               validate: (value, formValues) => {
-                if (formValues.password !== value) return 'Your passwords do no match';
+                if (formValues.password !== value) return 'Your passwords do not match';
               },
             })}
           />

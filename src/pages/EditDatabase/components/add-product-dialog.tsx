@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { SelectInput } from '@/components/SelectInput/select-input.tsx';
+import { SelectInput } from '@/components/select-input/select-input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '@/api/axiosConfig.js';
@@ -28,7 +28,7 @@ export const AddProductDialog = () => {
   const { register, handleSubmit, reset, control } = useForm<CreateProductDto>();
   const client = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (newProduct: CreateProductDto) => axiosInstance.post(ENDPOINTS.PRODUCTS, newProduct),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [productsQueryKey.all] });
@@ -92,6 +92,7 @@ export const AddProductDialog = () => {
                       options={categoriesOptions}
                       onSelect={field.onChange}
                       triggerClassname="col-span-3"
+                      placeholder="Select category"
                     />
                   )}
                 />
@@ -108,13 +109,19 @@ export const AddProductDialog = () => {
                       options={suppliersOptions}
                       onSelect={field.onChange}
                       triggerClassname="col-span-3"
+                      placeholder="Select supplier"
                     />
                   )}
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Save</Button>
+              <Button
+                type="submit"
+                isLoading={isPending}
+              >
+                Save
+              </Button>
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
                   Cancel

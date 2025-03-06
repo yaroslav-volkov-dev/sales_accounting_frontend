@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Controller, useForm } from "react-hook-form";
-import { SelectInput } from "@/components/SelectInput/select-input.tsx";
+import { SelectInput } from "@/components/select-input/select-input.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -40,7 +40,7 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
 
   const client = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: ({ id, body }: {
       id: string | number,
       body: EditProductDto
@@ -111,6 +111,7 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
                     onSelect={field.onChange}
                     triggerClassname="col-span-3"
                     defaultValue={field?.value?.toString()}
+                    placeholder="Select category"
                   />
                 )}
               />
@@ -128,13 +129,19 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
                     onSelect={field.onChange}
                     triggerClassname="col-span-3"
                     defaultValue={field?.value?.toString()}
+                    placeholder="Select supplier"
                   />
                 )}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              isLoading={isPending}
+            >
+              Save
+            </Button>
             <DialogClose asChild>
               <Button variant="secondary" onClick={() => reset()}>
                 Cancel

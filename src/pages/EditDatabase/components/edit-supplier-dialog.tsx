@@ -33,7 +33,7 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
 
   const client = useQueryClient();
 
-  const { mutate: addSupplierMutation } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: ({ body, id }: {
       id: number;
       body: EditSupplierDto
@@ -55,7 +55,7 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
         <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((body) => addSupplierMutation({ id: supplier.id, body }))}>
+        <form onSubmit={handleSubmit((body) => mutate({ id: supplier.id, body }))}>
           <DialogHeader>
             <DialogTitle>Edit Supplier</DialogTitle>
             <DialogDescription>{supplier.name} editing.</DialogDescription>
@@ -79,7 +79,12 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              isLoading={isPending}
+            >
+              Save
+            </Button>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Cancel

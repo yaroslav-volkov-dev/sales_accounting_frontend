@@ -33,7 +33,7 @@ export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
 
   const client = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: ({ id, body }: {
       id: string | number;
       body: EditCategoryDto
@@ -69,7 +69,12 @@ export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              isLoading={isPending}
+            >
+              Save
+            </Button>
             <DialogClose asChild>
               <Button variant="secondary" onClick={() => reset()}>
                 Cancel
