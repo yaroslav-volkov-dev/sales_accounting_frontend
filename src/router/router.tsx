@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainPage } from '@/pages/main-page/main-page.tsx';
-import { Layout } from '../components/Layout/Layout.jsx';
+import { Layout } from '@/components/layout/layout.tsx';
 import { EditDatabase } from '../pages/EditDatabase/edit-database.tsx';
 import { Registration } from '../pages/Registration/Registration.jsx';
 import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';

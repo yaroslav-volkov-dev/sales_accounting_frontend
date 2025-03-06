@@ -8,3 +8,10 @@ export type ProductsModel = {
   category: CategoryModel;
   supplier: SupplierModel
 }
+
+export type CreateProductDto = {
+  name: string;
+  price: number;
+  categoryId?: number;
+  supplierId?: number
+}

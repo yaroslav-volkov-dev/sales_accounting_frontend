@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { axiosInstance } from '@/api/axiosConfig.js';
-import { AddCategoryModal } from '../components/add-category-modal.tsx';
+import { AddCategoryDialog } from '../components/add-category-dialog.tsx';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { getQueryStringParams } from '@/utils/get-query-string-params.ts';
 import { categoriesQueryKey } from '../queries.ts';
@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button.tsx";
 const columnHelper = createColumnHelper<CategoryModel>();
 
 export const CategoriesPage = () => {
-  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
-
   const client = useQueryClient();
   const includeCount = true;
 
@@ -77,7 +75,7 @@ export const CategoriesPage = () => {
   return (
     <>
       <div className="flex flex-col items-start gap-3">
-        <Button onClick={() => setIsAddCategoryModalOpen(true)}>Add category</Button>
+        <AddCategoryDialog />
         <div className="h-full bg-white border border-gray-300 rounded">
           <table className="w-full border-collapse table-fixed">
             <thead className="border-b border-gray-300">
@@ -114,10 +112,6 @@ export const CategoriesPage = () => {
           </table>
         </div>
       </div>
-      <AddCategoryModal
-        isOpen={isAddCategoryModalOpen}
-        onClose={() => setIsAddCategoryModalOpen(false)}
-      />
     </>
   );
 };

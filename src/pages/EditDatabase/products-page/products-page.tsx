@@ -1,12 +1,12 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { axiosInstance } from '@/api/axiosConfig.js';
 import { productsQueryKey } from '../queries.ts';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button.tsx';
 import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
-import { AddProductModal } from '../components/AddProductModal.tsx';
+import { AddProductDialog } from '../components/add-product-dialog.tsx';
 import { FiltersController } from '@/components/filters-controller/filters-controller.js';
 import { ProductsModel } from "@/models";
 import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
@@ -16,8 +16,6 @@ import { ConfirmationModal } from "@/components/confirmation-modal/confirmation-
 const columnHelper = createColumnHelper<ProductsModel>();
 
 export const ProductsPage = () => {
-  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
-
   const {
     updateCategoryFilters,
     updateSupplierFilters,
@@ -25,6 +23,7 @@ export const ProductsPage = () => {
     suppliersOptions,
     categoriesOptions
   } = useProductFiltersState();
+  
   const { data: productsData } = useQuery<ProductsModel[]>({
     queryKey: [productsQueryKey.categories(state.categoriesIds, state.withoutCategory, state.suppliersIds, state.withoutSupplier)],
     queryFn: async () => {
@@ -105,9 +104,7 @@ export const ProductsPage = () => {
       <div className="flex gap-10 min-h-[500px]">
         <div className="flex flex-col gap-3 grow">
           <div className="flex gap-3">
-            <Button onClick={() => setIsAddProductModalOpen(true)}>
-              Add product
-            </Button>
+            <AddProductDialog />
             <FiltersController
               options={categoriesOptions}
               onSelect={updateCategoryFilters}
@@ -158,10 +155,6 @@ export const ProductsPage = () => {
           </div>
         </div>
       </div>
-      <AddProductModal
-        isOpen={isAddProductModalOpen}
-        onClose={() => setIsAddProductModalOpen(false)}
-      />
     </>
   );
 };

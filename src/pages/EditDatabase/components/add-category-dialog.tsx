@@ -2,7 +2,10 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '@/api/axiosConfig.js';
 import { ENDPOINTS } from '@/constants/endpoints.js';
-import { suppliersQueryKey } from '../queries.ts';
+import { categoriesQueryKey } from '../queries.ts';
+import { Input } from "@/components/ui/input.tsx";
+import { CreateCategoryDto } from "@/models/category.model.ts";
+import { notify } from "@/utils/notify.ts";
 import {
   Dialog,
   DialogContent,
@@ -11,44 +14,41 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from '@/components/ui/dialog.js';
-import { Label } from '@/components/ui/label.js';
-import { Input } from '@/components/ui/input.js';
-import { Button } from '@/components/ui/button.js';
+} from "@/components/ui/dialog.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { CreateSupplierDto } from "@/models/supplier.model.ts";
 import { useState } from "react";
-import { notify } from "@/utils/notify.ts";
+import { Button } from "@/components/ui/button.tsx";
 
-export const AddSupplierDialog = () => {
+export const AddCategoryDialog = () => {
   const [open, setOpen] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<CreateSupplierDto>();
+  const { register, handleSubmit, reset } = useForm<CreateCategoryDto>();
   const client = useQueryClient();
 
-  const { mutate: addSupplierMutation } = useMutation({
-    mutationFn: (newSupplier: CreateSupplierDto) => axiosInstance.post(ENDPOINTS.SUPPLIERS, newSupplier),
+  const { mutate } = useMutation({
+    mutationFn: (newCategory: CreateCategoryDto) => axiosInstance.post(ENDPOINTS.CATEGORIES, newCategory),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [suppliersQueryKey.all] });
+      client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Supplier successfully added!' });
+      notify({ message: 'Category successfully added!' });
     },
     onError: () => {
-      notify({ message: 'Something went wrong. Cannot add supplier.' });
+      notify({ message: 'Something went wrong. Cannot add category.' });
     }
   });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add supplier</Button>
+        <Button>Add category</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((data) => addSupplierMutation(data))}>
+        <form onSubmit={handleSubmit((data) => mutate(data))}>
           <DialogHeader>
-            <DialogTitle>Add Supplier</DialogTitle>
-            <DialogDescription>Add new supplier to the database.</DialogDescription>
+            <DialogTitle>Add Category</DialogTitle>
+            <DialogDescription>Add new category to the database.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

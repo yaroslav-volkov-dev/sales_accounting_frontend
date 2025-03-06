@@ -21,7 +21,7 @@ export const EditDatabase = () => {
 
   return (
     <div>
-      <nav className="flex gap-3">
+      <nav className="flex gap-3 pb-4 border-b border-gray-200">
         {links.map(({ to, label }) => (
           <NavLink
             to={to}

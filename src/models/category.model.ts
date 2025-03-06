@@ -5,3 +5,5 @@ export type CategoryModel = {
     Product: number
   };
 }
+
+export type CreateCategoryDto = Pick<CategoryModel, 'name'>
