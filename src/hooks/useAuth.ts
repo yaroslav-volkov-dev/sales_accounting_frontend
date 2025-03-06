@@ -1,4 +1,4 @@
-import { notify } from '../utils/notify.js';
+import { notify } from '../utils/notify.ts';
 import { DefaultError, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '../constants/endpoints.ts';
 import { axiosInstance } from '../api/axiosConfig.ts';

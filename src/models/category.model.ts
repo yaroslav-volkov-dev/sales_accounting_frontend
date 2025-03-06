@@ -1,5 +1,7 @@
 export type CategoryModel = {
   name: string;
   id: number;
-  _count: number;
+  _count: {
+    Product: number
+  };
 }

@@ -1,14 +1,14 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { MainPage } from '../pages/MainPage/MainPage.jsx';
+import { MainPage } from '@/pages/main-page/main-page.tsx';
 import { Layout } from '../components/Layout/Layout.jsx';
-import { EditDatabase } from '../pages/EditDatabase/EditDatabase.jsx';
+import { EditDatabase } from '../pages/EditDatabase/edit-database.tsx';
 import { Registration } from '../pages/Registration/Registration.jsx';
 import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';
 import { Login } from '../pages/Login/Login.tsx';
 import { UnauthorizedRoutes } from './UnauthorizedRoutes.jsx';
 import { ProductsPage } from '@/pages/EditDatabase/products-page/products-page.tsx';
-import { CategoriesPage } from '../pages/EditDatabase/CategoriesPage/CategoriesPage.jsx';
-import { SuppliersPage } from '../pages/EditDatabase/SuppliersPage/SuppliersPage.jsx';
+import { CategoriesPage } from '@/pages/EditDatabase/categories-page/categories-page.tsx';
+import { SuppliersPage } from '@/pages/EditDatabase/suppliers-page/suppliers-page.tsx';
 
 export const router = createBrowserRouter([
   {

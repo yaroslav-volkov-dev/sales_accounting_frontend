@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { cn } from '@/lib/utils.js';
 
 const links = [
   {
@@ -20,18 +21,20 @@ export const EditDatabase = () => {
 
   return (
     <div>
-      <div className="flex gap-3">
+      <nav className="flex gap-3">
         {links.map(({ to, label }) => (
           <NavLink
             to={to}
-            className={({ isActive }) => isActive ? 'text-button-primary' : undefined}
+            className={({ isActive }) => cn('text-xl font-bold', isActive && 'text-blue-500')}
             key={to}
           >
             {label}
           </NavLink>
         ))}
+      </nav>
+      <div className="mt-6">
+        <Outlet />
       </div>
-      <Outlet />
     </div>
   );
 };

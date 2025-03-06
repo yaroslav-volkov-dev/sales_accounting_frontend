@@ -6,18 +6,17 @@ import { ENDPOINTS } from '@/constants/endpoints.js';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button.tsx';
 import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
-import { ConfirmationModal } from '@/components/ConfirmationModal/ConfirmationModal.js';
 import { AddProductModal } from '../components/AddProductModal.tsx';
 import { FiltersController } from '@/components/filters-controller/filters-controller.js';
 import { ProductsModel } from "@/models";
 import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/utils/get-query-string-params.ts";
+import { ConfirmationModal } from "@/components/confirmation-modal/confirmation-modal.tsx";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 
 export const ProductsPage = () => {
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
-  const [deletableProduct, setDeletableProduct] = useState<ProductsModel | null>(null);
 
   const {
     updateCategoryFilters,
@@ -45,21 +44,16 @@ export const ProductsPage = () => {
 
   const client = useQueryClient();
 
-  const { mutate: deleteProductMutation, isPending: isDeleteProductLoading } = useMutation({
+  const { mutate: deleteProductMutation } = useMutation({
     mutationFn: (id: string | number) => axiosInstance.delete(`${ENDPOINTS.PRODUCTS}/${id}`),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [productsQueryKey.all] });
-      setDeletableProduct(null);
     },
   });
 
-  const openDeleteModalWindow = (product: ProductsModel) => {
-    if (!product) return;
-    setDeletableProduct(product);
-  };
 
-  const deleteProduct = () => {
-    const { id } = deletableProduct || {};
+  const deleteProduct = (product: ProductsModel) => {
+    const { id } = product || {};
 
     if (!id) return;
 
@@ -87,11 +81,11 @@ export const ProductsPage = () => {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => (
-        <Button
-          onClick={() => openDeleteModalWindow(row.original)}
-          className="bg-red-600">
-          Delete
-        </Button>
+        <ConfirmationModal
+          onConfirm={() => deleteProduct(row.original)}
+          message={`Do you really want to delete '${row.original?.name || ''}' product?`}
+          trigger={<Button variant="destructive">Delete</Button>}
+        />
       ),
     }),
   ], []);
@@ -108,7 +102,7 @@ export const ProductsPage = () => {
   return (
     <>
       <OverlayLoader show={false} />
-      <div className="flex gap-10 mt-10 min-h-[500px]">
+      <div className="flex gap-10 min-h-[500px]">
         <div className="flex flex-col gap-3 grow">
           <div className="flex gap-3">
             <Button onClick={() => setIsAddProductModalOpen(true)}>
@@ -167,13 +161,6 @@ export const ProductsPage = () => {
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={() => setIsAddProductModalOpen(false)}
-      />
-      <ConfirmationModal
-        isOpen={!!deletableProduct}
-        onConfirm={deleteProduct}
-        isLoading={isDeleteProductLoading}
-        onCancel={() => setDeletableProduct(null)}
-        message={`Do you really want to delete '${deletableProduct?.name || ''}' product?`}
       />
     </>
   );
