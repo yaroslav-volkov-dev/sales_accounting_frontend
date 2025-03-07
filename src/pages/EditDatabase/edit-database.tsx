@@ -14,6 +14,10 @@ const links = [
     label: 'Suppliers',
     to: 'suppliers'
   },
+  {
+    label: 'Stores',
+    to: 'stores'
+  },
 ];
 
 

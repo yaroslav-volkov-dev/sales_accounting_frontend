@@ -2,8 +2,9 @@ import { notify } from '../utils/notify.ts';
 import { DefaultError, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '../constants/endpoints.ts';
 import { axiosInstance } from '../api/axiosConfig.ts';
-import { LOCAL_STORAGE_KEY } from '../constants/localStorageKeys.ts';
+import { LOCAL_STORAGE_KEY } from '../constants/local-storage-keys.ts';
 import { LoginRequest, LoginResponse, RefreshSessionResponse, RegistrationResponse } from "@/types/auth.types.ts";
+import { UserModel } from "@/models";
 
 const queryKey = {
   auth: ['auth']
@@ -13,7 +14,7 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
 
-  const { data: userData, isLoading: isUserDataLoading } = useQuery({
+  const { data: userData, isLoading: isUserDataLoading } = useQuery<UserModel>({
     queryKey: [queryKey.auth],
     queryFn: () => axiosInstance.post(ENDPOINTS.REFRESH_SESSION),
     onSuccess: (response) => {

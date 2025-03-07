@@ -1,7 +1,7 @@
 import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
 import { useForm } from 'react-hook-form';
 import { errorMessageRequired } from '@/utils/infoMessages.ts';
-import { useAuth } from '@/hooks/useAuth.ts';
+import { useAuth } from '@/hooks/use-auth.ts';
 import { Label } from '@/components/ui/label.js';
 import { Input } from '@/components/ui/input.js';
 import { Button } from "@/components/ui/button.tsx";

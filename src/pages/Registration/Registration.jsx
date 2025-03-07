@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
 import { errorMessageRequired } from '@/utils/infoMessages.js';
-import { useAuth } from '@/hooks/useAuth.js';
+import { useAuth } from '@/hooks/use-auth.ts';
 import { Paper } from '@/components/Paper/Paper.js';
 import { Button } from '@/components/ui/button.js';
 import { Input } from '@/components/ui/input.js';

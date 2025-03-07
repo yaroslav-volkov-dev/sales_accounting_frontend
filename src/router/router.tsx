@@ -9,6 +9,7 @@ import { UnauthorizedRoutes } from './UnauthorizedRoutes.jsx';
 import { ProductsPage } from '@/pages/EditDatabase/products-page/products-page.tsx';
 import { CategoriesPage } from '@/pages/EditDatabase/categories-page/categories-page.tsx';
 import { SuppliersPage } from '@/pages/EditDatabase/suppliers-page/suppliers-page.tsx';
+import { StoresPage } from "@/pages/EditDatabase/stores-page/stores-page.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -28,8 +29,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Navigate to="products"
-                                   replace />,
+                element: <Navigate to="products" replace />,
               },
               {
                 path: 'products',
@@ -42,6 +42,10 @@ export const router = createBrowserRouter([
               {
                 path: 'suppliers',
                 element: <SuppliersPage />,
+              },
+              {
+                path: 'stores',
+                element: <StoresPage />,
               },
             ],
           },

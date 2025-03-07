@@ -1,34 +1,29 @@
-import { useCallback, useMemo } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { axiosInstance } from '@/api/axiosConfig.js';
-import { AddCategoryDialog } from '../components/add-category-dialog.tsx';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { getQueryStringParams } from '@/utils/get-query-string-params.ts';
-import { categoriesQueryKey } from '../queries.ts';
-import { notify } from '@/utils/notify.ts';
-import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx';
-import { CategoryModel } from "@/models";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { StoreModel } from "@/models/store.model.ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { categoriesQueryKey, storesQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { axiosInstance } from "@/api/axiosConfig.ts";
+import { ENDPOINTS } from "@/constants/endpoints.ts";
+import { notify } from "@/utils/notify.ts";
+import { useCallback, useMemo } from "react";
 import { Maybe } from "@/types/utility.types.ts";
+import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { EditCategoryDialog } from "@/pages/EditDatabase/components/edit-category-dialog.tsx";
-import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
-import { NavLink } from "react-router-dom";
-import { EyeIcon } from "lucide-react";
+import { AddStoreDialog } from "@/pages/EditDatabase/components/add-store-dialog.tsx";
+import { EditStoreDialog } from "@/pages/EditDatabase/components/edit-store-dialog.tsx";
 
-const columnHelper = createColumnHelper<CategoryModel>();
-const includeCount = true;
+const columnHelper = createColumnHelper<StoreModel>();
 
-export const CategoriesPage = () => {
+export const StoresPage = () => {
   const client = useQueryClient();
 
-  const { data: categoriesData } = useQuery<CategoryModel[]>({
-    queryKey: [categoriesQueryKey.includeCount(includeCount)],
-    queryFn: async () => axiosInstance.get(getQueryStringParams(ENDPOINTS.CATEGORIES, { includeCount }))
+  const { data: storesData } = useQuery<StoreModel[]>({
+    queryKey: [storesQueryKey.all],
+    queryFn: async () => axiosInstance.get(ENDPOINTS.STORES)
   });
 
-  const { mutate: deleteCategory } = useMutation({
-    mutationFn: (categoryId: number) => axiosInstance.delete(`${ENDPOINTS.CATEGORIES}/${categoryId}`),
+  const { mutate: deleteStore } = useMutation({
+    mutationFn: (storeId: number) => axiosInstance.delete(`${ENDPOINTS.STORES}/${storeId}`),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
       notify({ message: 'Category successfully deleted!' });
@@ -41,37 +36,23 @@ export const CategoriesPage = () => {
       return;
     }
 
-    deleteCategory(categoryId);
-  }, [deleteCategory]);
+    deleteStore(categoryId);
+  }, [deleteStore]);
 
   const columns = useMemo(() => [
     columnHelper.accessor('name', {
       header: 'Name',
       cell: ({ getValue }) => getValue(),
     }),
-    columnHelper.accessor((originalRow) => originalRow?._count?.Product, {
-      header: 'In Category',
-      cell: ({ getValue, row }) => {
-        const value = getValue();
-
-        const url = getQueryStringParams('/edit-database/products', {
-          [ProductsQueryFilterKey.CATEGORIES_IDS]: row.original.id
-        });
-
-        return (
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold">{value}</span>
-            {value > 0 && (
-              <NavLink to={url} className="relative top-[1px]">
-                <EyeIcon size={20} className="hover:text-blue-500" />
-              </NavLink>
-            )}
-          </div>
-        );
-      },
+    columnHelper.accessor('location', {
+      header: 'Location',
+      cell: ({ getValue }) => getValue()
+    }),
+    columnHelper.accessor('phoneNumber', {
+      header: 'Phone number',
+      cell: ({ getValue }) => getValue()
     }),
     columnHelper.display({
-      id: 'actions',
       header: 'Actions',
       cell: ({ row }) => (
         <div className="flex gap-4">
@@ -80,26 +61,26 @@ export const CategoriesPage = () => {
             message={`Do you really want to delete '${row.original?.name || ''}' category?`}
             trigger={<Button variant="outline">Delete</Button>}
           />
-          <EditCategoryDialog category={row.original} />
+          <EditStoreDialog store={row.original} />
         </div>
       ),
     }),
-  ], [handleDeleteCategory, categoriesData]);
+  ], [handleDeleteCategory, storesData]);
 
 
   const tableInstance = useReactTable({
-    data: categoriesData || [],
+    data: storesData || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const rows = useMemo(() => tableInstance.getRowModel().rows, [categoriesData]);
-  const headerGroups = useMemo(() => tableInstance.getHeaderGroups(), [categoriesData]);
+  const rows = useMemo(() => tableInstance.getRowModel().rows, [storesData]);
+  const headerGroups = useMemo(() => tableInstance.getHeaderGroups(), [storesData]);
 
   return (
     <>
       <div className="flex flex-col items-start gap-3">
-        <AddCategoryDialog />
+        <AddStoreDialog />
         <div className="h-full bg-white border border-gray-300 rounded">
           <table className="w-full border-collapse table-fixed">
             <thead className="border-b border-gray-300">

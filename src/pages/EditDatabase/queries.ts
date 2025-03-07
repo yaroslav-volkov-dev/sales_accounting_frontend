@@ -14,3 +14,7 @@ export const suppliersQueryKey = {
   includeCount: (includeCount: boolean) => [...suppliersQueryKey.all, includeCount]
 
 };
+
+export const storesQueryKey = {
+  all: ['all']
+};

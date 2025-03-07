@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth.ts';
+import { useAuth } from '@/hooks/use-auth.ts';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button.js';
 import { cn } from "@/lib/utils.ts";
