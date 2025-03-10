@@ -3,13 +3,13 @@ import { MainPage } from '@/pages/main-page/main-page.tsx';
 import { Layout } from '@/components/layout/layout.tsx';
 import { EditDatabase } from '../pages/edit-database/edit-database.tsx';
 import { Registration } from '../pages/Registration/Registration.jsx';
-import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';
 import { Login } from '../pages/Login/Login.tsx';
-import { UnauthorizedRoutes } from './UnauthorizedRoutes.jsx';
 import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx';
 import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx';
 import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx';
 import { StoresPage } from "@/pages/edit-database/stores-page/stores-page.tsx";
+import { ShiftView } from "@/pages/shift-view/shift-view.tsx";
+import { ProtectedRoutes } from "@/router/protected-routes.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -21,8 +21,12 @@ export const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        element: <AuthorizedRoutes />,
+        element: <ProtectedRoutes />,
         children: [
+          {
+            path: '/shift-view',
+            element: <ShiftView />
+          },
           {
             path: '/edit-database',
             element: <EditDatabase />,
@@ -52,17 +56,12 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        element: <UnauthorizedRoutes />,
-        children: [
-          {
-            path: '/registration',
-            element: <Registration />
-          },
-          {
-            path: '/login',
-            element: <Login />
-          },
-        ]
+        path: '/registration',
+        element: <Registration />
+      },
+      {
+        path: '/login',
+        element: <Login />
       },
     ]
   },

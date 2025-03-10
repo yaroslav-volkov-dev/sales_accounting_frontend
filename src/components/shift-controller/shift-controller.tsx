@@ -19,13 +19,11 @@ import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation
 import { useAuth } from "@/hooks/use-auth.ts";
 import dayjs from 'dayjs';
 
-const ShiftControllerWrapper = ({ children }: { children: ReactElement }) => {
-  return (
-    <div className="min-h-[210px] overflow-hidden py-4">
-      {children}
-    </div>
-  );
-};
+const ShiftControllerWrapper = ({ children }: { children: ReactElement }) => (
+  <div className="min-h-[210px] overflow-hidden py-4">
+    {children}
+  </div>
+);
 
 const ShiftControllerContent = () => {
   const [openStartShiftDialog, setOpenStartShiftDialog] = useState(false);
@@ -37,7 +35,7 @@ const ShiftControllerContent = () => {
 
   const { control, handleSubmit } = useForm<{ storeId: string }>();
 
-  const { data: activeShiftData, isPending: isActiveShiftDataPending } = useActiveShiftQuery(userId);
+  const { data: activeShiftData, isLoading: isActiveShiftDataLoading } = useActiveShiftQuery(userId);
   const { data: storesData } = useStoresQuery();
 
   const { mutate: startShift, isPending: isStartShiftPending } = useStartShiftMutation({
@@ -49,7 +47,7 @@ const ShiftControllerContent = () => {
 
   const storesOptions = storesData?.map(({ id, name }) => ({ value: `${id}`, label: name })) || [];
 
-  if (isActiveShiftDataPending) {
+  if (isActiveShiftDataLoading) {
     return (
       <div className="min-h-[inherit] flex justify-center items-center">
         <Loader size={50} />
