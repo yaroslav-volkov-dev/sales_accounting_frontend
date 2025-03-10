@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainPage } from '@/pages/main-page/main-page.tsx';
 import { Layout } from '@/components/layout/layout.tsx';
 import { EditDatabase } from '../pages/edit-database/edit-database.tsx';
-import { Registration } from '../pages/Registration/Registration.jsx';
+import { Registration } from '@/pages/registration/registration.tsx';
 import { Login } from '../pages/Login/Login.tsx';
 import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx';
 import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx';

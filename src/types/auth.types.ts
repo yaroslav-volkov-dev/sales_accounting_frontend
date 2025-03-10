@@ -6,7 +6,7 @@ export type LoginResponse = {
   token_type: string;
 }
 
-export type LoginRequest = {
+export type LoginDto = {
   email: string;
   password: string;
 }
@@ -25,4 +25,11 @@ export type RefreshSessionResponse = {
   expires_in: number;
   refresh_token: string;
   token_type: string;
+}
+
+export type RegistrationDto = {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string
 }
