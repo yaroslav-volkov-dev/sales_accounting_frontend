@@ -5,7 +5,7 @@ import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { useQuery } from "@tanstack/react-query";
 import { CategoryModel, SupplierModel } from "@/models";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { axiosInstance } from "@/api/axiosConfig.ts";
+import { axiosInstance } from "@/api/axios-config.ts";
 import { suppliersQueryKey } from "@/pages/edit-database/queries.ts";
 
 const querySchema = z.object({
@@ -31,14 +31,16 @@ export const useProductFiltersState = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { data: categoriesData } = useQuery<CategoryModel[]>({
+  const { data: categoriesData } = useQuery({
     queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.CATEGORIES)
+    queryFn: async () => axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
+    select: (response) => response.data
   });
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
+  const { data: suppliersData } = useQuery({
     queryKey: [suppliersQueryKey.all],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.SUPPLIERS),
+    queryFn: async () => axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
+    select: (response) => response.data
   });
 
   const queryParams = queryString.parse(location.search, { parseBooleans: true });

@@ -8,5 +8,10 @@ export const ENDPOINTS = Object.freeze({
   CATEGORIES: '/categories',
   SUPPLIERS: '/suppliers',
   STORES: '/stores',
-  SHIFTS: '/shifts'
+  SHIFTS: {
+    BASE: '/shifts',
+    START: '/shifts/start',
+    CLOSE: '/shifts/close',
+    ACTIVE: (userId: string) => `/shifts/active/${userId}`,
+  },
 });

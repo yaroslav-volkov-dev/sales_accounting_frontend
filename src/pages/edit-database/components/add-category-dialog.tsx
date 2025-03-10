@@ -1,11 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axiosConfig.js';
+import { axiosInstance } from '@/api/axios-config.ts';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { categoriesQueryKey } from '../queries.ts';
 import { Input } from "@/components/ui/input.tsx";
 import { CreateCategoryDto } from "@/models/category.model.ts";
-import { notify } from "@/utils/notify.ts";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +18,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
+import { notify } from "@/lib/notify.ts";
 
 export const AddCategoryDialog = () => {
   const [open, setOpen] = useState(false);

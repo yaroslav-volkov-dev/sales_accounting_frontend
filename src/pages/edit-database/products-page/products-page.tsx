@@ -1,5 +1,5 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { axiosInstance } from '@/api/axiosConfig.js';
+import { axiosInstance } from '@/api/axios-config.ts';
 import { productsQueryKey } from '../queries.ts';
 import { useCallback, useMemo } from 'react';
 import { ENDPOINTS } from '@/constants/endpoints.js';
@@ -10,7 +10,7 @@ import { AddProductDialog } from '../components/add-product-dialog.tsx';
 import { FiltersController } from '@/components/filters-controller/filters-controller.js';
 import { ProductsModel } from "@/models";
 import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
-import { getQueryStringParams } from "@/utils/get-query-string-params.ts";
+import { getQueryStringParams } from "@/lib/get-query-string-params.ts";
 import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
 import { EditProductDialog } from "@/pages/edit-database/components/edit-product-dialog.tsx";
 
@@ -25,7 +25,7 @@ export const ProductsPage = () => {
     categoriesOptions
   } = useProductFiltersState();
 
-  const { data: productsData } = useQuery<ProductsModel[]>({
+  const { data: productsData } = useQuery({
     queryKey: [productsQueryKey.categories(state.categoriesIds, state.withoutCategory, state.suppliersIds, state.withoutSupplier)],
     queryFn: async () => {
       const url = getQueryStringParams(
@@ -38,8 +38,9 @@ export const ProductsPage = () => {
         },
         { arrayFormat: 'comma' }
       );
-      return axiosInstance.get(url);
+      return axiosInstance.get<ProductsModel[]>(url);
     },
+    select: (response) => response.data
   });
 
   const client = useQueryClient();

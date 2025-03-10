@@ -1,10 +1,10 @@
 import { EditSupplierDto, SupplierModel } from "@/models";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "@/api/axiosConfig.ts";
+import { axiosInstance } from "@/api/axios-config.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { suppliersQueryKey } from "@/pages/edit-database/queries.ts";
-import { notify } from "@/utils/notify.ts";
+import { notify } from "@/lib/notify.ts";
 import { useState } from "react";
 import {
   Dialog,

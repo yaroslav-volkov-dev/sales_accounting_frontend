@@ -1,16 +1,17 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from '@/components/header/header.tsx';
-import { Container } from '@/components/container/container.tsx';
+import { Aside } from "@/components/aside/aside.tsx";
 
 export const Layout = () => {
   return (
-    <div className="h-screen flex flex-col gap-4">
-      <Header />
-      <main>
-        <Container>
+    <div className="h-screen grid grid-cols-[300px_1fr]">
+      <Aside />
+      <div>
+        <Header />
+        <main className="px-10 py-4">
           <Outlet />
-        </Container>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

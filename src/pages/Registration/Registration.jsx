@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js';
-import { errorMessageRequired } from '@/utils/infoMessages.js';
+import { errorMessageRequired } from '@/lib/infoMessages';
 import { useAuth } from '@/hooks/use-auth.ts';
 import { Paper } from '@/components/Paper/Paper.js';
 import { Button } from '@/components/ui/button.js';

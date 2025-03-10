@@ -16,11 +16,11 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditProductDto, ProductsModel } from "@/models/products.model.ts";
-import { axiosInstance } from "@/api/axiosConfig.ts";
+import { axiosInstance } from "@/api/axios-config.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { productsQueryKey, suppliersQueryKey } from "@/pages/edit-database/queries.ts";
 import { CategoryModel, SupplierModel } from "@/models";
-import { notify } from "@/utils/notify.ts";
+import { notify } from "@/lib/notify.ts";
 
 type EditProductDialogProps = {
   product: ProductsModel
@@ -56,14 +56,16 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
     }
   });
 
-  const { data: categoriesData } = useQuery<CategoryModel[]>({
+  const { data: categoriesData } = useQuery({
     queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.CATEGORIES)
+    queryFn: async () => axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
+    select: (response) => response.data
   });
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
+  const { data: suppliersData } = useQuery({
     queryKey: [suppliersQueryKey.all],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.SUPPLIERS),
+    queryFn: async () => axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
+    select: (response) => response.data
   });
 
   const categoriesOptions = categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) || [];

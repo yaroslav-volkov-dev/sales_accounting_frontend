@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axiosConfig.js';
+import { axiosInstance } from '@/api/axios-config.ts';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { suppliersQueryKey } from '../queries.ts';
 import {
@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button.js';
 import { DialogClose } from "@radix-ui/react-dialog";
 import { CreateSupplierDto } from "@/models/supplier.model.ts";
 import { useState } from "react";
-import { notify } from "@/utils/notify.ts";
+import { notify } from "@/lib/notify.ts";
 
 export const AddSupplierDialog = () => {
   const [open, setOpen] = useState(false);

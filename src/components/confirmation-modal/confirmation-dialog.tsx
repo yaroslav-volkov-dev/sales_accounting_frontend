@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -13,20 +12,24 @@ import {
 import { ReactElement } from "react";
 
 type ConfirmationDialogProps = {
-  onConfirm: () => void;
   message: string;
-  onCancel?: () => void;
+  onConfirm: () => void;
   trigger?: ReactElement
+  isLoading?: boolean;
+  open?: boolean
+  setOpen?: (open: boolean) => void
 }
 
 export const ConfirmationDialog = (
   {
     onConfirm,
-    onCancel,
     message,
-    trigger
+    trigger,
+    isLoading,
+    open,
+    setOpen
   }: ConfirmationDialogProps) => (
-  <AlertDialog>
+  <AlertDialog open={open} onOpenChange={setOpen}>
     <AlertDialogTrigger asChild>
       {trigger || <Button variant="outline">Show Dialog</Button>}
     </AlertDialogTrigger>
@@ -38,8 +41,13 @@ export const ConfirmationDialog = (
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel onClick={onCancel}>Nope</AlertDialogCancel>
-        <AlertDialogAction onClick={onConfirm}>Yes</AlertDialogAction>
+        <AlertDialogCancel>Nope</AlertDialogCancel>
+        <Button
+          onClick={onConfirm}
+          isLoading={isLoading}
+        >
+          Yep
+        </Button>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

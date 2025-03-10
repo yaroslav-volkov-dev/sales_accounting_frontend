@@ -1,10 +1,10 @@
-import { notify } from '../utils/notify.ts';
 import { DefaultError, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '../constants/endpoints.ts';
-import { axiosInstance } from '../api/axiosConfig.ts';
+import { axiosInstance } from '../api/axios-config.ts';
 import { LOCAL_STORAGE_KEY } from '../constants/local-storage-keys.ts';
 import { LoginRequest, LoginResponse, RefreshSessionResponse, RegistrationResponse } from "@/types/auth.types.ts";
 import { UserModel } from "@/models";
+import { notify } from "@/lib/notify.ts";
 
 const queryKey = {
   auth: ['auth']

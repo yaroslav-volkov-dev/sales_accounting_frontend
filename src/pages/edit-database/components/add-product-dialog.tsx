@@ -2,7 +2,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { SelectInput } from '@/components/select-input/select-input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axiosConfig.js';
+import { axiosInstance } from '@/api/axios-config.ts';
 import { ENDPOINTS } from '@/constants/endpoints.js';
 import { productsQueryKey, suppliersQueryKey } from '../queries.ts';
 import { Input } from "@/components/ui/input.tsx";
@@ -37,14 +37,16 @@ export const AddProductDialog = () => {
     },
   });
 
-  const { data: categoriesData } = useQuery<CategoryModel[]>({
+  const { data: categoriesData } = useQuery({
     queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.CATEGORIES)
+    queryFn: async () => axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
+    select: (response) => response.data
   });
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
+  const { data: suppliersData } = useQuery({
     queryKey: [suppliersQueryKey.all],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.SUPPLIERS),
+    queryFn: async () => axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
+    select: (response) => response.data
   });
 
   const categoriesOptions = categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) || [];

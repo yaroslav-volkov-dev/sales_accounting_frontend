@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ENDPOINTS } from '@/constants/endpoints.js';
-import { axiosInstance } from '@/api/axiosConfig.js';
+import { axiosInstance } from '@/api/axios-config.ts';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { getQueryStringParams } from '@/utils/get-query-string-params.ts';
+import { getQueryStringParams } from '@/lib/get-query-string-params.ts';
 import { suppliersQueryKey } from '../queries.ts';
-import { notify } from '@/utils/notify.ts';
+import { notify } from '@/lib/notify.ts';
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx';
 import { SupplierModel } from "@/models";
 import { Button } from "@/components/ui/button.tsx";
