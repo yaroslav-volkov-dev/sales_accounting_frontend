@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
-import { useAddCategoryMutation } from "@/api/queries/categories.ts";
+import { useAddCategoryMutation } from "@/api/queries";
 
 export const AddCategoryDialog = () => {
   const [open, setOpen] = useState(false);

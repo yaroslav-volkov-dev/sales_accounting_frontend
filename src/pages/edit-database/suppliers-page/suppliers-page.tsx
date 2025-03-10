@@ -1,10 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { axiosInstance } from '@/api/axios-config.ts';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { getQueryStringParams } from '@/lib/get-query-string-params.ts';
-import { suppliersQueryKey } from '../queries.ts';
 import { notify } from '@/lib/notify.ts';
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx';
 import { SupplierModel } from "@/models";
@@ -15,25 +11,15 @@ import { EditSupplierDialog } from "@/pages/edit-database/components/edit-suppli
 import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { NavLink } from "react-router-dom";
 import { EyeIcon } from "lucide-react";
+import { useDeleteSupplierMutation, useSupplierQuery } from "@/api/queries";
 
 const columnHelper = createColumnHelper<SupplierModel>();
 const includeCount = true;
 
 export const SuppliersPage = () => {
-  const client = useQueryClient();
+  const { data: suppliersData } = useSupplierQuery({ includeCount });
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
-    queryKey: [suppliersQueryKey.includeCount(includeCount)],
-    queryFn: async () => axiosInstance.get(getQueryStringParams(ENDPOINTS.SUPPLIERS, { includeCount })),
-  });
-
-  const { mutate: deleteSupplier } = useMutation({
-    mutationFn: (supplierId: number) => axiosInstance.delete(`${ENDPOINTS.SUPPLIERS}/${supplierId}`),
-    onSuccess: () => {
-      client.invalidateQueries({ queryKey: [suppliersQueryKey.all] });
-      notify({ message: 'Supplier successfully deleted!' });
-    }
-  });
+  const { mutate: deleteSupplier } = useDeleteSupplierMutation();
 
   const handleDeleteSupplier = useCallback((supplierId: Maybe<number>) => {
     if (!supplierId) {

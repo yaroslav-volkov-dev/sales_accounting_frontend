@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/api/axios-config.ts";
-import { CategoryModel, CreateCategoryDto } from "@/models";
+import { CategoryModel, CreateCategoryDto, EditCategoryDto } from "@/models";
 import { getQueryStringParams } from "@/lib/get-query-string-params.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { notify } from "@/lib/notify.ts";
@@ -12,7 +12,7 @@ export const categoriesQueryKey = {
 
 export const useCategoriesQuery = (args: { includeCount?: boolean } | void) => {
   const { includeCount } = args || {};
-  
+
   return useQuery({
     queryKey: categoriesQueryKey.list({ includeCount }),
     queryFn: async () => axiosInstance.get<CategoryModel[]>(getQueryStringParams(ENDPOINTS.CATEGORIES, { includeCount })),
@@ -48,6 +48,27 @@ export const useAddCategoryMutation = (args: { onSuccess: () => void } | void) =
     },
     onError: () => {
       notify({ type: 'error', message: 'Something went wrong. Cannot add category.' });
+    }
+  });
+};
+
+export const useEditCategoryMutation = (args: { onSuccess: () => void } | void) => {
+  const { onSuccess } = args || {};
+
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, body }: {
+      id: string | number;
+      body: EditCategoryDto
+    }) => axiosInstance.put(`${ENDPOINTS.CATEGORIES}/${id}`, body),
+    onSuccess: () => {
+      onSuccess?.();
+      client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
+      notify({ message: 'Category successfully edited!' });
+    },
+    onError: (error) => {
+      notify({ type: 'error', message: error.message });
     }
   });
 };

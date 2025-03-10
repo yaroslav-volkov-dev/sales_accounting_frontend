@@ -1,10 +1,5 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "@/api/axios-config.ts";
-import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { categoriesQueryKey } from "@/pages/edit-database/queries.ts";
-import { notify } from "@/lib/notify.ts";
 import {
   Dialog,
   DialogClose,
@@ -19,6 +14,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { CategoryModel, EditCategoryDto } from "@/models";
+import { useEditCategoryMutation } from "@/api/queries";
 
 export type EditCategoryDialogProps = {
   category: CategoryModel;
@@ -31,22 +27,11 @@ export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
     defaultValues: { ...category }
   });
 
-  const client = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: ({ id, body }: {
-      id: string | number;
-      body: EditCategoryDto
-    }) => axiosInstance.put(`${ENDPOINTS.CATEGORIES}/${id}`, body),
+  const { mutate, isPending } = useEditCategoryMutation({
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Category successfully edited!' });
     },
-    onError: () => {
-      notify({ type: 'error', message: 'Something went wrong. Cannot edit category.' });
-    }
   });
 
   return (

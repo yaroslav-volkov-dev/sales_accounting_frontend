@@ -11,7 +11,7 @@ import { EditCategoryDialog } from "@/pages/edit-database/components/edit-catego
 import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { NavLink } from "react-router-dom";
 import { EyeIcon } from "lucide-react";
-import { useCategoriesQuery, useDeleteCategoryMutation } from "@/api/queries/categories.ts";
+import { useCategoriesQuery, useDeleteCategoryMutation } from "@/api/queries";
 
 const includeCount = true;
 

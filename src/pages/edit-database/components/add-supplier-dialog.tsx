@@ -1,8 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axios-config.ts';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { suppliersQueryKey } from '../queries.ts';
 import {
   Dialog,
   DialogContent,
@@ -18,24 +14,17 @@ import { Button } from '@/components/ui/button.js';
 import { DialogClose } from "@radix-ui/react-dialog";
 import { CreateSupplierDto } from "@/models/supplier.model.ts";
 import { useState } from "react";
-import { notify } from "@/lib/notify.ts";
+import { useAddSupplierMutation } from "@/api/queries";
 
 export const AddSupplierDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<CreateSupplierDto>();
-  const client = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (newSupplier: CreateSupplierDto) => axiosInstance.post(ENDPOINTS.SUPPLIERS, newSupplier),
+  const { mutate, isPending } = useAddSupplierMutation({
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [suppliersQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Supplier successfully added!' });
-    },
-    onError: () => {
-      notify({ message: 'Something went wrong. Cannot add supplier.' });
     }
   });
 

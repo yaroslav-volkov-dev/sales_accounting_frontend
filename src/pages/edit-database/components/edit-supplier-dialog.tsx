@@ -1,10 +1,5 @@
 import { EditSupplierDto, SupplierModel } from "@/models";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "@/api/axios-config.ts";
-import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { suppliersQueryKey } from "@/pages/edit-database/queries.ts";
-import { notify } from "@/lib/notify.ts";
 import { useState } from "react";
 import {
   Dialog,
@@ -19,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { useEditSupplierMutation } from "@/api/queries";
 
 type EditSupplierDialogProps = {
   supplier: SupplierModel;
@@ -31,22 +27,11 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
     defaultValues: { ...supplier }
   });
 
-  const client = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: ({ body, id }: {
-      id: number;
-      body: EditSupplierDto
-    }) => axiosInstance.put(`${ENDPOINTS.SUPPLIERS}/${id}`, body),
+  const { mutate, isPending } = useEditSupplierMutation({
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [suppliersQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Supplier successfully edited!' });
     },
-    onError: () => {
-      notify({ message: 'Something went wrong. Cannot edit supplier.' });
-    }
   });
 
   return (
