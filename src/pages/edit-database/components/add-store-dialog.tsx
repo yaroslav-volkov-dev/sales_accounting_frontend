@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/api/axiosConfig.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { storesQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { storesQueryKey } from "@/pages/edit-database/queries.ts";
 import { notify } from "@/utils/notify.ts";
 import { CreateStoreDto } from "@/models/store.model.ts";
 

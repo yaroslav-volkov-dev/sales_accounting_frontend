@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/api/axiosConfig.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { categoriesQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { categoriesQueryKey } from "@/pages/edit-database/queries.ts";
 import { notify } from "@/utils/notify.ts";
 import {
   Dialog,

@@ -12,7 +12,7 @@ import { ProductsModel } from "@/models";
 import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/utils/get-query-string-params.ts";
 import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
-import { EditProductDialog } from "@/pages/EditDatabase/components/edit-product-dialog.tsx";
+import { EditProductDialog } from "@/pages/edit-database/components/edit-product-dialog.tsx";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 

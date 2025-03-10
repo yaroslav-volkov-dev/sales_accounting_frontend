@@ -1,7 +1,7 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { StoreModel } from "@/models/store.model.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { categoriesQueryKey, storesQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { categoriesQueryKey, storesQueryKey } from "@/pages/edit-database/queries.ts";
 import { axiosInstance } from "@/api/axiosConfig.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { notify } from "@/utils/notify.ts";
@@ -9,8 +9,8 @@ import { useCallback, useMemo } from "react";
 import { Maybe } from "@/types/utility.types.ts";
 import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { AddStoreDialog } from "@/pages/EditDatabase/components/add-store-dialog.tsx";
-import { EditStoreDialog } from "@/pages/EditDatabase/components/edit-store-dialog.tsx";
+import { AddStoreDialog } from "@/pages/edit-database/components/add-store-dialog.tsx";
+import { EditStoreDialog } from "@/pages/edit-database/components/edit-store-dialog.tsx";
 
 const columnHelper = createColumnHelper<StoreModel>();
 

@@ -1,15 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainPage } from '@/pages/main-page/main-page.tsx';
 import { Layout } from '@/components/layout/layout.tsx';
-import { EditDatabase } from '../pages/EditDatabase/edit-database.tsx';
+import { EditDatabase } from '../pages/edit-database/edit-database.tsx';
 import { Registration } from '../pages/Registration/Registration.jsx';
 import { AuthorizedRoutes } from './AuthorizedRoutes.jsx';
 import { Login } from '../pages/Login/Login.tsx';
 import { UnauthorizedRoutes } from './UnauthorizedRoutes.jsx';
-import { ProductsPage } from '@/pages/EditDatabase/products-page/products-page.tsx';
-import { CategoriesPage } from '@/pages/EditDatabase/categories-page/categories-page.tsx';
-import { SuppliersPage } from '@/pages/EditDatabase/suppliers-page/suppliers-page.tsx';
-import { StoresPage } from "@/pages/EditDatabase/stores-page/stores-page.tsx";
+import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx';
+import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx';
+import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx';
+import { StoresPage } from "@/pages/edit-database/stores-page/stores-page.tsx";
 
 export const router = createBrowserRouter([
   {

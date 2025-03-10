@@ -14,19 +14,21 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
 
-  const { data: userData, isLoading: isUserDataLoading } = useQuery<UserModel>({
+  const { data: userData, isLoading: isUserDataLoading } = useQuery({
     queryKey: [queryKey.auth],
-    queryFn: () => axiosInstance.post(ENDPOINTS.REFRESH_SESSION),
-    onSuccess: (response) => {
-      window.localStorage.setItem(
-        LOCAL_STORAGE_KEY.ACCESS_TOKEN,
-        response.session.access_token
-      );
+    queryFn: async () => {
+      const response = await axiosInstance.post<UserModel>(ENDPOINTS.REFRESH_SESSION);
+      const access_token = response?.data?.session?.access_token;
+
+      if (!token) return;
+
+      window.localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, access_token);
+
+      return response;
     },
-    onError: () => {
-      window.localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
-    },
+
     enabled: !!token,
+    select: (response) => response?.data
   });
 
   const { mutate: login, isPending: isLoginLoading } = useMutation<LoginResponse, DefaultError, LoginRequest>({

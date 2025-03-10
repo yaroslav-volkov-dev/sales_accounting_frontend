@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CategoryModel, SupplierModel } from "@/models";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { axiosInstance } from "@/api/axiosConfig.ts";
-import { suppliersQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { suppliersQueryKey } from "@/pages/edit-database/queries.ts";
 
 const querySchema = z.object({
   [ProductsQueryFilterKey.CATEGORIES_IDS]: z

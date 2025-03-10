@@ -10,8 +10,8 @@ import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation
 import { SupplierModel } from "@/models";
 import { Button } from "@/components/ui/button.tsx";
 import { Maybe } from "@/types/utility.types.ts";
-import { AddSupplierDialog } from "@/pages/EditDatabase/components/add-supplier-dialog.tsx";
-import { EditSupplierDialog } from "@/pages/EditDatabase/components/edit-supplier-dialog.tsx";
+import { AddSupplierDialog } from "@/pages/edit-database/components/add-supplier-dialog.tsx";
+import { EditSupplierDialog } from "@/pages/edit-database/components/edit-supplier-dialog.tsx";
 import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { NavLink } from "react-router-dom";
 import { EyeIcon } from "lucide-react";
@@ -24,7 +24,7 @@ export const SuppliersPage = () => {
 
   const { data: suppliersData } = useQuery<SupplierModel[]>({
     queryKey: [suppliersQueryKey.includeCount(includeCount)],
-    queryFn: async () => axiosInstance.get(getQueryStringParams(ENDPOINTS.SUPPLIERS, { includeCount }))
+    queryFn: async () => axiosInstance.get(getQueryStringParams(ENDPOINTS.SUPPLIERS, { includeCount })),
   });
 
   const { mutate: deleteSupplier } = useMutation({

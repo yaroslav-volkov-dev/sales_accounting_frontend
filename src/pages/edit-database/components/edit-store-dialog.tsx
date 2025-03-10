@@ -1,11 +1,11 @@
-import { EditSupplierDto, SupplierModel } from "@/models";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { EditStoreDto, StoreModel } from "@/models";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/api/axiosConfig.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { suppliersQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { storesQueryKey } from "@/pages/edit-database/queries.ts";
 import { notify } from "@/utils/notify.ts";
-import { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -20,32 +20,30 @@ import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 
-type EditSupplierDialogProps = {
-  supplier: SupplierModel;
+type EditStoreDialogProps = {
+  store: StoreModel
 }
 
-export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
+export const EditStoreDialog = ({ store }: EditStoreDialogProps) => {
   const [open, setOpen] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<EditSupplierDto>({
-    defaultValues: { ...supplier }
-  });
+  const { register, handleSubmit, reset } = useForm<EditStoreDto>({ defaultValues: { ...store } });
 
   const client = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: ({ body, id }: {
       id: number;
-      body: EditSupplierDto
-    }) => axiosInstance.put(`${ENDPOINTS.SUPPLIERS}/${id}`, body),
+      body: EditStoreDto
+    }) => axiosInstance.put(`${ENDPOINTS.STORES}/${id}`, body),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [suppliersQueryKey.all] });
+      client.invalidateQueries({ queryKey: [storesQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Supplier successfully edited!' });
+      notify({ message: 'Store successfully edited!' });
     },
     onError: () => {
-      notify({ message: 'Something went wrong. Cannot edit supplier.' });
+      notify({ message: 'Something went wrong. Cannot edit store.' });
     }
   });
 
@@ -55,10 +53,10 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
         <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((body) => mutate({ id: supplier.id, body }))}>
+        <form onSubmit={handleSubmit((body) => mutate({ id: store.id, body }))}>
           <DialogHeader>
-            <DialogTitle>Edit Supplier</DialogTitle>
-            <DialogDescription>{supplier.name} editing.</DialogDescription>
+            <DialogTitle>Edit Store</DialogTitle>
+            <DialogDescription>{store.name} editing.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -66,6 +64,16 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
                 Name
               </Label>
               <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="location" className="text-right">
+                Name
+              </Label>
+              <Input
+                placeholder="Location"
+                {...register('location')}
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="phoneNumber" className="text-right">

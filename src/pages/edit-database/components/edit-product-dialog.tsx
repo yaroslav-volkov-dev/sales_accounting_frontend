@@ -18,7 +18,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditProductDto, ProductsModel } from "@/models/products.model.ts";
 import { axiosInstance } from "@/api/axiosConfig.ts";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { productsQueryKey, suppliersQueryKey } from "@/pages/EditDatabase/queries.ts";
+import { productsQueryKey, suppliersQueryKey } from "@/pages/edit-database/queries.ts";
 import { CategoryModel, SupplierModel } from "@/models";
 import { notify } from "@/utils/notify.ts";
 

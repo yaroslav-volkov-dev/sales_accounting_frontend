@@ -11,7 +11,7 @@ import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation
 import { CategoryModel } from "@/models";
 import { Maybe } from "@/types/utility.types.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { EditCategoryDialog } from "@/pages/EditDatabase/components/edit-category-dialog.tsx";
+import { EditCategoryDialog } from "@/pages/edit-database/components/edit-category-dialog.tsx";
 import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { NavLink } from "react-router-dom";
 import { EyeIcon } from "lucide-react";
