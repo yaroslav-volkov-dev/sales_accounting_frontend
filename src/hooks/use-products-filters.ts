@@ -3,10 +3,11 @@ import queryString from 'query-string';
 import { z } from 'zod';
 import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { useQuery } from "@tanstack/react-query";
-import { CategoryModel, SupplierModel } from "@/models";
+import { SupplierModel } from "@/models";
 import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { axiosInstance } from "@/api/axios-config.ts";
 import { suppliersQueryKey } from "@/pages/edit-database/queries.ts";
+import { useCategoriesQuery } from "@/api/queries/categories.ts";
 
 const querySchema = z.object({
   [ProductsQueryFilterKey.CATEGORIES_IDS]: z
@@ -31,11 +32,7 @@ export const useProductFiltersState = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { data: categoriesData } = useQuery({
-    queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
-    select: (response) => response.data
-  });
+  const { data: categoriesData } = useCategoriesQuery();
 
   const { data: suppliersData } = useQuery({
     queryKey: [suppliersQueryKey.all],

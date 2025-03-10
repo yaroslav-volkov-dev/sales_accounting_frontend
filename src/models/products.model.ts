@@ -5,8 +5,8 @@ export type ProductsModel = {
   id: number;
   name: string;
   price: number;
-  category: CategoryModel;
-  supplier: SupplierModel
+  Category: CategoryModel;
+  Supplier: SupplierModel
 }
 
 export type CreateProductDto = {

@@ -69,11 +69,11 @@ export const ProductsPage = () => {
       header: 'Price',
       cell: ({ getValue }) => getValue(),
     }),
-    columnHelper.accessor((originalRow) => originalRow?.category?.name, {
+    columnHelper.accessor((originalRow) => originalRow?.Category?.name, {
       header: 'Category',
       cell: ({ getValue }) => getValue(),
     }),
-    columnHelper.accessor((originalRow) => originalRow?.supplier?.name, {
+    columnHelper.accessor((originalRow) => originalRow?.Supplier?.name, {
       header: 'Supplier',
       cell: ({ getValue }) => getValue(),
     }),

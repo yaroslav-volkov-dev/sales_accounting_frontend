@@ -1,11 +1,7 @@
 import { useCallback, useMemo } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { axiosInstance } from '@/api/axios-config.ts';
 import { AddCategoryDialog } from '../components/add-category-dialog.tsx';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { getQueryStringParams } from '@/lib/get-query-string-params.ts';
-import { categoriesQueryKey } from '../queries.ts';
 import { notify } from '@/lib/notify.ts';
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx';
 import { CategoryModel } from "@/models";
@@ -15,25 +11,16 @@ import { EditCategoryDialog } from "@/pages/edit-database/components/edit-catego
 import { ProductsQueryFilterKey } from "@/types/products-query.types.ts";
 import { NavLink } from "react-router-dom";
 import { EyeIcon } from "lucide-react";
+import { useCategoriesQuery, useDeleteCategoryMutation } from "@/api/queries/categories.ts";
 
-const columnHelper = createColumnHelper<CategoryModel>();
 const includeCount = true;
 
+const columnHelper = createColumnHelper<CategoryModel>();
+
 export const CategoriesPage = () => {
-  const client = useQueryClient();
+  const { data: categoriesData } = useCategoriesQuery({ includeCount });
 
-  const { data: categoriesData } = useQuery<CategoryModel[]>({
-    queryKey: [categoriesQueryKey.includeCount(includeCount)],
-    queryFn: async () => axiosInstance.get(getQueryStringParams(ENDPOINTS.CATEGORIES, { includeCount }))
-  });
-
-  const { mutate: deleteCategory } = useMutation({
-    mutationFn: (categoryId: number) => axiosInstance.delete(`${ENDPOINTS.CATEGORIES}/${categoryId}`),
-    onSuccess: () => {
-      client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
-      notify({ message: 'Category successfully deleted!' });
-    }
-  });
+  const { mutate: deleteCategory } = useDeleteCategoryMutation();
 
   const handleDeleteCategory = useCallback((categoryId: Maybe<number>) => {
     if (!categoryId) {

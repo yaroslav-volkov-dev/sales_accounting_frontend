@@ -1,8 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axios-config.ts';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { categoriesQueryKey } from '../queries.ts';
 import { Input } from "@/components/ui/input.tsx";
 import { CreateCategoryDto } from "@/models/category.model.ts";
 import {
@@ -18,24 +14,17 @@ import { Label } from "@/components/ui/label.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
-import { notify } from "@/lib/notify.ts";
+import { useAddCategoryMutation } from "@/api/queries/categories.ts";
 
 export const AddCategoryDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<CreateCategoryDto>();
-  const client = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (newCategory: CreateCategoryDto) => axiosInstance.post(ENDPOINTS.CATEGORIES, newCategory),
+  const { mutate, isPending } = useAddCategoryMutation({
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Category successfully added!' });
-    },
-    onError: () => {
-      notify({ type: 'error', message: 'Something went wrong. Cannot add category.' });
     }
   });
 

@@ -49,7 +49,13 @@ const ShiftControllerContent = () => {
 
   const storesOptions = storesData?.map(({ id, name }) => ({ value: `${id}`, label: name })) || [];
 
-  if (isActiveShiftDataPending) return <Loader size={30} />;
+  if (isActiveShiftDataPending) {
+    return (
+      <div className="min-h-[inherit] flex justify-center items-center">
+        <Loader size={50} />
+      </div>
+    );
+  }
 
   if (!activeShiftData) {
     return (
