@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { EditStoreDto, StoreModel } from "@/models";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "@/api/axios-config.ts";
-import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { storesQueryKey } from "@/pages/edit-database/queries.ts";
-import { notify } from "@/lib/notify.ts";
 import {
   Dialog,
   DialogClose,
@@ -19,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { useEditStoreMutation } from "@/api/queries/stores.ts";
 
 type EditStoreDialogProps = {
   store: StoreModel
@@ -28,23 +24,12 @@ export const EditStoreDialog = ({ store }: EditStoreDialogProps) => {
   const [open, setOpen] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<EditStoreDto>({ defaultValues: { ...store } });
-
-  const client = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: ({ body, id }: {
-      id: number;
-      body: EditStoreDto
-    }) => axiosInstance.put(`${ENDPOINTS.STORES}/${id}`, body),
+  
+  const { mutate, isPending } = useEditStoreMutation({
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [storesQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Store successfully edited!' });
     },
-    onError: () => {
-      notify({ message: 'Something went wrong. Cannot edit store.' });
-    }
   });
 
   return (

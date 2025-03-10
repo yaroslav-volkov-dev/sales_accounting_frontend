@@ -13,30 +13,19 @@ import { Input } from "@/components/ui/input.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "@/api/axios-config.ts";
-import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { storesQueryKey } from "@/pages/edit-database/queries.ts";
-import { notify } from "@/lib/notify.ts";
 import { CreateStoreDto } from "@/models/store.model.ts";
+import { useAddStoreMutation } from "@/api/queries/stores.ts";
 
 export const AddStoreDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<CreateStoreDto>();
-  const client = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (newStore: CreateStoreDto) => axiosInstance.post(ENDPOINTS.STORES, newStore),
+  const { mutate, isPending } = useAddStoreMutation({
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [storesQueryKey.all] });
       setOpen(false);
       reset();
-      notify({ message: 'Store successfully added!' });
     },
-    onError: () => {
-      notify({ message: 'Something went wrong. Cannot add store.' });
-    }
   });
 
   return (

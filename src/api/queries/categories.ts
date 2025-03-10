@@ -6,8 +6,8 @@ import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { notify } from "@/lib/notify.ts";
 
 export const categoriesQueryKey = {
-  all: ['categories'],
-  list: (params?: { includeCount?: boolean }) => [...categoriesQueryKey.all, params],
+  all: ['categories'] as const,
+  list: (params?: { includeCount?: boolean }) => [...categoriesQueryKey.all, params] as const,
 };
 
 export const useCategoriesQuery = (args: { includeCount?: boolean } | void) => {
@@ -22,6 +22,7 @@ export const useCategoriesQuery = (args: { includeCount?: boolean } | void) => {
 
 export const useDeleteCategoryMutation = () => {
   const client = useQueryClient();
+
   return useMutation({
     mutationFn: (categoryId: number) => axiosInstance.delete(`${ENDPOINTS.CATEGORIES}/${categoryId}`),
     onSuccess: () => {

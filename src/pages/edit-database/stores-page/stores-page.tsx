@@ -1,9 +1,5 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { StoreModel } from "@/models/store.model.ts";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { categoriesQueryKey, storesQueryKey } from "@/pages/edit-database/queries.ts";
-import { axiosInstance } from "@/api/axios-config.ts";
-import { ENDPOINTS } from "@/constants/endpoints.ts";
 import { notify } from "@/lib/notify.ts";
 import { useCallback, useMemo } from "react";
 import { Maybe } from "@/types/utility.types.ts";
@@ -11,24 +7,14 @@ import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation
 import { Button } from "@/components/ui/button.tsx";
 import { AddStoreDialog } from "@/pages/edit-database/components/add-store-dialog.tsx";
 import { EditStoreDialog } from "@/pages/edit-database/components/edit-store-dialog.tsx";
+import { useDeleteStoreMutation, useStoresQuery } from "@/api/queries/stores.ts";
 
 const columnHelper = createColumnHelper<StoreModel>();
 
 export const StoresPage = () => {
-  const client = useQueryClient();
+  const { data: storesData } = useStoresQuery();
 
-  const { data: storesData } = useQuery<StoreModel[]>({
-    queryKey: [storesQueryKey.all],
-    queryFn: async () => axiosInstance.get(ENDPOINTS.STORES)
-  });
-
-  const { mutate: deleteStore } = useMutation({
-    mutationFn: (storeId: number) => axiosInstance.delete(`${ENDPOINTS.STORES}/${storeId}`),
-    onSuccess: () => {
-      client.invalidateQueries({ queryKey: [categoriesQueryKey.all] });
-      notify({ message: 'Category successfully deleted!' });
-    }
-  });
+  const { mutate: deleteStore } = useDeleteStoreMutation();
 
   const handleDeleteCategory = useCallback((categoryId: Maybe<number>) => {
     if (!categoryId) {

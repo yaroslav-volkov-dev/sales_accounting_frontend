@@ -6,8 +6,8 @@ import { CreateSupplierDto, EditSupplierDto, SupplierModel } from "@/models";
 import { notify } from "@/lib/notify.ts";
 
 export const suppliersQueryKey = {
-  all: ['suppliers'],
-  list: (params: { includeCount?: boolean }) => [...suppliersQueryKey.all, params]
+  all: ['suppliers'] as const,
+  list: (params: { includeCount?: boolean }) => [...suppliersQueryKey.all, params] as const
 };
 
 export const useSupplierQuery = (args: { includeCount: boolean }) => {
