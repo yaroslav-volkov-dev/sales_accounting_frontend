@@ -21,24 +21,21 @@ const links = [
 ];
 
 
-export const EditDatabase = () => {
-
-  return (
-    <div>
-      <nav className="flex gap-3 pb-4 border-b border-gray-200">
-        {links.map(({ to, label }) => (
-          <NavLink
-            to={to}
-            className={({ isActive }) => cn('text-xl font-bold', isActive && 'text-blue-500')}
-            key={to}
-          >
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-      <div className="mt-6">
-        <Outlet />
-      </div>
+export const EditDatabase = () => (
+  <div>
+    <nav className="flex gap-3 pb-4 border-b border-gray-200">
+      {links.map(({ to, label }) => (
+        <NavLink
+          to={to}
+          className={({ isActive }) => cn('text-xl font-bold', isActive && 'text-blue-500')}
+          key={to}
+        >
+          {label}
+        </NavLink>
+      ))}
+    </nav>
+    <div className="mt-6">
+      <Outlet />
     </div>
-  );
-};
+  </div>
+);

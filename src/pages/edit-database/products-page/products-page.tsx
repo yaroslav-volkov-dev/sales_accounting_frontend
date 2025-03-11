@@ -13,6 +13,7 @@ import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/lib/get-query-string-params.ts";
 import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
 import { EditProductDialog } from "@/pages/edit-database/components/edit-product-dialog.tsx";
+import { Card } from "@/components/ui/card.tsx";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 
@@ -105,7 +106,7 @@ export const ProductsPage = () => {
   const headerGroups = useMemo(() => tableInstance.getHeaderGroups(), [productsData]);
 
   return (
-    <>
+    <Card className="p-3">
       <OverlayLoader show={false} />
       <div className="flex gap-10 min-h-[500px]">
         <div className="flex flex-col gap-3 grow">
@@ -124,9 +125,9 @@ export const ProductsPage = () => {
               initialOptionsIds={state.suppliersIds}
             />
           </div>
-          <div className="h-full bg-white border border-gray-300 rounded">
+          <div className="h-full bg-white border rounded-lg">
             <table className="w-full border-collapse table-fixed">
-              <thead className="border-b border-gray-300">
+              <thead className="border-b">
               {headerGroups.map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
@@ -147,7 +148,7 @@ export const ProductsPage = () => {
               <tbody>
               {rows.map(row => (
                 <tr key={row.id}
-                    className="border-b border-gray-300">
+                    className="border-b">
                   {row.getVisibleCells().map(cell => (
                     <td key={cell.id}
                         className="px-3 py-2 border-r border-gray-300 last:border-none">
@@ -161,6 +162,6 @@ export const ProductsPage = () => {
           </div>
         </div>
       </div>
-    </>
+    </Card>
   );
 };

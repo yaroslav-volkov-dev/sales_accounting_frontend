@@ -42,7 +42,7 @@ const renderLinks = (links: Link[]) => links.map(({ to, label, icon }) => (
     to={to}
     key={to}
     className={({ isActive }) =>
-      cn('flex items-center gap-3 p-2 text-xl font-semibold hover:bg-blue-100 rounded-lg', isActive && 'font-bold [&>svg]:stroke-3')}
+      cn('flex items-center gap-3 p-2 text-xl font-semibold hover:bg-accent rounded-lg', isActive && 'font-bold [&>svg]:stroke-3')}
   >
     {icon}
     {label}
@@ -53,8 +53,8 @@ export const Aside = () => {
   const { isAuth, logout } = useAuth();
 
   return (
-    <aside className="h-full flex flex-col bg-gray-100 px-4 pb-4">
-      <div className="h-16 flex justify-center items-center">
+    <aside className="h-full flex flex-col pb-4 border-r">
+      <div className="h-16 flex justify-center items-center border-b">
         <NavLink
           to="/"
           className={({ isActive }) => cn(isActive && 'text-blue-500')}
@@ -66,19 +66,22 @@ export const Aside = () => {
       </div>
       {isAuth && (
         <>
+          <div className="px-4">
+            <ShiftController />
+          </div>
           <Separator />
-          <ShiftController />
         </>
       )}
-      <Separator />
-      <nav className="flex flex-col grow gap-2 py-4">
+      <nav className="flex flex-col grow gap-2 p-4">
         {isAuth ? renderLinks(authorizedLinks) : renderLinks(unauthorizedLinks)}
       </nav>
-      {isAuth && (
-        <Button onClick={() => logout()}>
-          Log out
-        </Button>
-      )}
+      <div className="px-4">
+        {isAuth && (
+          <Button onClick={() => logout()} className="w-full">
+            Log out
+          </Button>
+        )}
+      </div>
     </aside>
   );
 };

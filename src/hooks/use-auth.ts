@@ -48,6 +48,10 @@ export const useAuth = () => {
       navigate('/shift-view');
       notify({ message: 'Successfully logged in' });
     },
+    onError: (error) => {
+      console.log(error);
+      notify({ type: 'error', message: error.message });
+    }
   });
 
   const { mutate: registration, isPending: isRegistrationPending } = useMutation({

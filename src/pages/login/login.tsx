@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useForm } from "react-hook-form";
 import { LoginDto } from "@/types/auth.types.ts";
 import { useAuth } from "@/hooks/use-auth.ts";
+import { NavLink } from "react-router-dom";
 
 export const Login = () => {
   const { register: registerField, handleSubmit } = useForm<LoginDto>();
@@ -49,9 +50,9 @@ export const Login = () => {
                 </div>
                 <div className="mt-4 text-center text-sm">
                   Don&apos;t have an account?{" "}
-                  <a href="/registration" className="underline underline-offset-4">
+                  <NavLink to="/registration" className="underline underline-offset-4">
                     Sign up
-                  </a>
+                  </NavLink>
                 </div>
               </form>
             </CardContent>
