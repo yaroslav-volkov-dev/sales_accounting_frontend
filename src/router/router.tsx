@@ -3,7 +3,7 @@ import { MainPage } from '@/pages/main-page/main-page.tsx';
 import { Layout } from '@/components/layout/layout.tsx';
 import { EditDatabase } from '../pages/edit-database/edit-database.tsx';
 import { Registration } from '@/pages/registration/registration.tsx';
-import { Login } from '../pages/Login/Login.tsx';
+import { Login } from '@/pages/login/login.tsx';
 import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx';
 import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx';
 import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx';

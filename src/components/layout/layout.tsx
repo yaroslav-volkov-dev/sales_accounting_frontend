@@ -6,9 +6,9 @@ export const Layout = () => {
   return (
     <div className="h-screen grid grid-cols-[300px_1fr]">
       <Aside />
-      <div>
+      <div className="flex flex-col">
         <Header />
-        <main className="px-10 py-4">
+        <main className="grow px-10 py-4">
           <Outlet />
         </main>
       </div>
