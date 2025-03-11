@@ -77,7 +77,7 @@ export const ShiftView = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <Card className="p-3 h-full">
+      <Card className="h-full p-3">
         <div>
           <Button>
             Add Sale <PlusIcon strokeWidth={3} />

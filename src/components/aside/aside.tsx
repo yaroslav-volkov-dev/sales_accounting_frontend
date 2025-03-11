@@ -54,16 +54,6 @@ export const Aside = () => {
 
   return (
     <aside className="h-full flex flex-col pb-4 border-r">
-      <div className="h-16 flex justify-center items-center border-b">
-        <NavLink
-          to="/"
-          className={({ isActive }) => cn(isActive && 'text-accent-foreground')}
-        >
-          <h2 className="font-[600] text-center text-[24px] flex flex-col">
-            Sales accounting
-          </h2>
-        </NavLink>
-      </div>
       {isAuth && (
         <>
           <div className="px-4">
