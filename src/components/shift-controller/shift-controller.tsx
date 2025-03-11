@@ -20,7 +20,7 @@ import { useAuth } from "@/hooks/use-auth.ts";
 import dayjs from 'dayjs';
 
 const ShiftControllerWrapper = ({ children }: { children: ReactElement }) => (
-  <div className="min-h-[210px] overflow-hidden py-4">
+  <div className="h-[1px] min-h-[210px] overflow-hidden py-4">
     {children}
   </div>
 );
@@ -35,7 +35,12 @@ const ShiftControllerContent = () => {
 
   const { control, handleSubmit } = useForm<{ storeId: string }>();
 
-  const { data: activeShiftData, isLoading: isActiveShiftDataLoading } = useActiveShiftQuery(userId);
+  const {
+    data: activeShiftData,
+    isSuccess: isActiveShiftDataSuccess,
+    isPending: isActiveShiftDataPending
+  } = useActiveShiftQuery(userId);
+
   const { data: storesData } = useStoresQuery();
 
   const { mutate: startShift, isPending: isStartShiftPending } = useStartShiftMutation({
@@ -47,17 +52,17 @@ const ShiftControllerContent = () => {
 
   const storesOptions = storesData?.map(({ id, name }) => ({ value: `${id}`, label: name })) || [];
 
-  if (isActiveShiftDataLoading) {
+  if (isActiveShiftDataPending) {
     return (
-      <div className="min-h-[inherit] flex justify-center items-center">
+      <div className="h-full flex justify-center items-center">
         <Loader size={50} />
       </div>
     );
   }
 
-  if (!activeShiftData) {
+  if (isActiveShiftDataSuccess && !activeShiftData) {
     return (
-      <div className="min-h-[inherit] flex flex-col justify-center items-center gap-3">
+      <div className="h-full flex flex-col justify-center items-center gap-3">
         <span className="text-lg font-semibold">The shift is not started yet</span>
         <Dialog open={openStartShiftDialog} onOpenChange={setOpenStartShiftDialog}>
           <DialogTrigger asChild>
@@ -103,26 +108,30 @@ const ShiftControllerContent = () => {
     );
   }
 
-  const startDate = dayjs(activeShiftData?.startedAt).format('DD/MM/YYYY');
 
-  return (
-    <div className="min-h-[inherit] flex flex-col">
-      <h6 className="font-bold">Current shift:</h6>
-      <ul className="flex flex-col gap-1 mt-3">
-        <li className="flex justify-between">Shift started at: <span>{startDate}</span></li>
-        <li className="flex justify-between">Store: <span>{activeShiftData.Store.name}</span></li>
-        <li className="flex justify-between">Location: <span>{activeShiftData.Store.location}</span></li>
-      </ul>
-      <ConfirmationDialog
-        onConfirm={() => closeShift({ userId })}
-        message="Do you want to close shift?"
-        isLoading={isCloseShiftPending}
-        trigger={<Button className="mt-5">Close shift</Button>}
-        open={openCloseShiftDialog}
-        setOpen={setCloseStartShiftDialog}
-      />
-    </div>
-  );
+  if (activeShiftData) {
+    return (
+      <div className="h-full flex flex-col">
+        <h6 className="font-bold">Current shift:</h6>
+        <ul className="flex flex-col gap-1 mt-3">
+          <li className="flex justify-between">Shift started
+            at: <span>{dayjs(activeShiftData?.startedAt).format('DD/MM/YYYY')}</span></li>
+          <li className="flex justify-between">Store: <span>{activeShiftData.Store.name}</span></li>
+          <li className="flex justify-between">Location: <span>{activeShiftData.Store.location}</span></li>
+        </ul>
+        <ConfirmationDialog
+          onConfirm={() => closeShift({ userId })}
+          message="Do you want to close shift?"
+          isLoading={isCloseShiftPending}
+          trigger={<Button className="mt-5">Close shift</Button>}
+          open={openCloseShiftDialog}
+          setOpen={setCloseStartShiftDialog}
+        />
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export const ShiftController = () => (
