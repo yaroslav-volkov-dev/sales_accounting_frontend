@@ -106,7 +106,7 @@ const ShiftControllerContent = () => {
   const startDate = dayjs(activeShiftData?.startedAt).format('DD/MM/YYYY');
 
   return (
-    <div className="flex flex-col">
+    <div className="min-h-[inherit] flex flex-col">
       <h6 className="font-bold">Current shift:</h6>
       <ul className="flex flex-col gap-1 mt-3">
         <li className="flex justify-between">Shift started at: <span>{startDate}</span></li>

@@ -74,9 +74,11 @@ export const Aside = () => {
       <nav className="flex flex-col grow gap-2 py-4">
         {isAuth ? renderLinks(authorizedLinks) : renderLinks(unauthorizedLinks)}
       </nav>
-      <Button onClick={() => logout()}>
-        Log out
-      </Button>
+      {isAuth && (
+        <Button onClick={() => logout()}>
+          Log out
+        </Button>
+      )}
     </aside>
   );
 };

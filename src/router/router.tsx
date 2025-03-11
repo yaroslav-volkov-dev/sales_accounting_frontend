@@ -10,6 +10,7 @@ import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-pa
 import { StoresPage } from "@/pages/edit-database/stores-page/stores-page.tsx";
 import { ShiftView } from "@/pages/shift-view/shift-view.tsx";
 import { ProtectedRoutes } from "@/router/protected-routes.tsx";
+import { UnauthorizedRoutes } from "@/router/unauthorized-routes.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -56,12 +57,17 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        path: '/registration',
-        element: <Registration />
-      },
-      {
-        path: '/login',
-        element: <Login />
+        element: <UnauthorizedRoutes />,
+        children: [
+          {
+            path: '/registration',
+            element: <Registration />
+          },
+          {
+            path: '/login',
+            element: <Login />
+          },
+        ]
       },
     ]
   },
