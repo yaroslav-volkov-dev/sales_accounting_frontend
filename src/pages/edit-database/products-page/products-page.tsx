@@ -13,7 +13,6 @@ import { useProductFiltersState } from "@/hooks/use-products-filters.ts";
 import { getQueryStringParams } from "@/lib/get-query-string-params.ts";
 import { ConfirmationDialog } from "@/components/confirmation-modal/confirmation-dialog.tsx";
 import { EditProductDialog } from "@/pages/edit-database/components/edit-product-dialog.tsx";
-import { Card } from "@/components/ui/card.tsx";
 
 const columnHelper = createColumnHelper<ProductsModel>();
 
@@ -106,10 +105,10 @@ export const ProductsPage = () => {
   const headerGroups = useMemo(() => tableInstance.getHeaderGroups(), [productsData]);
 
   return (
-    <Card className="p-3">
+    <>
       <OverlayLoader show={false} />
       <div className="flex gap-10 min-h-[500px]">
-        <div className="flex flex-col gap-3 grow">
+        <div className="h-full flex flex-col gap-3 grow">
           <div className="flex gap-3">
             <AddProductDialog />
             <FiltersController
@@ -125,7 +124,7 @@ export const ProductsPage = () => {
               initialOptionsIds={state.suppliersIds}
             />
           </div>
-          <div className="h-full bg-white border rounded-lg">
+          <div className="grow bg-white border rounded-lg">
             <table className="w-full border-collapse table-fixed">
               <thead className="border-b">
               {headerGroups.map(headerGroup => (
@@ -162,6 +161,6 @@ export const ProductsPage = () => {
           </div>
         </div>
       </div>
-    </Card>
+    </>
   );
 };

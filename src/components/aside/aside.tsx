@@ -42,7 +42,7 @@ const renderLinks = (links: Link[]) => links.map(({ to, label, icon }) => (
     to={to}
     key={to}
     className={({ isActive }) =>
-      cn('flex items-center gap-3 p-2 text-xl font-semibold hover:bg-accent rounded-lg', isActive && 'font-bold [&>svg]:stroke-3')}
+      cn('flex items-center gap-3 p-2 text-xl font-semibold hover:bg-accent rounded-lg', isActive && 'font-bold bg-accent [&>svg]:stroke-3')}
   >
     {icon}
     {label}
@@ -57,7 +57,7 @@ export const Aside = () => {
       <div className="h-16 flex justify-center items-center border-b">
         <NavLink
           to="/"
-          className={({ isActive }) => cn(isActive && 'text-blue-500')}
+          className={({ isActive }) => cn(isActive && 'text-accent-foreground')}
         >
           <h2 className="font-[600] text-center text-[24px] flex flex-col">
             Sales accounting
