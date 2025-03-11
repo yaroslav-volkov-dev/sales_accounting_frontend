@@ -6,11 +6,12 @@ import { SaleModel } from "@/models/sale.model.ts";
 import { AppTable } from "@/components/app-table/app-table.tsx";
 import dayjs from "dayjs";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { useMemo } from "react";
 
 const columnHelper = createColumnHelper<SaleModel>();
 
 const generateRows = (): SaleModel[] => {
-  return [...new Array(50)].map((_, index,) => ({
+  return [...new Array(25)].map((_, index,) => ({
     soldForPrice: 1234,
     id: index,
     Product: {
@@ -32,7 +33,7 @@ const mockData: SaleModel[] = generateRows();
 
 export const ShiftView = () => {
 
-  const columns: ColumnDef<SaleModel>[] = [
+  const columns: ColumnDef<SaleModel>[] = useMemo(() => [
     columnHelper.display({
       id: "select",
       header: ({ table }) => (
@@ -57,14 +58,6 @@ export const ShiftView = () => {
       header: 'Product Name',
       cell: ({ getValue }) => getValue(),
     }),
-    columnHelper.accessor((row) => row.soldForPrice, {
-      header: 'Price',
-      cell: ({ getValue }) => getValue(),
-    }),
-    columnHelper.accessor((row) => row.quantity, {
-      header: 'Quantity',
-      cell: ({ getValue }) => getValue(),
-    }),
     columnHelper.accessor((row) => row.paymentType, {
       header: 'Payment Type',
       cell: ({ getValue }) => getValue(),
@@ -73,7 +66,23 @@ export const ShiftView = () => {
       header: 'Time',
       cell: () => dayjs().format("HH:mm"),
     }),
-  ] as Array<ColumnDef<SaleModel, unknown>>;
+    columnHelper.accessor((row) => row.soldForPrice, {
+      header: 'Price',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.accessor((row) => row.quantity, {
+      header: 'Quantity',
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnHelper.display({
+      id: 'sum',
+      header: 'Sum',
+      cell: ({ row }) => {
+        const { soldForPrice, quantity } = row?.original || {};
+        return soldForPrice * quantity;
+      },
+    }),
+  ] as Array<ColumnDef<SaleModel, unknown>>, []);
 
   return (
     <div className="h-full flex flex-col">

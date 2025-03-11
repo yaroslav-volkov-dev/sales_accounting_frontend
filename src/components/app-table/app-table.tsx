@@ -43,8 +43,8 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
   });
 
   return (
-    <div className="w-full h-full overflow-y-auto">
-      <div className="grow rounded-md border">
+    <div className="w-full h-full overflow-hidden flex flex-col">
+      <div className="grow rounded-md border overflow-y-auto">
         <Table className="relative table-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -70,6 +70,7 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="h-[40px]"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -94,7 +95,7 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end shrink-0 space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
