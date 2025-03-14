@@ -1,1 +1,1 @@
-export const errorMessageRequired = 'This field is required';
+export const errorMessageRequired = 'This field is required'

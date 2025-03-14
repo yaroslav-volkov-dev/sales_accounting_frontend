@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { EditStoreDto, StoreModel } from "@/models";
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { EditStoreDto, StoreModel } from '@/models'
 import {
   Dialog,
   DialogClose,
@@ -9,28 +9,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { useEditStoreMutation } from "@/api/queries/stores.ts";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { Input } from '@/components/ui/input.tsx'
+import { useEditStoreMutation } from '@/api/queries/stores.ts'
 
 type EditStoreDialogProps = {
   store: StoreModel
 }
 
 export const EditStoreDialog = ({ store }: EditStoreDialogProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const { register, handleSubmit, reset } = useForm<EditStoreDto>({ defaultValues: { ...store } });
-  
+  const { register, handleSubmit, reset } = useForm<EditStoreDto>({
+    defaultValues: { ...store },
+  })
+
   const { mutate, isPending } = useEditStoreMutation({
     onSuccess: () => {
-      setOpen(false);
-      reset();
+      setOpen(false)
+      reset()
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -48,7 +50,11 @@ export const EditStoreDialog = ({ store }: EditStoreDialogProps) => {
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+              <Input
+                placeholder="Name"
+                {...register('name', { required: true })}
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="location" className="text-right">
@@ -72,10 +78,7 @@ export const EditStoreDialog = ({ store }: EditStoreDialogProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              isLoading={isPending}
-            >
+            <Button type="submit" isLoading={isPending}>
               Save
             </Button>
             <DialogClose asChild>
@@ -87,5 +90,5 @@ export const EditStoreDialog = ({ store }: EditStoreDialogProps) => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

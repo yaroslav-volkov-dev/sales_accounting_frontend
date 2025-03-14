@@ -1,16 +1,16 @@
 export type SaleModel = {
-  id: number;
-  productId: number;
+  id: number
+  productId: number
   Product: {
-    name: string;
-    price: number;
+    name: string
+    price: number
     id: number
-  };
-  soldForPrice: number;
-  paymentType: 'cash' | 'card',
-  createdAt: string;
-  updateAt: string;
+  }
+  soldForPrice: number
+  paymentType: 'cash' | 'card'
+  createdAt: string
+  updateAt: string
   sellerId: number
-  shopId: number;
-  quantity: number;
+  shopId: number
+  quantity: number
 }

@@ -14,4 +14,8 @@ export const ENDPOINTS = Object.freeze({
     CLOSE: '/shifts/close',
     ACTIVE: (userId: string) => `/shifts/active/${userId}`,
   },
-});
+  PROFILE: {
+    BASE: '/profiles',
+    GET_BY_ID: (id?: string) => `/profiles/${id}`,
+  },
+})

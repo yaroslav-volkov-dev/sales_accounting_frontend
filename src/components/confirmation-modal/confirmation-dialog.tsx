@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from '@/components/ui/button.tsx'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -7,28 +7,27 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from "@/components/ui/alert-dialog.tsx";
-import { ReactElement } from "react";
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog.tsx'
+import { ReactElement } from 'react'
 
 type ConfirmationDialogProps = {
-  message: string;
-  onConfirm: () => void;
+  message: string
+  onConfirm: () => void
   trigger?: ReactElement
-  isLoading?: boolean;
+  isLoading?: boolean
   open?: boolean
   setOpen?: (open: boolean) => void
 }
 
-export const ConfirmationDialog = (
-  {
-    onConfirm,
-    message,
-    trigger,
-    isLoading,
-    open,
-    setOpen
-  }: ConfirmationDialogProps) => (
+export const ConfirmationDialog = ({
+  onConfirm,
+  message,
+  trigger,
+  isLoading,
+  open,
+  setOpen,
+}: ConfirmationDialogProps) => (
   <AlertDialog open={open} onOpenChange={setOpen}>
     <AlertDialogTrigger asChild>
       {trigger || <Button variant="outline">Show Dialog</Button>}
@@ -36,19 +35,14 @@ export const ConfirmationDialog = (
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-        <AlertDialogDescription>
-          {message}
-        </AlertDialogDescription>
+        <AlertDialogDescription>{message}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Nope</AlertDialogCancel>
-        <Button
-          onClick={onConfirm}
-          isLoading={isLoading}
-        >
+        <Button onClick={onConfirm} isLoading={isLoading}>
           Yep
         </Button>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
-);
+)

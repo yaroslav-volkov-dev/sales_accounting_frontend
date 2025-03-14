@@ -1,6 +1,6 @@
-import { useForm } from 'react-hook-form';
-import { Input } from "@/components/ui/input.tsx";
-import { CreateCategoryDto } from "@/models/category.model.ts";
+import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/input.tsx'
+import { CreateCategoryDto } from '@/models/category.model.ts'
 import {
   Dialog,
   DialogContent,
@@ -8,25 +8,25 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useState } from "react";
-import { Button } from "@/components/ui/button.tsx";
-import { useAddCategoryMutation } from "@/api/queries";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button.tsx'
+import { useAddCategoryMutation } from '@/api/queries'
 
 export const AddCategoryDialog = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const { register, handleSubmit, reset } = useForm<CreateCategoryDto>();
+  const { register, handleSubmit, reset } = useForm<CreateCategoryDto>()
 
   const { mutate, isPending } = useAddCategoryMutation({
     onSuccess: () => {
-      setOpen(false);
-      reset();
-    }
-  });
+      setOpen(false)
+      reset()
+    },
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -37,21 +37,24 @@ export const AddCategoryDialog = () => {
         <form onSubmit={handleSubmit((data) => mutate(data))}>
           <DialogHeader>
             <DialogTitle>Add Category</DialogTitle>
-            <DialogDescription>Add new category to the database.</DialogDescription>
+            <DialogDescription>
+              Add new category to the database.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+              <Input
+                placeholder="Name"
+                {...register('name', { required: true })}
+                className="col-span-3"
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              isLoading={isPending}
-            >
+            <Button type="submit" isLoading={isPending}>
               Save
             </Button>
             <DialogClose asChild>
@@ -63,5 +66,5 @@ export const AddCategoryDialog = () => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

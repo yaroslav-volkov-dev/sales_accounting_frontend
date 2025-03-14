@@ -1,13 +1,13 @@
-import { Controller, useForm } from 'react-hook-form';
-import { SelectInput } from '@/components/select-input/select-input.tsx';
-import { Button } from '@/components/ui/button.tsx';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/api/axios-config.ts';
-import { ENDPOINTS } from '@/constants/endpoints.js';
-import { productsQueryKey, suppliersQueryKey } from '../queries.ts';
-import { Input } from "@/components/ui/input.tsx";
-import { CategoryModel } from "@/models/category.model.ts";
-import { SupplierModel } from "@/models/supplier.model.ts";
+import { Controller, useForm } from 'react-hook-form'
+import { SelectInput } from '@/components/select-input/select-input.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { axiosInstance } from '@/api/axios-config.ts'
+import { ENDPOINTS } from '@/constants/endpoints.js'
+import { productsQueryKey, suppliersQueryKey } from '../queries.ts'
+import { Input } from '@/components/ui/input.tsx'
+import { CategoryModel } from '@/models/category.model.ts'
+import { SupplierModel } from '@/models/supplier.model.ts'
 import {
   Dialog,
   DialogClose,
@@ -16,41 +16,48 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { useState } from "react";
-import { CreateProductDto } from "@/models/products.model.ts";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { useState } from 'react'
+import { CreateProductDto } from '@/models/products.model.ts'
 
 export const AddProductDialog = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const { register, handleSubmit, reset, control } = useForm<CreateProductDto>();
-  const client = useQueryClient();
+  const { register, handleSubmit, reset, control } = useForm<CreateProductDto>()
+  const client = useQueryClient()
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (newProduct: CreateProductDto) => axiosInstance.post(ENDPOINTS.PRODUCTS, newProduct),
+    mutationFn: (newProduct: CreateProductDto) =>
+      axiosInstance.post(ENDPOINTS.PRODUCTS, newProduct),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [productsQueryKey.all] });
-      setOpen(false);
-      reset();
+      client.invalidateQueries({ queryKey: [productsQueryKey.all] })
+      setOpen(false)
+      reset()
     },
-  });
+  })
 
   const { data: categoriesData } = useQuery({
     queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
-    select: (response) => response.data
-  });
+    queryFn: async () =>
+      axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
+    select: (response) => response.data,
+  })
 
   const { data: suppliersData } = useQuery({
     queryKey: [suppliersQueryKey.all],
-    queryFn: async () => axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
-    select: (response) => response.data
-  });
+    queryFn: async () =>
+      axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
+    select: (response) => response.data,
+  })
 
-  const categoriesOptions = categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) || [];
-  const suppliersOptions = suppliersData?.map(({ name, id }) => ({ value: `${id}`, label: name })) || [];
+  const categoriesOptions =
+    categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
+    []
+  const suppliersOptions =
+    suppliersData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
+    []
 
   return (
     <>
@@ -62,14 +69,20 @@ export const AddProductDialog = () => {
           <form onSubmit={handleSubmit((data) => mutate(data))}>
             <DialogHeader>
               <DialogTitle>Add Product</DialogTitle>
-              <DialogDescription>Add new product to the database.</DialogDescription>
+              <DialogDescription>
+                Add new product to the database.
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name
                 </Label>
-                <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+                <Input
+                  placeholder="Name"
+                  {...register('name', { required: true })}
+                  className="col-span-3"
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="price" className="text-right">
@@ -118,10 +131,7 @@ export const AddProductDialog = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button
-                type="submit"
-                isLoading={isPending}
-              >
+              <Button type="submit" isLoading={isPending}>
                 Save
               </Button>
               <DialogClose asChild>
@@ -134,5 +144,5 @@ export const AddProductDialog = () => {
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}

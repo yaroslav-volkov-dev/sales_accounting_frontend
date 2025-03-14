@@ -1,6 +1,6 @@
-import { EditSupplierDto, SupplierModel } from "@/models";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { EditSupplierDto, SupplierModel } from '@/models'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 import {
   Dialog,
   DialogClose,
@@ -9,30 +9,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { useEditSupplierMutation } from "@/api/queries";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { Input } from '@/components/ui/input.tsx'
+import { useEditSupplierMutation } from '@/api/queries'
 
 type EditSupplierDialogProps = {
-  supplier: SupplierModel;
+  supplier: SupplierModel
 }
 
 export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const { register, handleSubmit, reset } = useForm<EditSupplierDto>({
-    defaultValues: { ...supplier }
-  });
+    defaultValues: { ...supplier },
+  })
 
   const { mutate, isPending } = useEditSupplierMutation({
     onSuccess: () => {
-      setOpen(false);
-      reset();
+      setOpen(false)
+      reset()
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,7 +40,9 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
         <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((body) => mutate({ id: supplier.id, body }))}>
+        <form
+          onSubmit={handleSubmit((body) => mutate({ id: supplier.id, body }))}
+        >
           <DialogHeader>
             <DialogTitle>Edit Supplier</DialogTitle>
             <DialogDescription>{supplier.name} editing.</DialogDescription>
@@ -50,7 +52,11 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+              <Input
+                placeholder="Name"
+                {...register('name', { required: true })}
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="phoneNumber" className="text-right">
@@ -64,10 +70,7 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              isLoading={isPending}
-            >
+            <Button type="submit" isLoading={isPending}>
               Save
             </Button>
             <DialogClose asChild>
@@ -79,5 +82,5 @@ export const EditSupplierDialog = ({ supplier }: EditSupplierDialogProps) => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import {
   Dialog,
   DialogClose,
@@ -8,31 +8,31 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { CategoryModel, EditCategoryDto } from "@/models";
-import { useEditCategoryMutation } from "@/api/queries";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { Input } from '@/components/ui/input.tsx'
+import { CategoryModel, EditCategoryDto } from '@/models'
+import { useEditCategoryMutation } from '@/api/queries'
 
 export type EditCategoryDialogProps = {
-  category: CategoryModel;
+  category: CategoryModel
 }
 
 export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const { register, handleSubmit, reset } = useForm<EditCategoryDto>({
-    defaultValues: { ...category }
-  });
+    defaultValues: { ...category },
+  })
 
   const { mutate, isPending } = useEditCategoryMutation({
     onSuccess: () => {
-      setOpen(false);
-      reset();
+      setOpen(false)
+      reset()
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,7 +40,9 @@ export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
         <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((body) => mutate({ id: category.id, body }))}>
+        <form
+          onSubmit={handleSubmit((body) => mutate({ id: category.id, body }))}
+        >
           <DialogHeader>
             <DialogTitle>Edit Category</DialogTitle>
             <DialogDescription>{category.name} editing.</DialogDescription>
@@ -50,14 +52,15 @@ export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+              <Input
+                placeholder="Name"
+                {...register('name', { required: true })}
+                className="col-span-3"
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              isLoading={isPending}
-            >
+            <Button type="submit" isLoading={isPending}>
               Save
             </Button>
             <DialogClose asChild>
@@ -69,5 +72,5 @@ export const EditCategoryDialog = ({ category }: EditCategoryDialogProps) => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

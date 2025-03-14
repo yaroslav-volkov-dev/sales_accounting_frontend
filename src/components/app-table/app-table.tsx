@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,20 +9,30 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 type AppTableProps<DATA, VALUE> = {
   columns: ColumnDef<DATA, VALUE>[]
   data: DATA[]
 }
 
-export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VALUE>) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+export const AppTable = <DATA, VALUE>({
+  columns,
+  data,
+}: AppTableProps<DATA, VALUE>) => {
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data,
@@ -40,7 +50,7 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
       columnVisibility,
       rowSelection,
     },
-  });
+  })
 
   return (
     <div className="w-full h-full overflow-hidden flex flex-col">
@@ -55,11 +65,11 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -69,7 +79,7 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="h-[40px]"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -97,10 +107,10 @@ export const AppTable = <DATA, VALUE>({ columns, data }: AppTableProps<DATA, VAL
       </div>
       <div className="flex items-center justify-end shrink-0 space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

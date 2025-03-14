@@ -1,26 +1,25 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { cn } from '@/lib/utils.js';
-import { Card } from "@/components/ui/card.tsx";
+import { NavLink, Outlet } from 'react-router-dom'
+import { cn } from '@/lib/utils.js'
+import { Card } from '@/components/ui/card.tsx'
 
 const links = [
   {
     label: 'Products',
-    to: 'products'
+    to: 'products',
   },
   {
     label: 'Categories',
-    to: 'categories'
+    to: 'categories',
   },
   {
     label: 'Suppliers',
-    to: 'suppliers'
+    to: 'suppliers',
   },
   {
     label: 'Stores',
-    to: 'stores'
+    to: 'stores',
   },
-];
-
+]
 
 export const EditDatabase = () => (
   <div className="h-full flex flex-col">
@@ -29,7 +28,11 @@ export const EditDatabase = () => (
         <NavLink
           to={to}
           className={({ isActive }) =>
-            cn('px-3 py-1 rounded-lg text-xl font-semibold hover:bg-accent', isActive && 'bg-accent')}
+            cn(
+              'px-3 py-1 rounded-lg text-xl font-semibold hover:bg-accent',
+              isActive && 'bg-accent'
+            )
+          }
           key={to}
         >
           {label}
@@ -40,4 +43,4 @@ export const EditDatabase = () => (
       <Outlet />
     </Card>
   </div>
-);
+)

@@ -1,28 +1,41 @@
-import { clsx } from 'clsx';
-import { createPortal } from 'react-dom';
-import { RefObject } from "react";
+import { clsx } from 'clsx'
+import { createPortal } from 'react-dom'
+import { RefObject } from 'react'
 
 type OverlayLoaderProps = {
-  show: boolean;
-  parentRef?: RefObject<HTMLElement>;
-  className?: string;
+  show: boolean
+  parentRef?: RefObject<HTMLElement>
+  className?: string
   opacity?: number
 }
 
-export const OverlayLoader = ({ show, parentRef, className, opacity = 0.5 }: OverlayLoaderProps) => {
-  if (!show) return null;
+export const OverlayLoader = ({
+  show,
+  parentRef,
+  className,
+  opacity = 0.5,
+}: OverlayLoaderProps) => {
+  if (!show) return null
 
-  const parentElement = parentRef?.current;
-  const portalContainer = parentElement || document.body;
+  const parentElement = parentRef?.current
+  const portalContainer = parentElement || document.body
 
-  portalContainer.classList.add('relative');
+  portalContainer.classList.add('relative')
 
   return createPortal(
     <div
-      className={clsx(parentElement ? 'absolute' : 'fixed', 'flex justify-center items-center top-0 left-0 z-50 h-full w-full', className)}>
+      className={clsx(
+        parentElement ? 'absolute' : 'fixed',
+        'flex justify-center items-center top-0 left-0 z-50 h-full w-full',
+        className
+      )}
+    >
       <h1 className="text-red-500 text-[40px]">LOADING...</h1>
-      <div className="absolute top-0 left-0 h-full w-full bg-black" style={{ opacity }} />
+      <div
+        className="absolute top-0 left-0 h-full w-full bg-black"
+        style={{ opacity }}
+      />
     </div>,
     portalContainer
-  );
-};
+  )
+}

@@ -1,7 +1,7 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { Aside } from "@/components/aside/aside.tsx";
-import { Header } from "@/components/header/header.tsx";
-import { cn } from "@/lib/utils.ts";
+import { NavLink, Outlet } from 'react-router-dom'
+import { Aside } from '@/components/aside/aside.tsx'
+import { Header } from '@/components/header/header.tsx'
+import { cn } from '@/lib/utils.ts'
 
 export const Layout = () => {
   return (
@@ -22,5 +22,5 @@ export const Layout = () => {
         <Outlet />
       </main>
     </div>
-  );
-};
+  )
+}

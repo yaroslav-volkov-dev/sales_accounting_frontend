@@ -1,21 +1,23 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { MainPage } from '@/pages/main-page/main-page.tsx';
-import { Layout } from '@/components/layout/layout.tsx';
-import { EditDatabase } from '../pages/edit-database/edit-database.tsx';
-import { Registration } from '@/pages/registration/registration.tsx';
-import { Login } from '@/pages/login/login.tsx';
-import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx';
-import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx';
-import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx';
-import { StoresPage } from "@/pages/edit-database/stores-page/stores-page.tsx";
-import { ShiftView } from "@/pages/shift-view/shift-view.tsx";
-import { ProtectedRoutes } from "@/router/protected-routes.tsx";
-import { UnauthorizedRoutes } from "@/router/unauthorized-routes.tsx";
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { MainPage } from '@/pages/main-page/main-page.tsx'
+import { Layout } from '@/components/layout/layout.tsx'
+import { EditDatabase } from '../pages/edit-database/edit-database.tsx'
+import { Registration } from '@/pages/registration/registration.tsx'
+import { Login } from '@/pages/login/login.tsx'
+import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx'
+import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx'
+import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx'
+import { StoresPage } from '@/pages/edit-database/stores-page/stores-page.tsx'
+import { ShiftView } from '@/pages/shift-view/shift-view.tsx'
+import { ProtectedRoutes } from '@/router/protected-routes.tsx'
+import { UnauthorizedRoutes } from '@/router/unauthorized-routes.tsx'
+import { routes } from '@/constants/routes'
+import { ProfilePage } from '@/pages/profile/profile.page'
 
 export const router = createBrowserRouter([
   {
     element: <Layout />,
-    path: '/',
+    path: routes.home,
     children: [
       {
         index: true,
@@ -25,11 +27,15 @@ export const router = createBrowserRouter([
         element: <ProtectedRoutes />,
         children: [
           {
-            path: '/shift-view',
-            element: <ShiftView />
+            path: routes.shiftView,
+            element: <ShiftView />,
           },
           {
-            path: '/edit-database',
+            path: routes.profile,
+            element: <ProfilePage />,
+          },
+          {
+            path: routes.editDatabase.base,
             element: <EditDatabase />,
             children: [
               {
@@ -37,42 +43,42 @@ export const router = createBrowserRouter([
                 element: <Navigate to="products" replace />,
               },
               {
-                path: 'products',
+                path: routes.editDatabase.products,
                 element: <ProductsPage />,
               },
               {
-                path: 'categories',
+                path: routes.editDatabase.categories,
                 element: <CategoriesPage />,
               },
               {
-                path: 'suppliers',
+                path: routes.editDatabase.suppliers,
                 element: <SuppliersPage />,
               },
               {
-                path: 'stores',
+                path: routes.editDatabase.stores,
                 element: <StoresPage />,
               },
             ],
           },
-        ]
+        ],
       },
       {
         element: <UnauthorizedRoutes />,
         children: [
           {
-            path: '/registration',
-            element: <Registration />
+            path: routes.registration,
+            element: <Registration />,
           },
           {
-            path: '/login',
-            element: <Login />
+            path: routes.login,
+            element: <Login />,
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
     path: '*',
-    element: <h1>Not found</h1>
-  }
-]);
+    element: <h1>Not found</h1>,
+  },
+])

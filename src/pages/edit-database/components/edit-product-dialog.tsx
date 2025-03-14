@@ -5,71 +5,81 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { Controller, useForm } from "react-hook-form";
-import { SelectInput } from "@/components/select-input/select-input.tsx";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EditProductDto, ProductsModel } from "@/models/products.model.ts";
-import { axiosInstance } from "@/api/axios-config.ts";
-import { ENDPOINTS } from "@/constants/endpoints.ts";
-import { productsQueryKey, suppliersQueryKey } from "@/pages/edit-database/queries.ts";
-import { CategoryModel, SupplierModel } from "@/models";
-import { notify } from "@/lib/notify.ts";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { Input } from '@/components/ui/input.tsx'
+import { Controller, useForm } from 'react-hook-form'
+import { SelectInput } from '@/components/select-input/select-input.tsx'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { EditProductDto, ProductsModel } from '@/models/products.model.ts'
+import { axiosInstance } from '@/api/axios-config.ts'
+import { ENDPOINTS } from '@/constants/endpoints.ts'
+import {
+  productsQueryKey,
+  suppliersQueryKey,
+} from '@/pages/edit-database/queries.ts'
+import { CategoryModel, SupplierModel } from '@/models'
+import { notify } from '@/lib/notify.ts'
 
 type EditProductDialogProps = {
   product: ProductsModel
 }
 
 export const EditProductDialog = ({ product }: EditProductDialogProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const { register, handleSubmit, reset, control } = useForm<EditProductDto>({
     defaultValues: {
       name: product.name,
       price: product.price,
       categoryId: product?.category?.id,
-      supplierId: product?.supplier?.id
-    }
-  });
+      supplierId: product?.supplier?.id,
+    },
+  })
 
-  const client = useQueryClient();
+  const client = useQueryClient()
 
   const { mutate, isPending } = useMutation({
-    mutationFn: ({ id, body }: {
-      id: string | number,
-      body: EditProductDto
-    }) => axiosInstance.put(`${ENDPOINTS.PRODUCTS}/${id}`, body),
+    mutationFn: ({ id, body }: { id: string | number; body: EditProductDto }) =>
+      axiosInstance.put(`${ENDPOINTS.PRODUCTS}/${id}`, body),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [productsQueryKey.all] });
-      setOpen(false);
-      reset();
-      notify({ message: 'Product successfully edited!' });
+      client.invalidateQueries({ queryKey: [productsQueryKey.all] })
+      setOpen(false)
+      reset()
+      notify({ message: 'Product successfully edited!' })
     },
     onError: () => {
-      notify({ type: 'error', message: 'Something went wrong. Cannot edit product.' });
-    }
-  });
+      notify({
+        type: 'error',
+        message: 'Something went wrong. Cannot edit product.',
+      })
+    },
+  })
 
   const { data: categoriesData } = useQuery({
     queryKey: [ENDPOINTS.CATEGORIES],
-    queryFn: async () => axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
-    select: (response) => response.data
-  });
+    queryFn: async () =>
+      axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
+    select: (response) => response.data,
+  })
 
   const { data: suppliersData } = useQuery({
     queryKey: [suppliersQueryKey.all],
-    queryFn: async () => axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
-    select: (response) => response.data
-  });
+    queryFn: async () =>
+      axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
+    select: (response) => response.data,
+  })
 
-  const categoriesOptions = categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) || [];
-  const suppliersOptions = suppliersData?.map(({ name, id }) => ({ value: `${id}`, label: name })) || [];
+  const categoriesOptions =
+    categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
+    []
+  const suppliersOptions =
+    suppliersData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
+    []
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -77,7 +87,9 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
         <Button>Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit((body) => mutate({ id: product.id, body }))}>
+        <form
+          onSubmit={handleSubmit((body) => mutate({ id: product.id, body }))}
+        >
           <DialogHeader>
             <DialogTitle>Edit Product</DialogTitle>
             <DialogDescription>{product.name} editing.</DialogDescription>
@@ -87,7 +99,11 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input placeholder="Name" {...register('name', { required: true })} className="col-span-3" />
+              <Input
+                placeholder="Name"
+                {...register('name', { required: true })}
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="price" className="text-right">
@@ -138,10 +154,7 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              isLoading={isPending}
-            >
+            <Button type="submit" isLoading={isPending}>
               Save
             </Button>
             <DialogClose asChild>
@@ -153,6 +166,5 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-
-};
+  )
+}
