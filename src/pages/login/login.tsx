@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button.tsx'
 import {
   Card,
   CardContent,
@@ -5,18 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card.tsx'
-import { Label } from '@/components/ui/label.tsx'
 import { Input } from '@/components/ui/input.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { useLoginMutation } from '@/hooks/use-auth.ts'
 import { errorMessageRequired } from '@/lib/infoMessages.ts'
-import { Button } from '@/components/ui/button.tsx'
-import { useForm } from 'react-hook-form'
 import { LoginDto } from '@/types/auth.types.ts'
-import { useAuth } from '@/hooks/use-auth.ts'
+import { useForm } from 'react-hook-form'
 import { NavLink } from 'react-router-dom'
 
 export const Login = () => {
   const { register: registerField, handleSubmit } = useForm<LoginDto>()
-  const { login, isLoginLoading } = useAuth()
+  const { mutate: login, isPending: isLoginPending } = useLoginMutation()
 
   return (
     <div className="h-full flex justify-center items-center">
@@ -60,7 +60,7 @@ export const Login = () => {
                     <Button
                       type="submit"
                       className="w-full"
-                      isLoading={isLoginLoading}
+                      isLoading={isLoginPending}
                     >
                       Login
                     </Button>

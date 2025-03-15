@@ -1,9 +1,4 @@
 export const ENDPOINTS = Object.freeze({
-  REGISTER: '/auth/register',
-  LOGIN: '/auth/login',
-  REFRESH_SESSION: '/auth/refresh',
-  LOGOUT: '/auth/logout',
-  UPLOAD: '/upload',
   PRODUCTS: '/products',
   CATEGORIES: '/categories',
   SUPPLIERS: '/suppliers',
@@ -17,5 +12,13 @@ export const ENDPOINTS = Object.freeze({
   PROFILE: {
     BASE: '/profiles',
     GET_BY_ID: (id?: string) => `/profiles/${id}`,
+    UPDATE: (id?: string) => `/profiles/${id}`,
+  },
+  USER: {
+    BASE: '/users',
+    REFRESH: '/users/refresh',
+    REGISTER: '/users/register',
+    LOGIN: '/users/login',
+    LOGOUT: '/users/logout',
   },
 })

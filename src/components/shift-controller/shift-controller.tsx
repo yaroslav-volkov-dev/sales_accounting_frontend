@@ -1,12 +1,13 @@
-import { ReactElement, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 import {
   useActiveShiftQuery,
   useCloseShiftMutation,
   useStartShiftMutation,
 } from '@/api/queries'
 import { useStoresQuery } from '@/api/queries/stores.ts'
+import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
 import { Loader } from '@/components/loader/loader.tsx'
+import { SelectInput } from '@/components/select-input/select-input.tsx'
+import { Button } from '@/components/ui/button.tsx'
 import {
   Dialog,
   DialogContent,
@@ -16,12 +17,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog.tsx'
-import { Button } from '@/components/ui/button.tsx'
-import { SelectInput } from '@/components/select-input/select-input.tsx'
+import { useUserQuery } from '@/hooks/use-auth.ts'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
-import { useAuth } from '@/hooks/use-auth.ts'
 import dayjs from 'dayjs'
+import { ReactElement, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 
 const ShiftControllerWrapper = ({ children }: { children: ReactElement }) => (
   <div className="h-[1px] min-h-[210px] overflow-hidden py-4">{children}</div>
@@ -31,7 +31,7 @@ const ShiftControllerContent = () => {
   const [openStartShiftDialog, setOpenStartShiftDialog] = useState(false)
   const [openCloseShiftDialog, setCloseStartShiftDialog] = useState(false)
 
-  const { userData } = useAuth()
+  const { data: userData } = useUserQuery()
 
   const userId = userData?.user?.id || ''
 

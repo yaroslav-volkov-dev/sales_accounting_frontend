@@ -1,3 +1,11 @@
+type User = {
+  email: string
+  firstName: string
+  id: string
+  lastName: string
+  phoneNumber: string
+}
+
 export type LoginResponse = {
   access_token: string
   expires_at: number
@@ -20,16 +28,15 @@ export type RegistrationResponse = {
 }
 
 export type RefreshSessionResponse = {
-  access_token: string
-  expires_at: number
-  expires_in: number
-  refresh_token: string
-  token_type: string
+  accessToken: string,
+  user: User
 }
 
 export type RegistrationDto = {
-  username: string
   email: string
   password: string
   confirmPassword: string
+  firstName: string
+  lastName: string
+  phone?: string
 }

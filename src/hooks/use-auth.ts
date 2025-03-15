@@ -1,7 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ENDPOINTS } from '../constants/endpoints.ts'
-import { axiosInstance } from '../api/axios-config.ts'
-import { LOCAL_STORAGE_KEY } from '../constants/local-storage-keys.ts'
+import { routes } from '@/constants/routes.ts'
+import { notify } from '@/lib/notify.ts'
 import {
   LoginDto,
   LoginResponse,
@@ -9,31 +7,30 @@ import {
   RegistrationDto,
   RegistrationResponse,
 } from '@/types/auth.types.ts'
-import { UserModel } from '@/models'
-import { notify } from '@/lib/notify.ts'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { axiosInstance } from '../api/axios-config.ts'
+import { ENDPOINTS } from '../constants/endpoints.ts'
+import { LOCAL_STORAGE_KEY } from '../constants/local-storage-keys.ts'
 
 const authQueryKey = {
   all: ['auth'],
 }
 
-export const useAuth = () => {
-  const client = useQueryClient()
-  const navigate = useNavigate()
 
+
+export const useUserQuery = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
 
-  const { data: userData, isLoading: isUserDataLoading } = useQuery({
+  return useQuery({
     queryKey: authQueryKey.all,
     queryFn: async () => {
-      const response = await axiosInstance.post<UserModel>(
-        ENDPOINTS.REFRESH_SESSION
-      )
-      const access_token = response?.data?.session?.access_token
+      const response = await axiosInstance.post<RefreshSessionResponse>(ENDPOINTS.USER.REFRESH)
+      const accessToken = response?.data?.accessToken
 
       if (!token) return
 
-      window.localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, access_token)
+      window.localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken)
 
       return response
     },
@@ -41,17 +38,50 @@ export const useAuth = () => {
     enabled: !!token,
     select: (response) => response?.data,
   })
+}
 
-  const { mutate: login, isPending: isLoginLoading } = useMutation({
-    mutationFn: (userData: LoginDto) =>
-      axiosInstance.post<LoginResponse>(ENDPOINTS.LOGIN, userData),
+export const useLoginMutation = () => {
+  const client = useQueryClient()
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: (userData: LoginDto) => axiosInstance.post<LoginResponse>(ENDPOINTS.USER.LOGIN, userData),
     onSuccess: (response) => {
       localStorage.setItem(
         LOCAL_STORAGE_KEY.ACCESS_TOKEN,
         response.data.access_token
       )
       client.invalidateQueries({ queryKey: authQueryKey.all })
-      navigate('/shift-view')
+
+      navigate(routes.shiftView)
+
+      console.log('HAHA');
+
+      notify({ message: 'Successfully logged in' })
+    },
+    onError: (error) => {
+      notify({ type: 'error', message: error.message })
+    },
+  })
+}
+
+export const useAuth = () => {
+  const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
+
+  const client = useQueryClient()
+  const navigate = useNavigate()
+
+  const { data: userData, isLoading: isUserDataLoading } = useUserQuery()
+
+  const { mutate: login, isPending: isLoginLoading } = useMutation({
+    mutationFn: (userData: LoginDto) => axiosInstance.post<LoginResponse>(ENDPOINTS.USER.LOGIN, userData),
+    onSuccess: (response) => {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.ACCESS_TOKEN,
+        response.data.access_token
+      )
+      client.invalidateQueries({ queryKey: authQueryKey.all })
+      navigate(routes.shiftView)
       notify({ message: 'Successfully logged in' })
     },
     onError: (error) => {
@@ -63,13 +93,14 @@ export const useAuth = () => {
   const { mutate: registration, isPending: isRegistrationPending } =
     useMutation({
       mutationFn: (userData: RegistrationDto) =>
-        axiosInstance.post<RegistrationResponse>(ENDPOINTS.REGISTER, userData),
+        axiosInstance.post<RegistrationResponse>(ENDPOINTS.USER.REGISTER, userData),
       onSuccess: (response) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEY.ACCESS_TOKEN,
           response.data.access_token
         )
         client.invalidateQueries({ queryKey: authQueryKey.all })
+        navigate(routes.shiftView)
         notify({ message: 'Successfully registered' })
       },
     })
@@ -77,14 +108,14 @@ export const useAuth = () => {
   const { mutate: refreshSession } = useMutation({
     mutationFn: () =>
       axiosInstance.post<RefreshSessionResponse>(
-        ENDPOINTS.REFRESH_SESSION,
+        ENDPOINTS.USER.REFRESH,
         {},
         { withCredentials: true }
       ),
     onSuccess: (response) => {
       localStorage.setItem(
         LOCAL_STORAGE_KEY.ACCESS_TOKEN,
-        response.data.access_token
+        response.data.accessToken
       )
       client.invalidateQueries({ queryKey: authQueryKey.all })
     },
@@ -95,7 +126,7 @@ export const useAuth = () => {
   })
 
   const { mutate: logout, isPending: isLogoutPending } = useMutation({
-    mutationFn: () => axiosInstance.post(ENDPOINTS.LOGOUT),
+    mutationFn: () => axiosInstance.post(ENDPOINTS.USER.LOGOUT),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: authQueryKey.all })
       localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
