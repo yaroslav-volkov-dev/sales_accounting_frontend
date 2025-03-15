@@ -3,41 +3,37 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useUserQuery } from '@/hooks/use-auth'
+import { useProfileUpdateMutation, useUserQuery } from '@/hooks/use-auth'
 import { errorMessageRequired } from '@/lib/infoMessages'
-import { ProfileModel } from '@/models'
+import { UserModel } from '@/models'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const profileSchema = z
   .object({
-    username: z
-      .string()
-      .min(3, { message: 'The min length is 3 characters' })
-      .nonempty({ message: errorMessageRequired }),
     email: z
       .string()
       .email({ message: 'This field must be email' })
       .nonempty({ message: errorMessageRequired }),
-    firstName: z.string().min(1, { message: errorMessageRequired }),
-    lastName: z.string().min(1, { message: errorMessageRequired }),
-    phone: z.string(),
+    firstName: z.string().nonempty({ message: errorMessageRequired }),
+    lastName: z.string().nonempty({ message: errorMessageRequired }),
+    phoneNumber: z.string().nonempty({ message: errorMessageRequired }),
   })
 
 type ProfileFormData = z.infer<typeof profileSchema>
 
 type ProfilePageFormProps = {
-  data: ProfileModel
+  data: UserModel
 }
 
 const ProfilePageForm = ({ data: profileData }: ProfilePageFormProps) => {
-  const { register, watch, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
+  const { register, watch, handleSubmit } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: profileData,
   })
 
-  // const { mutate, isPending } = useProfileUpdateMutation()
+  const { mutate, isPending } = useProfileUpdateMutation()
 
   const currentValues = watch()
 
@@ -48,7 +44,7 @@ const ProfilePageForm = ({ data: profileData }: ProfilePageFormProps) => {
   }
 
   const onSubmit = (data: ProfileFormData) => {
-    // mutate({ userId: profileData.id, data })
+    mutate({ id: profileData.id, userData: data })
   }
 
   return (
@@ -65,10 +61,6 @@ const ProfilePageForm = ({ data: profileData }: ProfilePageFormProps) => {
             <CardContent>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-3">
-                  <Label>Username</Label>
-                  <Input {...register('username')} />
-                </div>
-                <div className="grid gap-3">
                   <Label>Email</Label>
                   <Input {...register('email')} />
                 </div>
@@ -82,7 +74,7 @@ const ProfilePageForm = ({ data: profileData }: ProfilePageFormProps) => {
                 </div>
                 <div className="grid gap-3">
                   <Label>Phone</Label>
-                  <Input {...register('phone')} />
+                  <Input {...register('phoneNumber')} />
                 </div>
               </div>
             </CardContent>
@@ -122,7 +114,7 @@ export const ProfilePage = () => {
     </div>
   )
 
-  if (isSuccess) return <ProfilePageForm data={data} />
+  if (isSuccess && data?.user) return <ProfilePageForm data={data.user} />
 
   return null
 }

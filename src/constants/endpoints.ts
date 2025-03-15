@@ -9,16 +9,12 @@ export const ENDPOINTS = Object.freeze({
     CLOSE: '/shifts/close',
     ACTIVE: (userId: string) => `/shifts/active/${userId}`,
   },
-  PROFILE: {
-    BASE: '/profiles',
-    GET_BY_ID: (id?: string) => `/profiles/${id}`,
-    UPDATE: (id?: string) => `/profiles/${id}`,
-  },
   USER: {
     BASE: '/users',
     REFRESH: '/users/refresh',
     REGISTER: '/users/register',
     LOGIN: '/users/login',
     LOGOUT: '/users/logout',
+    UPDATE: (id?: string) => `/users/update/${id}`,
   },
 })

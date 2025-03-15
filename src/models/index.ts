@@ -10,4 +10,5 @@ export type {
   EditSupplierDto,
   SupplierModel
 } from './supplier.model.ts'
+export type { UpdateProfileDto, UserModel } from './user-model.ts'
 

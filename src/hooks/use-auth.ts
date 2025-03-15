@@ -1,5 +1,6 @@
 import { routes } from '@/constants/routes.ts'
 import { notify } from '@/lib/notify.ts'
+import { UpdateProfileDto } from '@/models/user-model.ts'
 import {
   LoginDto,
   LoginResponse,
@@ -16,8 +17,6 @@ import { LOCAL_STORAGE_KEY } from '../constants/local-storage-keys.ts'
 const authQueryKey = {
   all: ['auth'],
 }
-
-
 
 export const useUserQuery = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
@@ -58,6 +57,21 @@ export const useLoginMutation = () => {
       console.log('HAHA');
 
       notify({ message: 'Successfully logged in' })
+    },
+    onError: (error) => {
+      notify({ type: 'error', message: error.message })
+    },
+  })
+}
+
+export const useProfileUpdateMutation = () => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ userData, id }: { userData: UpdateProfileDto, id: string }) => axiosInstance.put(ENDPOINTS.USER.UPDATE(id), userData),
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: authQueryKey.all })
+      notify({ message: 'Successfully updated profile' })
     },
     onError: (error) => {
       notify({ type: 'error', message: error.message })
