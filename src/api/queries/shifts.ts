@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { axiosInstance } from '@/api/axios-config.ts'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
-import { ActiveShiftResponse } from '@/types/shifts-query.types.ts'
 import { notify } from '@/lib/notify.ts'
+import { ActiveShiftResponse } from '@/types/shifts-query.types.ts'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const shiftKeys = {
   all: ['shifts'] as const,

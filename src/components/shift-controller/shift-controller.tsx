@@ -22,6 +22,7 @@ import { DialogClose } from '@radix-ui/react-dialog'
 import dayjs from 'dayjs'
 import { ReactElement, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { AlertMessage } from '../alert-message/alert-message'
 
 const ShiftControllerWrapper = ({ children }: { children: ReactElement }) => (
   <div className="h-[1px] min-h-[210px] overflow-hidden py-4">{children}</div>
@@ -41,7 +42,9 @@ const ShiftControllerContent = () => {
     data: activeShiftData,
     isSuccess: isActiveShiftDataSuccess,
     isPending: isActiveShiftDataPending,
+    isError: isActiveShiftDataError,
   } = useActiveShiftQuery(userId)
+
 
   const { data: storesData } = useStoresQuery()
 
@@ -63,6 +66,10 @@ const ShiftControllerContent = () => {
         <Loader size={50} />
       </div>
     )
+  }
+
+  if (isActiveShiftDataError) {
+    return <AlertMessage message="Something went wrong. Cant load shift data." />
   }
 
   if (isActiveShiftDataSuccess && !activeShiftData) {
