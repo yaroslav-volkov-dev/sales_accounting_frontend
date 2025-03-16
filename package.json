@@ -1,12 +1,12 @@
 {
-  "name": "sales_accounting",
+  "name": "sales_accounting_frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint sales_accounting",
+    "lint": "eslint sales_accounting_frontend",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx}\""
