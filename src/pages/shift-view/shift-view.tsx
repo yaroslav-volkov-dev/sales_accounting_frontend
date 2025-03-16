@@ -1,37 +1,20 @@
-import { Card } from '@/components/ui/card.tsx'
-import { Button } from '@/components/ui/button.tsx'
-import { PlusIcon } from 'lucide-react'
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import { SaleModel } from '@/models/sale.model.ts'
+import { useActiveShiftQuery } from '@/api/queries'
+import { useSalesByShiftQuery } from '@/api/queries/sales'
 import { AppTable } from '@/components/app-table/app-table.tsx'
-import dayjs from 'dayjs'
+import { Card } from '@/components/ui/card.tsx'
 import { Checkbox } from '@/components/ui/checkbox.tsx'
+import { SaleModel } from '@/models/sale.model.ts'
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import dayjs from 'dayjs'
 import { useMemo } from 'react'
+import { AddSaleDialog } from './components/add-sale-dialog'
 
 const columnHelper = createColumnHelper<SaleModel>()
 
-const generateRows = (): SaleModel[] => {
-  return [...new Array(25)].map((_, index) => ({
-    soldForPrice: 1234,
-    id: index,
-    Product: {
-      name: 'Filter 1',
-      price: 234,
-      id: 1,
-    },
-    createdAt: new Date().toDateString(),
-    updateAt: '',
-    paymentType: 'cash',
-    productId: 1,
-    sellerId: 2,
-    shopId: 3,
-    quantity: 12,
-  }))
-}
-
-const mockData: SaleModel[] = generateRows()
-
 export const ShiftView = () => {
+  const { data: activeShift } = useActiveShiftQuery()
+  const { data: sales } = useSalesByShiftQuery(activeShift?.id);
+
   const columns: ColumnDef<SaleModel>[] = useMemo(
     () =>
       [
@@ -61,15 +44,15 @@ export const ShiftView = () => {
           header: 'Product Name',
           cell: ({ getValue }) => getValue(),
         }),
-        columnHelper.accessor((row) => row.paymentType, {
-          header: 'Payment Type',
+        columnHelper.accessor((row) => row.paymentMethod, {
+          header: 'Payment Method',
           cell: ({ getValue }) => getValue(),
         }),
         columnHelper.accessor((row) => row.createdAt, {
           header: 'Time',
           cell: () => dayjs().format('HH:mm'),
         }),
-        columnHelper.accessor((row) => row.soldForPrice, {
+        columnHelper.accessor((row) => row.sellingPrice, {
           header: 'Price',
           cell: ({ getValue }) => getValue(),
         }),
@@ -81,8 +64,8 @@ export const ShiftView = () => {
           id: 'sum',
           header: 'Sum',
           cell: ({ row }) => {
-            const { soldForPrice, quantity } = row?.original || {}
-            return soldForPrice * quantity
+            const { sellingPrice, quantity } = row?.original || {}
+            return sellingPrice * quantity
           },
         }),
       ] as Array<ColumnDef<SaleModel, unknown>>,
@@ -93,11 +76,9 @@ export const ShiftView = () => {
     <div className="h-full flex flex-col">
       <Card className="h-full p-3">
         <div>
-          <Button>
-            Add Sale <PlusIcon strokeWidth={3} />
-          </Button>
+          <AddSaleDialog />
         </div>
-        <AppTable data={mockData} columns={columns} />
+        <AppTable data={sales || []} columns={columns} />
       </Card>
     </div>
   )

@@ -43,7 +43,7 @@ const ShiftControllerContent = () => {
     isSuccess: isActiveShiftDataSuccess,
     isPending: isActiveShiftDataPending,
     isError: isActiveShiftDataError,
-  } = useActiveShiftQuery(userId)
+  } = useActiveShiftQuery()
 
 
   const { data: storesData } = useStoresQuery()

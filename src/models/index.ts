@@ -4,6 +4,7 @@ export type {
 export type {
   CreateProductDto, EditProductDto, ProductsModel
 } from './products.model.ts'
+export type { CreateSaleDto, SaleModel } from './sale.model.ts'
 export type { CreateStoreDto, EditStoreDto, StoreModel } from './store.model.ts'
 export type {
   CreateSupplierDto,

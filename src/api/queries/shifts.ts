@@ -1,5 +1,6 @@
 import { axiosInstance } from '@/api/axios-config.ts'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
+import { useUserQuery } from '@/hooks/use-auth'
 import { notify } from '@/lib/notify.ts'
 import { ActiveShiftResponse } from '@/types/shifts-query.types.ts'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -9,16 +10,18 @@ export const shiftKeys = {
   active: (userId: string) => [...shiftKeys.all, 'active', userId] as const,
 }
 
-export const useActiveShiftQuery = (userId: string) =>
-  useQuery({
+export const useActiveShiftQuery = () => {
+  const { userId } = useUserQuery()
+
+  return useQuery({
     queryKey: shiftKeys.active(userId),
-    queryFn: async () =>
-      axiosInstance.get<ActiveShiftResponse>(
-        ENDPOINTS.SHIFTS.ACTIVE(userId || '')
-      ),
+    queryFn: async () => axiosInstance.get<ActiveShiftResponse>(
+      ENDPOINTS.SHIFTS.ACTIVE(userId || '')
+    ),
     enabled: !!userId,
     select: (response) => response.data,
   })
+}
 
 type StartShiftMutationVariables = {
   userId: string

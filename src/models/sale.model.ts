@@ -1,3 +1,8 @@
+export enum PaymentMethod {
+  CASH = 'CASH',
+  CARD = 'CARD',
+}
+
 export type SaleModel = {
   id: number
   productId: number
@@ -6,11 +11,23 @@ export type SaleModel = {
     price: number
     id: number
   }
-  soldForPrice: number
-  paymentType: 'cash' | 'card'
+  sellingPrice: number
+  paymentMethod: PaymentMethod
   createdAt: string
   updateAt: string
-  sellerId: number
-  shopId: number
+  userId: string
+  storeId: number
   quantity: number
+  shiftId: number
+}
+
+
+export type CreateSaleDto = {
+  productId: number
+  sellingPrice: number
+  paymentMethod: PaymentMethod
+  userId: string
+  storeId: number
+  quantity: number
+  shiftId: number
 }

@@ -1,19 +1,18 @@
 export {
-  useCloseShiftMutation,
-  useStartShiftMutation,
-  useActiveShiftQuery,
+  useActiveShiftQuery, useCloseShiftMutation,
+  useStartShiftMutation
 } from './shifts'
 
 export {
-  useEditCategoryMutation,
-  useCategoriesQuery,
-  useAddCategoryMutation,
-  useDeleteCategoryMutation,
+  useAddCategoryMutation, useCategoriesQuery, useDeleteCategoryMutation, useEditCategoryMutation
 } from './categories'
 
 export {
-  useAddSupplierMutation,
-  useEditSupplierMutation,
-  useSupplierQuery,
-  useDeleteSupplierMutation,
+  useAddSupplierMutation, useDeleteSupplierMutation, useEditSupplierMutation,
+  useSupplierQuery
 } from './suppliers'
+
+export {
+  useProductsQuery
+} from './products.ts'
+

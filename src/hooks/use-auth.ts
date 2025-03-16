@@ -21,7 +21,7 @@ const authQueryKey = {
 export const useUserQuery = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
 
-  return useQuery({
+  const queryData = useQuery({
     queryKey: authQueryKey.all,
     queryFn: async () => {
       const response = await axiosInstance.post<RefreshSessionResponse>(ENDPOINTS.USER.REFRESH)
@@ -37,6 +37,11 @@ export const useUserQuery = () => {
     enabled: !!token,
     select: (response) => response?.data,
   })
+
+  return {
+    ...queryData,
+    userId: queryData?.data?.user?.id || '',
+  }
 }
 
 export const useLoginMutation = () => {
@@ -51,11 +56,7 @@ export const useLoginMutation = () => {
         response.data.access_token
       )
       client.invalidateQueries({ queryKey: authQueryKey.all })
-
       navigate(routes.shiftView)
-
-      console.log('HAHA');
-
       notify({ message: 'Successfully logged in' })
     },
     onError: (error) => {
@@ -85,7 +86,7 @@ export const useAuth = () => {
   const client = useQueryClient()
   const navigate = useNavigate()
 
-  const { data: userData, isLoading: isUserDataLoading } = useUserQuery()
+  const { data: userData, isPending: isUserDataPending } = useUserQuery()
 
   const { mutate: login, isPending: isLoginLoading } = useMutation({
     mutationFn: (userData: LoginDto) => axiosInstance.post<LoginResponse>(ENDPOINTS.USER.LOGIN, userData),
@@ -157,7 +158,7 @@ export const useAuth = () => {
     login,
     registration,
     userData,
-    isUserDataLoading,
+    isUserDataPending,
     logout,
     refreshSession,
     isLoginLoading,

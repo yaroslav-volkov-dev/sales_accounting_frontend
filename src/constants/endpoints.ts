@@ -17,4 +17,8 @@ export const ENDPOINTS = Object.freeze({
     LOGOUT: '/users/logout',
     UPDATE: (id?: string) => `/users/update/${id}`,
   },
+  SALES: {
+    BASE: '/sales',
+    GET_ALL_BY_SHIFT: (shiftId: string | number) => `/sales/shift/${shiftId}`,
+  },
 })
