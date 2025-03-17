@@ -2,12 +2,18 @@ import { axiosInstance } from '@/api/axios-config.ts'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { useUserQuery } from '@/hooks/use-auth'
 import { notify } from '@/lib/notify.ts'
-import { ActiveShiftResponse } from '@/types/shifts-query.types.ts'
+import { ProductModel, ShiftModel, StoreModel } from '@/models'
+import { SaleModel } from '@/models/sale.model'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const shiftKeys = {
   all: ['shifts'] as const,
   active: (userId: string) => [...shiftKeys.all, 'active', userId] as const,
+}
+
+export type ActiveShiftResponse = ShiftModel & {
+  Sale: (SaleModel & { Product: ProductModel })[];
+  Store: StoreModel
 }
 
 export const useActiveShiftQuery = () => {

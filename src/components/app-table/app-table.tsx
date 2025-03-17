@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,6 +9,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table'
+import { useState } from 'react'
 
 import {
   Table,
@@ -55,19 +55,19 @@ export const AppTable = <DATA, VALUE>({
   return (
     <div className="w-full h-full overflow-hidden flex flex-col">
       <div className="grow rounded-md border overflow-y-auto">
-        <Table className="relative table-auto">
+        <Table className="relative">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} style={{ width: header.column.columnDef.meta?.width }}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
@@ -83,7 +83,7 @@ export const AppTable = <DATA, VALUE>({
                   className="h-[40px]"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} style={{ width: cell.column.columnDef.meta?.width }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
