@@ -1,12 +1,20 @@
 import { useActiveShiftQuery } from '@/api/queries'
 import { Checkbox } from '@/components/ui/checkbox.tsx'
-import { ProductModel, SaleModel } from '@/models'
+import { formatCurrency } from '@/lib/format-currency'
+import { PaymentMethod, ProductModel, SaleModel } from '@/models'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import dayjs from 'dayjs'
+import { BanknoteIcon, CreditCardIcon } from 'lucide-react'
 import { useMemo } from 'react'
+import { RowActionsCell } from './components/row-actions-cell'
 import { ShiftViewTable } from './components/shift-view-table'
+const columnHelper = createColumnHelper<SaleModel & { Product: ProductModel }>();
 
-const columnHelper = createColumnHelper<SaleModel & { Product: ProductModel }>()
+const paymentMethodData: Record<PaymentMethod, { icon: React.ReactNode, label: string }> = {
+  [PaymentMethod.CASH]: { icon: <BanknoteIcon className='text-green-500' size={20} />, label: 'Cash' },
+  [PaymentMethod.CARD]: { icon: <CreditCardIcon className='text-blue-500' size={20} />, label: 'Card' },
+}
+
 
 export const ShiftView = () => {
   const { data: activeShift, isPending: isActiveShiftPending } = useActiveShiftQuery()
@@ -45,15 +53,19 @@ export const ShiftView = () => {
         }),
         columnHelper.accessor((row) => row.paymentMethod, {
           header: 'Payment Method',
-          cell: ({ getValue }) => getValue(),
-        }),
-        columnHelper.accessor((row) => row.createdAt, {
-          header: 'Time',
-          cell: () => dayjs().format('HH:mm'),
+          cell: ({ getValue }) => {
+
+            return (
+              <div className="flex items-center gap-2">
+                {paymentMethodData[getValue()]?.icon}
+                {paymentMethodData[getValue()]?.label}
+              </div>
+            )
+          },
         }),
         columnHelper.accessor((row) => row.sellingPrice, {
           header: 'Price',
-          cell: ({ getValue }) => getValue(),
+          cell: ({ getValue }) => formatCurrency(getValue()),
         }),
         columnHelper.accessor((row) => row.quantity, {
           header: 'Quantity',
@@ -64,9 +76,21 @@ export const ShiftView = () => {
           header: 'Sum',
           cell: ({ row }) => {
             const { sellingPrice, quantity } = row?.original || {}
-            return sellingPrice * quantity
+            return formatCurrency(sellingPrice * quantity)
           },
         }),
+        columnHelper.accessor((row) => row.createdAt, {
+          header: 'Time',
+          cell: () => dayjs().format('HH:mm'),
+        }),
+        columnHelper.display({
+          meta: {
+            width: '60px',
+          },
+          id: 'actions',
+          cell: () => <RowActionsCell onEdit={() => { }} onDelete={() => { }} />,
+        }),
+
       ] as Array<ColumnDef<SaleModel, unknown>>,
     []
   )

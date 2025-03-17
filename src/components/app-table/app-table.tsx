@@ -83,7 +83,11 @@ export const AppTable = <DATA, VALUE>({
                   className="h-[40px]"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} style={{ width: cell.column.columnDef.meta?.width }}>
+                    <TableCell key={cell.id}
+                      style={{
+                        width: cell.column.columnDef.meta?.width,
+                        textAlign: cell.column.columnDef.meta?.align,
+                      }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
