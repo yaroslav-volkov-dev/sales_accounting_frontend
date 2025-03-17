@@ -15,7 +15,6 @@ const paymentMethodData: Record<PaymentMethod, { icon: React.ReactNode, label: s
   [PaymentMethod.CARD]: { icon: <CreditCardIcon className='text-blue-500' size={20} />, label: 'Card' },
 }
 
-
 export const ShiftView = () => {
   const { data: activeShift, isPending: isActiveShiftPending } = useActiveShiftQuery()
 

@@ -1,18 +1,19 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
-import { MainPage } from '@/pages/main-page/main-page.tsx'
 import { Layout } from '@/components/layout/layout.tsx'
-import { EditDatabase } from '../pages/edit-database/edit-database.tsx'
-import { Registration } from '@/pages/registration/registration.page.tsx'
-import { Login } from '@/pages/login/login.tsx'
-import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx'
+import { routes } from '@/constants/routes'
+import { CompanyPage } from '@/pages/company/company-page.tsx'
 import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx'
-import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx'
+import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx'
 import { StoresPage } from '@/pages/edit-database/stores-page/stores-page.tsx'
+import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx'
+import { Login } from '@/pages/login/login.tsx'
+import { MainPage } from '@/pages/main-page/main-page.tsx'
+import { ProfilePage } from '@/pages/profile/profile.page'
+import { Registration } from '@/pages/registration/registration.page.tsx'
 import { ShiftView } from '@/pages/shift-view/shift-view.tsx'
 import { ProtectedRoutes } from '@/router/protected-routes.tsx'
 import { UnauthorizedRoutes } from '@/router/unauthorized-routes.tsx'
-import { routes } from '@/constants/routes'
-import { ProfilePage } from '@/pages/profile/profile.page'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { EditDatabase } from '../pages/edit-database/edit-database.tsx'
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
           {
             path: routes.profile,
             element: <ProfilePage />,
+          },
+          {
+            path: routes.company,
+            element: <CompanyPage />,
           },
           {
             path: routes.editDatabase.base,

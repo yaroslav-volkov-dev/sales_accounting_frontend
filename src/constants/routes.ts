@@ -15,4 +15,5 @@ export const routes = {
   categories: '/categories',
   suppliers: '/suppliers',
   stores: '/stores',
+  company: '/company',
 }

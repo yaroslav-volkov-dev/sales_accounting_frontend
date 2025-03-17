@@ -8,11 +8,19 @@ export type {
   CreateSupplierDto,
   EditSupplierDto
 } from './supplier.model.ts'
-export type { UpdateProfileDto, UserModel } from './user-model.ts'
+export type { UpdateProfileDto } from './user-model.ts'
 
 export enum PaymentMethod {
   CASH = 'CASH',
   CARD = 'CARD',
+}
+
+export type UserModel = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: string
 }
 
 export type CategoryModel = {

@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator.tsx'
 import { routes } from '@/constants/routes'
 import { useAuth } from '@/hooks/use-auth.ts'
 import { cn } from '@/lib/utils.ts'
-import { ListIcon, LucideEdit3, UserIcon } from 'lucide-react'
+import { Building2, ListIcon, LucideEdit3, UserIcon } from 'lucide-react'
 import { ReactElement } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -29,6 +29,11 @@ const authorizedLinks = [
     label: 'Profile',
     to: routes.profile,
     icon: <UserIcon size={20} />,
+  },
+  {
+    label: 'Company',
+    to: routes.company,
+    icon: <Building2 size={20} />,
   },
 ]
 
