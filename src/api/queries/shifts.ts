@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const shiftKeys = {
   all: ['shifts'] as const,
-  active: (userId: string) => [...shiftKeys.all, 'active', userId] as const,
+  active: (userId: string | number) => [...shiftKeys.all, 'active', userId] as const,
 }
 
 export type ActiveShiftResponse = ShiftModel & {

@@ -1,17 +1,15 @@
 import { useActiveShiftQuery } from '@/api/queries'
-import { AppTable } from '@/components/app-table/app-table.tsx'
-import { Card } from '@/components/ui/card.tsx'
 import { Checkbox } from '@/components/ui/checkbox.tsx'
 import { ProductModel, SaleModel } from '@/models'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
-import { AddSaleDialog } from './components/add-sale-dialog'
+import { ShiftViewTable } from './components/shift-view-table'
 
 const columnHelper = createColumnHelper<SaleModel & { Product: ProductModel }>()
 
 export const ShiftView = () => {
-  const { data: activeShift } = useActiveShiftQuery()
+  const { data: activeShift, isPending: isActiveShiftPending } = useActiveShiftQuery()
 
   const columns: ColumnDef<SaleModel>[] = useMemo(
     () =>
@@ -77,12 +75,7 @@ export const ShiftView = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <Card className="h-full p-3">
-        <div>
-          <AddSaleDialog />
-        </div>
-        <AppTable data={sales || []} columns={columns} />
-      </Card>
+      <ShiftViewTable isLoading={isActiveShiftPending} sales={sales || []} columns={columns} />
     </div>
   )
 }

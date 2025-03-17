@@ -1,9 +1,11 @@
 import { ENDPOINTS } from "@/constants/endpoints"
+import { useUserQuery } from "@/hooks/use-auth"
 import { notify } from "@/lib/notify"
 import { CreateSaleDto, SaleModel } from "@/models/sale.model"
 import { Maybe } from "@/types/utility.types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "../axios-config"
+import { shiftKeys } from "./shifts"
 
 const salesKeys = {
   all: ['sales'] as const,
@@ -23,11 +25,13 @@ export const useSalesByShiftQuery = (shiftId: Maybe<string | number>) => {
 export const useCreateSaleMutation = (args: { onSuccess?: () => void } | void) => {
   const queryClient = useQueryClient()
   const { onSuccess } = args || {}
+  const { userId } = useUserQuery()
 
   return useMutation({
     mutationFn: ({ sale }: { sale: CreateSaleDto }) => axiosInstance.post(ENDPOINTS.SALES.BASE, sale),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: salesKeys.list(variables.sale.shiftId) })
+      console.log('sale created', variables.sale.shiftId)
+      queryClient.invalidateQueries({ queryKey: shiftKeys.active(userId || '') })
       notify({ message: 'Sale created successfully' })
       onSuccess?.()
     },
