@@ -11,6 +11,7 @@ export const ENDPOINTS = Object.freeze({
   },
   USER: {
     BASE: '/users',
+    ME: '/users/me',
     REFRESH: '/users/refresh',
     REGISTER: '/users/register',
     LOGIN: '/users/login',

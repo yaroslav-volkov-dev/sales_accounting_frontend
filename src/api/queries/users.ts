@@ -25,7 +25,7 @@ export const useUsersListQuery = () => {
   })
 }
 
-export type RefreshSessionResponse = {
+export type SessionResponse = {
   accessToken: string,
   user: UserModel
 }
@@ -35,19 +35,7 @@ export const useUserQuery = () => {
 
   const queryData = useQuery({
     queryKey: usersQueryKey.auth(),
-    queryFn: async () => {
-      const response = await axiosInstance.post<RefreshSessionResponse>(ENDPOINTS.USER.REFRESH)
-      const accessToken = response?.data?.accessToken
-
-      if (!token) {
-        localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
-        return
-      }
-
-      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken)
-      return response
-    },
-
+    queryFn: async () => await axiosInstance.get<SessionResponse>(ENDPOINTS.USER.ME),
     enabled: !!token,
     select: (response) => response?.data,
   })
@@ -67,18 +55,12 @@ type RegistrationDto = {
   lastName: string
 }
 
-type RegistrationResponse = {
-  accessToken: string
-  user: UserModel
-}
-
-
 export const useRegisterMutation = () => {
   const navigate = useNavigate()
 
   return useMutation({
     mutationFn: (userData: RegistrationDto) =>
-      axiosInstance.post<RegistrationResponse>(ENDPOINTS.USER.REGISTER, userData),
+      axiosInstance.post<SessionResponse>(ENDPOINTS.USER.REGISTER, userData),
     onSuccess: (response) => {
       localStorage.setItem(
         LOCAL_STORAGE_KEY.ACCESS_TOKEN,
@@ -98,16 +80,11 @@ export type LoginDto = {
   password: string
 }
 
-type LoginResponse = {
-  accessToken: string
-  user: UserModel
-}
-
 export const useLoginMutation = () => {
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: (userData: LoginDto) => axiosInstance.post<LoginResponse>(ENDPOINTS.USER.LOGIN, userData),
+    mutationFn: (userData: LoginDto) => axiosInstance.post<SessionResponse>(ENDPOINTS.USER.LOGIN, userData),
     onSuccess: (response) => {
       const token = response.data.accessToken
 
@@ -147,28 +124,6 @@ export const useProfileUpdateMutation = () => {
     },
     onError: (error) => {
       notify({ type: 'error', message: error.message })
-    },
-  })
-}
-
-const useRefreshSessionMutation = () => {
-
-  return useMutation({
-    mutationFn: () =>
-      axiosInstance.post<RefreshSessionResponse>(
-        ENDPOINTS.USER.REFRESH,
-        {},
-        { withCredentials: true }
-      ),
-    onSuccess: (response) => {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY.ACCESS_TOKEN,
-        response.data.accessToken
-      )
-    },
-    onError: () => {
-      localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
-      notify({ message: 'Something went wrong, cannot refresh the session' })
     },
   })
 }
