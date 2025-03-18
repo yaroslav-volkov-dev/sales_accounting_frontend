@@ -1,9 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { axiosInstance } from '@/api/axios-config.ts'
-import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
+import { axiosInstance } from '@/api/global-config'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
-import { CreateSupplierDto, EditSupplierDto, SupplierModel } from '@/models'
+import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
 import { notify } from '@/lib/notify.ts'
+import { CreateSupplierDto, EditSupplierDto, SupplierModel } from '@/models'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const suppliersQueryKey = {
   all: ['suppliers'] as const,

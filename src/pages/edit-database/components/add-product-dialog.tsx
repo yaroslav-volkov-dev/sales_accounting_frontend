@@ -1,13 +1,6 @@
-import { Controller, useForm } from 'react-hook-form'
+import { axiosInstance } from '@/api/global-config.ts'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
 import { Button } from '@/components/ui/button.tsx'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { axiosInstance } from '@/api/axios-config.ts'
-import { ENDPOINTS } from '@/constants/endpoints.js'
-import { productsQueryKey, suppliersQueryKey } from '../queries.ts'
-import { Input } from '@/components/ui/input.tsx'
-import { CategoryModel } from '@/models/category.model.ts'
-import { SupplierModel } from '@/models/supplier.model.ts'
 import {
   Dialog,
   DialogClose,
@@ -18,9 +11,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog.tsx'
+import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
-import { useState } from 'react'
+import { ENDPOINTS } from '@/constants/endpoints.js'
+import { CategoryModel } from '@/models/category.model.ts'
 import { CreateProductDto } from '@/models/products.model.ts'
+import { SupplierModel } from '@/models/supplier.model.ts'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { productsQueryKey, suppliersQueryKey } from '../queries.ts'
 
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false)

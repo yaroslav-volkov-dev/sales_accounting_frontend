@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/api/axios-config.ts'
+import { axiosInstance } from '@/api/global-config'
 import { useUserQuery } from '@/api/queries/users'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { notify } from '@/lib/notify.ts'

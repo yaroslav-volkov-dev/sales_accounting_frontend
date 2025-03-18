@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CreateStoreDto, EditStoreDto, StoreModel } from '@/models'
-import { axiosInstance } from '@/api/axios-config.ts'
+import { axiosInstance } from '@/api/global-config'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { notify } from '@/lib/notify.ts'
+import { CreateStoreDto, EditStoreDto, StoreModel } from '@/models'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const storesQueryKey = {
   all: ['stores'] as const,

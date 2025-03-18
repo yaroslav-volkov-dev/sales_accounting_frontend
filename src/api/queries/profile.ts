@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
+import { axiosInstance } from '@/api/global-config'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
-import { axiosInstance } from '@/api/axios-config.ts'
+import { useQuery } from '@tanstack/react-query'
 
 const profileQueryKey = {
   all: ['profile'],

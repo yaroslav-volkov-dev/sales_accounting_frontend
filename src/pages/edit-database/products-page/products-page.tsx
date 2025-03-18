@@ -1,23 +1,23 @@
+import { axiosInstance } from '@/api/global-config.ts'
+import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
+import { FiltersController } from '@/components/filters-controller/filters-controller.js'
+import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js'
+import { Button } from '@/components/ui/button.tsx'
+import { ENDPOINTS } from '@/constants/endpoints.js'
+import { useProductFiltersState } from '@/hooks/use-products-filters.ts'
+import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
+import { ProductsModel } from '@/models'
+import { EditProductDialog } from '@/pages/edit-database/components/edit-product-dialog.tsx'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { axiosInstance } from '@/api/axios-config.ts'
-import { productsQueryKey } from '../queries.ts'
 import { useCallback, useMemo } from 'react'
-import { ENDPOINTS } from '@/constants/endpoints.js'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@/components/ui/button.tsx'
-import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js'
 import { AddProductDialog } from '../components/add-product-dialog.tsx'
-import { FiltersController } from '@/components/filters-controller/filters-controller.js'
-import { ProductsModel } from '@/models'
-import { useProductFiltersState } from '@/hooks/use-products-filters.ts'
-import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
-import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
-import { EditProductDialog } from '@/pages/edit-database/components/edit-product-dialog.tsx'
+import { productsQueryKey } from '../queries.ts'
 
 const columnHelper = createColumnHelper<ProductsModel>()
 
@@ -160,9 +160,9 @@ export const ProductsPage = () => {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </th>
                     ))}
                   </tr>

@@ -2,7 +2,7 @@ import { ENDPOINTS } from "@/constants/endpoints"
 import { getQueryStringParams } from "@/lib/get-query-string-params"
 import { ProductsModel } from "@/models/products.model"
 import { useQuery } from "@tanstack/react-query"
-import { axiosInstance } from "../axios-config"
+import { axiosInstance } from "../global-config"
 
 type Filters = {
   categoryIds: string[]

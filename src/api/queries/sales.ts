@@ -4,7 +4,7 @@ import { notify } from "@/lib/notify"
 import { CreateSaleDto, SaleModel } from "@/models/sale.model"
 import { Maybe } from "@/types/utility.types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { axiosInstance } from "../axios-config"
+import { axiosInstance } from "../global-config"
 import { shiftKeys } from "./shifts"
 
 const salesKeys = {

@@ -1,3 +1,6 @@
+import { axiosInstance } from '@/api/global-config'
+import { SelectInput } from '@/components/select-input/select-input.tsx'
+import { Button } from '@/components/ui/button.tsx'
 import {
   Dialog,
   DialogContent,
@@ -7,23 +10,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog.tsx'
-import { Button } from '@/components/ui/button.tsx'
-import { Label } from '@/components/ui/label.tsx'
 import { Input } from '@/components/ui/input.tsx'
-import { Controller, useForm } from 'react-hook-form'
-import { SelectInput } from '@/components/select-input/select-input.tsx'
-import { DialogClose } from '@radix-ui/react-dialog'
-import { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { EditProductDto, ProductsModel } from '@/models/products.model.ts'
-import { axiosInstance } from '@/api/axios-config.ts'
+import { Label } from '@/components/ui/label.tsx'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
+import { notify } from '@/lib/notify.ts'
+import { CategoryModel, SupplierModel } from '@/models'
+import { EditProductDto, ProductsModel } from '@/models/products.model.ts'
 import {
   productsQueryKey,
   suppliersQueryKey,
 } from '@/pages/edit-database/queries.ts'
-import { CategoryModel, SupplierModel } from '@/models'
-import { notify } from '@/lib/notify.ts'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 
 type EditProductDialogProps = {
   product: ProductsModel

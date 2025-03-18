@@ -5,7 +5,7 @@ import { notify } from '@/lib/notify'
 import { UserModel } from '@/models'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { axiosInstance } from '../axios-config'
+import { axiosInstance } from '../global-config'
 
 export const usersQueryKey = {
   all: ['users'] as const,
@@ -92,7 +92,6 @@ export const useLoginMutation = () => {
         notify({ type: 'error', message: 'Something went wrong, no token in response' })
         return
       }
-
       localStorage.setItem(
         LOCAL_STORAGE_KEY.ACCESS_TOKEN,
         token
