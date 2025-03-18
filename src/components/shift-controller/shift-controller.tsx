@@ -4,6 +4,7 @@ import {
   useStartShiftMutation,
 } from '@/api/queries'
 import { useStoresQuery } from '@/api/queries/stores.ts'
+import { useUserQuery } from '@/api/queries/users'
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
 import { Loader } from '@/components/loader/loader.tsx'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
@@ -17,7 +18,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog.tsx'
-import { useUserQuery } from '@/hooks/use-auth.ts'
 import { DialogClose } from '@radix-ui/react-dialog'
 import dayjs from 'dayjs'
 import { ReactElement, useState } from 'react'

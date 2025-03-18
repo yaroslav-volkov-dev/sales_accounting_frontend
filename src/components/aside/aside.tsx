@@ -1,8 +1,8 @@
+import { useLogoutMutation, useUserQuery } from '@/api/queries/users'
 import { ShiftController } from '@/components/shift-controller/shift-controller.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Separator } from '@/components/ui/separator.tsx'
 import { routes } from '@/constants/routes'
-import { useAuth } from '@/hooks/use-auth.ts'
 import { cn } from '@/lib/utils.ts'
 import { Building2, ListIcon, LucideEdit3, UserIcon } from 'lucide-react'
 import { ReactElement } from 'react'
@@ -66,7 +66,8 @@ const renderLinks = (links: Link[]) =>
   ))
 
 export const Aside = () => {
-  const { isAuth, logout, isLogoutPending } = useAuth()
+  const { isAuth } = useUserQuery()
+  const { mutate: logout, isPending: isLogoutPending } = useLogoutMutation()
 
   return (
     <aside className="h-full flex flex-col pb-4 border-r">

@@ -1,3 +1,4 @@
+import { useRegisterMutation } from '@/api/queries/users'
 import { Button } from '@/components/ui/button.js'
 import {
   Card,
@@ -8,7 +9,6 @@ import {
 } from '@/components/ui/card.tsx'
 import { Input } from '@/components/ui/input.js'
 import { Label } from '@/components/ui/label.tsx'
-import { useAuth } from '@/hooks/use-auth.ts'
 import { errorMessageRequired } from '@/lib/infoMessages'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -39,7 +39,7 @@ export const Registration = () => {
   const { register, handleSubmit } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
   })
-  const { registration, isRegistrationPending } = useAuth()
+  const { mutate: registration, isPending: isRegistrationPending } = useRegisterMutation()
 
   return (
     <div className="h-full flex justify-center items-center">

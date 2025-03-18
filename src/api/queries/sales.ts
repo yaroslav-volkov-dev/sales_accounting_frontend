@@ -1,5 +1,5 @@
+import { useUserQuery } from "@/api/queries/users"
 import { ENDPOINTS } from "@/constants/endpoints"
-import { useUserQuery } from "@/hooks/use-auth"
 import { notify } from "@/lib/notify"
 import { CreateSaleDto, SaleModel } from "@/models/sale.model"
 import { Maybe } from "@/types/utility.types"

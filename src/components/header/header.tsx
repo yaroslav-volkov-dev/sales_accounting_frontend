@@ -1,4 +1,4 @@
-import { useUserQuery } from '@/hooks/use-auth'
+import { useUserQuery } from '@/api/queries/users'
 
 export const Header = () => {
   const { data, isSuccess } = useUserQuery()

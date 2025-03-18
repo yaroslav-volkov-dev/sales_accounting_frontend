@@ -1,3 +1,4 @@
+import { LoginDto, useLoginMutation } from '@/api/queries/users'
 import { Button } from '@/components/ui/button.tsx'
 import {
   Card,
@@ -8,9 +9,7 @@ import {
 } from '@/components/ui/card.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
-import { useLoginMutation } from '@/hooks/use-auth.ts'
 import { errorMessageRequired } from '@/lib/infoMessages.ts'
-import { LoginDto } from '@/types/auth.types.ts'
 import { useForm } from 'react-hook-form'
 import { NavLink } from 'react-router-dom'
 

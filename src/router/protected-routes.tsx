@@ -1,8 +1,8 @@
-import { useAuth } from '../hooks/use-auth.ts'
+import { useUserQuery } from '@/api/queries/users'
 import { Navigate, Outlet } from 'react-router-dom'
 
 export const ProtectedRoutes = () => {
-  const { isAuth } = useAuth()
+  const { isAuth } = useUserQuery()
 
   if (!isAuth) return <Navigate to="/login" />
 
