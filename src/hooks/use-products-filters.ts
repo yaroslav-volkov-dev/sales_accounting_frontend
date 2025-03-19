@@ -10,12 +10,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 const querySchema = z.object({
-  [ProductsQueryFilterKey.CATEGORIES_IDS]: z
+  [ProductsQueryFilterKey.CATEGORY_IDS]: z
     .union([z.string(), z.array(z.string())])
     .transform((val) => (val ? (Array.isArray(val) ? val : [val]) : []))
     .optional(),
   [ProductsQueryFilterKey.WITHOUT_CATEGORY]: z.boolean().optional(),
-  [ProductsQueryFilterKey.SUPPLIERS_IDS]: z
+  [ProductsQueryFilterKey.SUPPLIER_IDS]: z
     .union([z.string(), z.array(z.string())])
     .transform((val) => (val ? (Array.isArray(val) ? val : [val]) : []))
     .optional(),
@@ -83,7 +83,7 @@ export const useProductFiltersState = () => {
   }) => {
     updateQueryState((state) => ({
       ...state,
-      [ProductsQueryFilterKey.CATEGORIES_IDS]: ungroupedFilters,
+      [ProductsQueryFilterKey.CATEGORY_IDS]: ungroupedFilters,
       [ProductsQueryFilterKey.WITHOUT_CATEGORY]: groupedFilters[
         ProductsQueryFilterKey.WITHOUT_CATEGORY
       ]
@@ -101,7 +101,7 @@ export const useProductFiltersState = () => {
   }) =>
     updateQueryState((state) => ({
       ...state,
-      [ProductsQueryFilterKey.SUPPLIERS_IDS]: ungroupedFilters,
+      [ProductsQueryFilterKey.SUPPLIER_IDS]: ungroupedFilters,
       [ProductsQueryFilterKey.WITHOUT_SUPPLIER]: groupedFilters[
         ProductsQueryFilterKey.WITHOUT_SUPPLIER
       ]

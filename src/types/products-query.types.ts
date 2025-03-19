@@ -1,6 +1,6 @@
 export enum ProductsQueryFilterKey {
-  CATEGORIES_IDS = 'categoriesIds',
-  SUPPLIERS_IDS = 'suppliersIds',
+  CATEGORY_IDS = 'categoryIds',
+  SUPPLIER_IDS = 'supplierIds',
   WITHOUT_CATEGORY = 'withoutCategory',
   WITHOUT_SUPPLIER = 'withoutSupplier',
 }

@@ -1,4 +1,6 @@
 import { axiosInstance } from '@/api/global-config'
+import { productQueryKey } from '@/api/queries/products'
+import { suppliersQueryKey } from '@/api/queries/suppliers'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import {
@@ -16,10 +18,6 @@ import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { notify } from '@/lib/notify.ts'
 import { CategoryModel, SupplierModel } from '@/models'
 import { EditProductDto, ProductsModel } from '@/models/products.model.ts'
-import {
-  productsQueryKey,
-  suppliersQueryKey,
-} from '@/pages/edit-database/queries.ts'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -36,8 +34,8 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
     defaultValues: {
       name: product.name,
       price: product.price,
-      categoryId: product?.category?.id,
-      supplierId: product?.supplier?.id,
+      categoryId: product?.Category?.id,
+      supplierId: product?.Supplier?.id,
     },
   })
 
@@ -47,7 +45,7 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
     mutationFn: ({ id, body }: { id: string | number; body: EditProductDto }) =>
       axiosInstance.put(`${ENDPOINTS.PRODUCTS}/${id}`, body),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [productsQueryKey.all] })
+      client.invalidateQueries({ queryKey: [productQueryKey.all] })
       setOpen(false)
       reset()
       notify({ message: 'Product successfully edited!' })

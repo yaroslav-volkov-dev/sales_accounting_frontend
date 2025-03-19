@@ -1,14 +1,14 @@
 import { axiosInstance } from '@/api/global-config.ts'
+import { productQueryKey, useProductsQuery } from '@/api/queries/products.ts'
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
 import { FiltersController } from '@/components/filters-controller/filters-controller.js'
 import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js'
 import { Button } from '@/components/ui/button.tsx'
 import { ENDPOINTS } from '@/constants/endpoints.js'
 import { useProductFiltersState } from '@/hooks/use-products-filters.ts'
-import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
 import { ProductsModel } from '@/models'
 import { EditProductDialog } from '@/pages/edit-database/components/edit-product-dialog.tsx'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   createColumnHelper,
   flexRender,
@@ -17,8 +17,6 @@ import {
 } from '@tanstack/react-table'
 import { useCallback, useMemo } from 'react'
 import { AddProductDialog } from '../components/add-product-dialog.tsx'
-import { productsQueryKey } from '../queries.ts'
-
 const columnHelper = createColumnHelper<ProductsModel>()
 
 export const ProductsPage = () => {
@@ -30,30 +28,7 @@ export const ProductsPage = () => {
     categoriesOptions,
   } = useProductFiltersState()
 
-  const { data: productsData } = useQuery({
-    queryKey: [
-      productsQueryKey.categories(
-        state.categoriesIds,
-        state.withoutCategory,
-        state.suppliersIds,
-        state.withoutSupplier
-      ),
-    ],
-    queryFn: async () => {
-      const url = getQueryStringParams(
-        ENDPOINTS.PRODUCTS,
-        {
-          categoryIds: state.categoriesIds,
-          suppliersIds: state.suppliersIds,
-          withoutCategory: state.withoutCategory,
-          withoutSupplier: state.withoutSupplier,
-        },
-        { arrayFormat: 'comma' }
-      )
-      return axiosInstance.get<ProductsModel[]>(url)
-    },
-    select: (response) => response.data,
-  })
+  const { data: productsData } = useProductsQuery({ ...state })
 
   const client = useQueryClient()
 
@@ -61,7 +36,7 @@ export const ProductsPage = () => {
     mutationFn: (id: string | number) =>
       axiosInstance.delete(`${ENDPOINTS.PRODUCTS}/${id}`),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [productsQueryKey.all] })
+      client.invalidateQueries({ queryKey: [productQueryKey.all] })
     },
   })
 

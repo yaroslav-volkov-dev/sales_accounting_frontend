@@ -1,4 +1,5 @@
 import { axiosInstance } from '@/api/global-config.ts'
+import { productQueryKey } from '@/api/queries/products.ts'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import {
@@ -20,7 +21,7 @@ import { SupplierModel } from '@/models/supplier.model.ts'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { productsQueryKey, suppliersQueryKey } from '../queries.ts'
+import { suppliersQueryKey } from '../queries.ts'
 
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false)
@@ -32,7 +33,7 @@ export const AddProductDialog = () => {
     mutationFn: (newProduct: CreateProductDto) =>
       axiosInstance.post(ENDPOINTS.PRODUCTS, newProduct),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [productsQueryKey.all] })
+      client.invalidateQueries({ queryKey: [productQueryKey.all] })
       setOpen(false)
       reset()
     },
