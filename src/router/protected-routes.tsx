@@ -1,5 +1,5 @@
-import { useUserQuery } from '@/api/queries/users'
-import { Navigate, Outlet } from 'react-router-dom'
+import { useUserQuery } from '@/api/queries/users';
+import { Navigate, Outlet } from 'react-router-dom';
 
 export const ProtectedRoutes = () => {
   const { isAuth } = useUserQuery()

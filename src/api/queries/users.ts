@@ -1,5 +1,4 @@
 import { ENDPOINTS } from '@/constants/endpoints'
-import { LOCAL_STORAGE_KEY } from '@/constants/local-storage-keys'
 import { routes } from '@/constants/routes'
 import { notify } from '@/lib/notify'
 import { UserModel } from '@/models'
@@ -25,25 +24,17 @@ export const useUsersListQuery = () => {
   })
 }
 
-export type SessionResponse = {
-  accessToken: string,
-  user: UserModel
-}
-
 export const useUserQuery = () => {
-  const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
-
   const queryData = useQuery({
     queryKey: usersQueryKey.auth(),
-    queryFn: async () => await axiosInstance.get<SessionResponse>(ENDPOINTS.USER.ME),
-    enabled: !!token,
+    queryFn: async () => await axiosInstance.get<{ user: UserModel }>(ENDPOINTS.USER.ME),
     select: (response) => response?.data,
   })
 
   return {
     ...queryData,
     userId: queryData?.data?.user?.id || '',
-    isAuth: !!token,
+    isAuth: !!queryData?.data?.user,
   }
 }
 
@@ -57,15 +48,14 @@ type RegistrationDto = {
 
 export const useRegisterMutation = () => {
   const navigate = useNavigate()
+  const client = useQueryClient()
 
   return useMutation({
     mutationFn: (userData: RegistrationDto) =>
-      axiosInstance.post<SessionResponse>(ENDPOINTS.USER.REGISTER, userData),
+      axiosInstance.post<{ user: UserModel }>(ENDPOINTS.USER.REGISTER, userData),
     onSuccess: (response) => {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY.ACCESS_TOKEN,
-        response.data.accessToken
-      )
+      client.setQueryData(usersQueryKey.auth(), response)
+
       navigate(routes.shiftView)
       notify({ message: 'Successfully registered' })
     },
@@ -82,20 +72,13 @@ export type LoginDto = {
 
 export const useLoginMutation = () => {
   const navigate = useNavigate()
+  const client = useQueryClient()
 
   return useMutation({
-    mutationFn: (userData: LoginDto) => axiosInstance.post<SessionResponse>(ENDPOINTS.USER.LOGIN, userData),
+    mutationFn: (userData: LoginDto) => axiosInstance.post<{ user: UserModel }>(ENDPOINTS.USER.LOGIN, userData),
     onSuccess: (response) => {
-      const token = response.data.accessToken
+      client.setQueryData(usersQueryKey.auth(), response)
 
-      if (!token) {
-        notify({ type: 'error', message: 'Something went wrong, no token in response' })
-        return
-      }
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY.ACCESS_TOKEN,
-        token
-      )
       navigate(routes.shiftView)
       notify({ message: 'Successfully logged in' })
     },
@@ -133,8 +116,7 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: () => axiosInstance.post(ENDPOINTS.USER.LOGOUT),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: usersQueryKey.auth() })
-      localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
+      client.setQueryData(usersQueryKey.auth(), null)
       notify({ message: 'Successfully logged out' })
     },
     onError: () => {
