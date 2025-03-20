@@ -6,14 +6,12 @@ import { ProductsPage } from '@/pages/edit-database/products-page/products-page.
 import { StoresPage } from '@/pages/edit-database/stores-page/stores-page.tsx'
 import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx'
 import { Login } from '@/pages/login/login.tsx'
-import { MainPage } from '@/pages/main-page/main-page.tsx'
 import { ProfilePage } from '@/pages/profile/profile.page'
 import { Registration } from '@/pages/registration/registration.page.tsx'
 import { ShiftView } from '@/pages/shift-view/shift-view.tsx'
-import { ProtectedRoutes } from '@/router/protected-routes.tsx'
-import { UnauthorizedRoutes } from '@/router/unauthorized-routes.tsx'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { EditDatabase } from '../pages/edit-database/edit-database.tsx'
+import { ProtectedRoute } from './protected-route.tsx'
 
 export const router = createBrowserRouter([
   {
@@ -21,64 +19,50 @@ export const router = createBrowserRouter([
     path: routes.home,
     children: [
       {
-        index: true,
-        element: <MainPage />,
+        path: routes.shiftView,
+        element: <ProtectedRoute.Authorized element={<ShiftView />} />,
       },
       {
-        element: <ProtectedRoutes />,
+        path: routes.profile,
+        element: <ProtectedRoute.Authorized element={<ProfilePage />} />,
+      },
+      {
+        path: routes.company,
+        element: <ProtectedRoute.Authorized element={<CompanyPage />} />,
+      },
+      {
+        path: routes.editDatabase.base,
+        element: <ProtectedRoute.Authorized element={<EditDatabase />} />,
         children: [
           {
-            path: routes.shiftView,
-            element: <ShiftView />,
+            index: true,
+            element: <Navigate to="products" replace />,
           },
           {
-            path: routes.profile,
-            element: <ProfilePage />,
+            path: routes.editDatabase.products,
+            element: <ProductsPage />,
           },
           {
-            path: routes.company,
-            element: <CompanyPage />,
+            path: routes.editDatabase.categories,
+            element: <CategoriesPage />,
           },
           {
-            path: routes.editDatabase.base,
-            element: <EditDatabase />,
-            children: [
-              {
-                index: true,
-                element: <Navigate to="products" replace />,
-              },
-              {
-                path: routes.editDatabase.products,
-                element: <ProductsPage />,
-              },
-              {
-                path: routes.editDatabase.categories,
-                element: <CategoriesPage />,
-              },
-              {
-                path: routes.editDatabase.suppliers,
-                element: <SuppliersPage />,
-              },
-              {
-                path: routes.editDatabase.stores,
-                element: <StoresPage />,
-              },
-            ],
+            path: routes.editDatabase.suppliers,
+            element: <SuppliersPage />,
+          },
+          {
+            path: routes.editDatabase.stores,
+            element: <StoresPage />,
           },
         ],
       },
       {
-        element: <UnauthorizedRoutes />,
-        children: [
-          {
-            path: routes.registration,
-            element: <Registration />,
-          },
-          {
-            path: routes.login,
-            element: <Login />,
-          },
-        ],
+        path: routes.registration,
+        element: <ProtectedRoute.Unauthorized element={<Registration />} />,
+      },
+      {
+        path: routes.login,
+        element: <ProtectedRoute.Unauthorized element={<Login />} />,
       },
     ],
   },

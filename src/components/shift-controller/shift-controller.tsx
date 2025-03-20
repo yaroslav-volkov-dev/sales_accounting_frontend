@@ -6,7 +6,6 @@ import {
 import { useStoresQuery } from '@/api/queries/stores.ts'
 import { useUserQuery } from '@/api/queries/users'
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
-import { Loader } from '@/components/loader/loader.tsx'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import {
@@ -23,9 +22,18 @@ import dayjs from 'dayjs'
 import { ReactElement, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { AlertMessage } from '../alert-message/alert-message'
+import { Skeleton } from '../ui/skeleton'
+
+export const ShiftControllerSkeleton = () => (
+  <div className="overflow-hidden">
+    <Skeleton className="h-6 mb-3" />
+    <Skeleton className="h-20" />
+    <Skeleton className="h-9 w-full mt-5" />
+  </div>
+)
 
 const ShiftControllerWrapper = ({ children }: { children: ReactElement }) => (
-  <div className="h-[1px] min-h-[210px] overflow-hidden py-4">{children}</div>
+  <div className="overflow-hidden">{children}</div>
 )
 
 const ShiftControllerContent = () => {
@@ -61,11 +69,7 @@ const ShiftControllerContent = () => {
     storesData?.map(({ id, name }) => ({ value: `${id}`, label: name })) || []
 
   if (isActiveShiftDataPending) {
-    return (
-      <div className="h-full flex justify-center items-center">
-        <Loader size={50} />
-      </div>
-    )
+    return <ShiftControllerSkeleton />
   }
 
   if (isActiveShiftDataError) {

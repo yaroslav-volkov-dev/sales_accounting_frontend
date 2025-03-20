@@ -18,7 +18,7 @@ export const Layout = () => {
       </div>
       <Header />
       <Aside />
-      <main className="px-10 py-4">
+      <main className="p-4">
         <Outlet />
       </main>
     </div>
