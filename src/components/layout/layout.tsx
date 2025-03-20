@@ -2,7 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { Aside } from '@/components/aside/aside.tsx'
 import { Header } from '@/components/header/header.tsx'
 import { cn } from '@/lib/utils.ts'
-
+import { toast } from 'sonner'
 export const Layout = () => {
   return (
     <div className="h-screen grid grid-cols-[300px_1fr] grid-rows-[64px_minmax(0,1fr)]">
@@ -11,7 +11,7 @@ export const Layout = () => {
           to="/"
           className={({ isActive }) => cn(isActive && 'text-accent-foreground')}
         >
-          <h2 className="font-[600] text-center text-[24px] flex flex-col">
+          <h2 className="font-[600] text-center text-[24px] flex flex-col" onClick={() => toast.error('Hello')}>
             Sales accounting
           </h2>
         </NavLink>

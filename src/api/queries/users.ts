@@ -1,9 +1,9 @@
 import { ENDPOINTS } from '@/constants/endpoints'
 import { routes } from '@/constants/routes'
-import { notify } from '@/lib/notify'
 import { UserModel } from '@/models'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { axiosInstance } from '../global-config'
 
 export const usersQueryKey = {
@@ -57,10 +57,10 @@ export const useRegisterMutation = () => {
       client.setQueryData(usersQueryKey.auth(), response)
 
       navigate(routes.shiftView)
-      notify({ message: 'Successfully registered' })
+      toast.success('Successfully registered')
     },
     onError: (error) => {
-      notify({ type: 'error', message: error.message })
+      toast.error(error.message)
     },
   })
 }
@@ -80,10 +80,10 @@ export const useLoginMutation = () => {
       client.setQueryData(usersQueryKey.auth(), response)
 
       navigate(routes.shiftView)
-      notify({ message: 'Successfully logged in' })
+      toast.success('Successfully logged in')
     },
     onError: (error) => {
-      notify({ type: 'error', message: error.message })
+      toast.error(error.message)
     },
   })
 }
@@ -102,10 +102,10 @@ export const useProfileUpdateMutation = () => {
     mutationFn: ({ userData, id }: { userData: UpdateProfileDto, id: string }) => axiosInstance.put(ENDPOINTS.USER.UPDATE(id), userData),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: usersQueryKey.all })
-      notify({ message: 'Successfully updated profile' })
+      toast.success('Successfully updated profile')
     },
     onError: (error) => {
-      notify({ type: 'error', message: error.message })
+      toast.error(error.message)
     },
   })
 }
@@ -117,10 +117,10 @@ export const useLogoutMutation = () => {
     mutationFn: () => axiosInstance.post(ENDPOINTS.USER.LOGOUT),
     onSuccess: () => {
       client.setQueryData(usersQueryKey.auth(), null)
-      notify({ message: 'Successfully logged out' })
+      toast.success('Successfully logged out')
     },
     onError: () => {
-      notify({ type: 'error', message: 'Something went wrong, cannot logout' })
+      toast.error('Something went wrong, cannot logout')
     },
   })
 }
