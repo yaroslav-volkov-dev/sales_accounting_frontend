@@ -1,4 +1,4 @@
-import { LoginDto, useLoginMutation } from '@/api/queries/users'
+import { LoginDto, useLoginMutation } from '@/api/queries/auth'
 import { Button } from '@/components/ui/button.tsx'
 import {
   Card,

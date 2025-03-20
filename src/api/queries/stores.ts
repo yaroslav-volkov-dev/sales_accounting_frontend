@@ -3,6 +3,7 @@ import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { notify } from '@/lib/notify.ts'
 import { CreateStoreDto, EditStoreDto, StoreModel } from '@/models'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export const storesQueryKey = {
   all: ['stores'] as const,
@@ -44,7 +45,9 @@ export const useDeleteStoreMutation = () => {
       client.invalidateQueries({ queryKey: storesQueryKey.all })
       notify({ message: 'Category successfully deleted!' })
     },
-    onError: ({ message }) => notify({ type: 'error', message }),
+    onError: (error) => {
+      toast.error(error?.response?.data.message)
+    },
   })
 }
 

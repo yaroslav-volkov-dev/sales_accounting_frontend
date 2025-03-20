@@ -1,4 +1,4 @@
-import { useLogoutMutation, useUserQuery } from '@/api/queries/users'
+import { useLogoutMutation, useUserQuery } from '@/api/queries/auth'
 import { ShiftController, ShiftControllerSkeleton } from '@/components/shift-controller/shift-controller.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Separator } from '@/components/ui/separator.tsx'

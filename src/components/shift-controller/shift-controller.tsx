@@ -3,8 +3,8 @@ import {
   useCloseShiftMutation,
   useStartShiftMutation,
 } from '@/api/queries'
+import { useUserQuery } from '@/api/queries/auth'
 import { useStoresQuery } from '@/api/queries/stores.ts'
-import { useUserQuery } from '@/api/queries/users'
 import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
 import { Button } from '@/components/ui/button.tsx'

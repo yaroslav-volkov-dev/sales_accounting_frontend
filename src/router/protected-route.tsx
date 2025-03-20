@@ -1,4 +1,4 @@
-import { useUserQuery } from "@/api/queries/users"
+import { useUserQuery } from "@/api/queries/auth"
 import { routes } from "@/constants/routes"
 import { Navigate } from "react-router-dom"
 

@@ -1,4 +1,4 @@
-import { useUserQuery } from "@/api/queries/users"
+import { useUserQuery } from "@/api/queries/auth"
 import { ENDPOINTS } from "@/constants/endpoints"
 import { notify } from "@/lib/notify"
 import { CreateSaleDto, SaleModel } from "@/models/sale.model"

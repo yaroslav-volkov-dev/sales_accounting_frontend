@@ -1,16 +1,28 @@
 import { axiosInstance } from '@/api/global-config'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 const profileQueryKey = {
   all: ['profile'],
   detail: (userId?: string) => [...profileQueryKey.all, userId] as const,
 }
 
-export const useProfileQuery = (userId?: string) =>
-  useQuery({
-    queryKey: profileQueryKey.detail(userId),
-    queryFn: () => axiosInstance.get(ENDPOINTS.PROFILE.GET_BY_ID(userId)),
-    enabled: !!userId,
-    select: (response) => response.data,
+type UpdateProfileDto = {
+  firstName?: string
+  lastName?: string
+  email?: string
+  phoneNumber?: string
+}
+
+export const useUpdateProfileMutation = () => {
+  return useMutation({
+    mutationFn: ({ id, userData }: { userData: UpdateProfileDto, id: string }) => axiosInstance.put(ENDPOINTS.PROFILE.UPDATE(id), userData),
+    onSuccess: () => {
+      toast.success('Profile updated successfully')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
+}

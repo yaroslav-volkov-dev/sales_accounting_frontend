@@ -1,19 +1,18 @@
+import { useDeleteStoreMutation, useStoresQuery } from '@/api/queries/stores.ts'
+import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { StoreModel } from '@/models/store.model.ts'
+import { AddStoreDialog } from '@/pages/edit-database/components/add-store-dialog.tsx'
+import { EditStoreDialog } from '@/pages/edit-database/components/edit-store-dialog.tsx'
+import { Maybe } from '@/types/utility.types.ts'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { StoreModel } from '@/models/store.model.ts'
-import { notify } from '@/lib/notify.ts'
 import { useCallback, useMemo } from 'react'
-import { Maybe } from '@/types/utility.types.ts'
-import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
-import { Button } from '@/components/ui/button.tsx'
-import { AddStoreDialog } from '@/pages/edit-database/components/add-store-dialog.tsx'
-import { EditStoreDialog } from '@/pages/edit-database/components/edit-store-dialog.tsx'
-import { useDeleteStoreMutation, useStoresQuery } from '@/api/queries/stores.ts'
-
+import { toast } from 'sonner'
 const columnHelper = createColumnHelper<StoreModel>()
 
 export const StoresPage = () => {
@@ -24,7 +23,7 @@ export const StoresPage = () => {
   const handleDeleteCategory = useCallback(
     (categoryId: Maybe<number>) => {
       if (!categoryId) {
-        notify({ type: 'error', message: 'Category ID is not provided' })
+        toast.error('Category ID is not provided')
         return
       }
 
@@ -94,9 +93,9 @@ export const StoresPage = () => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </th>
                   ))}
                 </tr>

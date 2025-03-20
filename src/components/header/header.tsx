@@ -1,4 +1,4 @@
-import { useUserQuery } from '@/api/queries/users'
+import { useUserQuery } from '@/api/queries/auth'
 import { Skeleton } from '../ui/skeleton'
 
 const renderGreeting = ({ isAuth, isPending, fullName }: { isAuth: boolean, isPending: boolean, fullName: string }) => {

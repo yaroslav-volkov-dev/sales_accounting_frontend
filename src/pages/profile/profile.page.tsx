@@ -1,4 +1,5 @@
-import { useProfileUpdateMutation, useUserQuery } from '@/api/queries/users'
+import { useUserQuery } from '@/api/queries/auth'
+import { useUserUpdateMutation } from '@/api/queries/users'
 import { Loader } from '@/components/loader/loader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -33,7 +34,7 @@ const ProfilePageForm = ({ data: profileData }: ProfilePageFormProps) => {
     defaultValues: profileData,
   })
 
-  const { mutate, isPending } = useProfileUpdateMutation()
+  const { mutate, isPending } = useUserUpdateMutation()
 
   const currentValues = watch()
 

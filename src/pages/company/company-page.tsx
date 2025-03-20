@@ -1,4 +1,4 @@
-import { useUsersListQuery } from '@/api/queries/users'
+import { useUsersListQuery } from '@/api/queries/company'
 import { AppTable } from '@/components/app-table/app-table'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'

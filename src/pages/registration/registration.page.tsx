@@ -1,4 +1,4 @@
-import { useRegisterMutation } from '@/api/queries/users'
+import { useRegisterMutation } from '@/api/queries/auth'
 import { Button } from '@/components/ui/button.js'
 import {
   Card,

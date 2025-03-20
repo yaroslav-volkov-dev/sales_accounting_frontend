@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api/global-config'
-import { useUserQuery } from '@/api/queries/users'
+import { useUserQuery } from '@/api/queries/auth'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { notify } from '@/lib/notify.ts'
 import { ProductModel, ShiftModel, StoreModel } from '@/models'
