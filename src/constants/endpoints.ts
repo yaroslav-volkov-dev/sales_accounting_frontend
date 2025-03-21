@@ -27,7 +27,7 @@ export const ENDPOINTS = Object.freeze({
   },
   COMPANY: {
     BASE: '/company',
-    USERS: '/company/users',
+    PROFILES: '/company/profiles',
   },
   SALES: {
     BASE: '/sales',

@@ -11,7 +11,7 @@ export const companyQueryKey = {
 export const useUsersListQuery = () => {
   return useQuery({
     queryKey: companyQueryKey.users(),
-    queryFn: () => axiosInstance.get<UserModel[]>(ENDPOINTS.COMPANY.USERS),
+    queryFn: () => axiosInstance.get<UserModel[]>(ENDPOINTS.COMPANY.PROFILES),
     select: (response) => response.data,
   })
 }
