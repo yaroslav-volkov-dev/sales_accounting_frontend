@@ -8,6 +8,7 @@ import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-pa
 import { Login } from '@/pages/login/login.tsx'
 import { ProfilePage } from '@/pages/profile/profile.page'
 import { Registration } from '@/pages/registration/registration.page.tsx'
+import { SelectWorkspacePage } from '@/pages/select-organization/select-organization.page.tsx'
 import { ShiftView } from '@/pages/shift-view/shift-view.tsx'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { EditDatabase } from '../pages/edit-database/edit-database.tsx'
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: routes.shiftView,
-        element: <ProtectedRoute.Authorized element={<ShiftView />} />,
+        element: <ProtectedRoute.Workspace element={<ShiftView />} />,
       },
       {
         path: routes.profile,
@@ -28,11 +29,15 @@ export const router = createBrowserRouter([
       },
       {
         path: routes.company,
-        element: <ProtectedRoute.Authorized element={<CompanyPage />} />,
+        element: <ProtectedRoute.Workspace element={<CompanyPage />} />,
+      },
+      {
+        path: routes.selectWorkspace,
+        element: <ProtectedRoute.Intermediate element={<SelectWorkspacePage />} />,
       },
       {
         path: routes.editDatabase.base,
-        element: <ProtectedRoute.Authorized element={<EditDatabase />} />,
+        element: <ProtectedRoute.Workspace element={<EditDatabase />} />,
         children: [
           {
             index: true,

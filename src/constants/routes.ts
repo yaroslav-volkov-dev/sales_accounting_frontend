@@ -16,4 +16,5 @@ export const routes = {
   suppliers: '/suppliers',
   stores: '/stores',
   company: '/company',
+  selectWorkspace: '/select-workspace',
 }

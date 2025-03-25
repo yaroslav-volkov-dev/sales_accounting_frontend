@@ -21,13 +21,16 @@ export type UserModel = {
   lastName: string
   email: string
   phoneNumber: string
+  ownedOrganizations: any[]
+  memberOrganizations: any[]
+  activeOrganizationId: string | null
 }
 
 export type CategoryModel = {
   name: string
   id: number
   _count: {
-    Product: number
+    product: number
   }
 }
 
@@ -36,7 +39,7 @@ export type SupplierModel = {
   id: number
   phoneNumber: string
   _count: {
-    Product: number
+    product: number
   }
 }
 
