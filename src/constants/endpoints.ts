@@ -33,4 +33,8 @@ export const ENDPOINTS = Object.freeze({
     BASE: '/sales',
     GET_ALL_BY_SHIFT: (shiftId: string | number) => `/sales/shift/${shiftId}`,
   },
+  WORKSPACES: {
+    BASE: '/workspaces',
+    CREATE: '/workspaces/create',
+  },
 })

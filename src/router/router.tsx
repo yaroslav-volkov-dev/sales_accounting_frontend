@@ -5,6 +5,7 @@ import { CategoriesPage } from '@/pages/edit-database/categories-page/categories
 import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx'
 import { StoresPage } from '@/pages/edit-database/stores-page/stores-page.tsx'
 import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx'
+import { HomePage } from '@/pages/home/home.page.tsx'
 import { Login } from '@/pages/login/login.tsx'
 import { ProfilePage } from '@/pages/profile/profile.page'
 import { Registration } from '@/pages/registration/registration.page.tsx'
@@ -17,15 +18,27 @@ import { ProtectedRoute } from './protected-route.tsx'
 export const router = createBrowserRouter([
   {
     element: <Layout />,
-    path: routes.home,
     children: [
+      {
+        path: routes.home,
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: routes.login,
+        element: <ProtectedRoute.Unauthorized element={<Login />} />,
+      },
+      {
+        path: routes.registration,
+        element: <ProtectedRoute.Unauthorized element={<Registration />} />,
+      },
       {
         path: routes.shiftView,
         element: <ProtectedRoute.Workspace element={<ShiftView />} />,
       },
       {
         path: routes.profile,
-        element: <ProtectedRoute.Authorized element={<ProfilePage />} />,
+        element: <ProtectedRoute.Intermediate element={<ProfilePage />} />,
       },
       {
         path: routes.company,
@@ -60,14 +73,6 @@ export const router = createBrowserRouter([
             element: <StoresPage />,
           },
         ],
-      },
-      {
-        path: routes.registration,
-        element: <ProtectedRoute.Unauthorized element={<Registration />} />,
-      },
-      {
-        path: routes.login,
-        element: <ProtectedRoute.Unauthorized element={<Login />} />,
       },
     ],
   },

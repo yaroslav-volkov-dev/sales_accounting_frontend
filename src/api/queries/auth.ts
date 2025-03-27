@@ -16,12 +16,14 @@ export const useUserQuery = () => {
     queryKey: authQueryKey.me(),
     queryFn: async () => await axiosInstance.get<{ user: UserModel }>(ENDPOINTS.AUTH.ME),
     select: (response) => response?.data,
+    retryOnMount: false,
   })
 
   return {
     ...queryData,
     userId: queryData?.data?.user?.id || '',
     isAuth: !!queryData?.data?.user,
+    isWorkspaceExists: !!queryData?.data?.user?.activeOrganizationId,
   }
 }
 

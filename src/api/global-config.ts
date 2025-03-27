@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '@/constants/endpoints'
 import { LOCAL_STORAGE_KEY } from '@/constants/local-storage-keys'
-import { routes } from '@/constants/routes'
+import { routes, unauthenticatedRoutes } from '@/constants/routes'
 import { UserModel } from '@/models'
 import { Query, QueryCache, QueryClient } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
@@ -14,14 +14,12 @@ export const axiosInstance = axios.create({
 
 const refreshAuthToken = async () => {
   try {
-    const response = await axiosInstance.post<{ user: UserModel }>(ENDPOINTS.USER.REFRESH)
+    const response = await axiosInstance.post<{ user: UserModel }>(ENDPOINTS.AUTH.REFRESH)
 
     return response.data
   } catch {
-    if (![routes.login, routes.registration].includes(window.location.pathname)) {
-      localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
-      window.location.href = routes.login
-    }
+    localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
+    window.location.href = routes.login
   }
 };
 
@@ -41,8 +39,14 @@ export const queryClient = new QueryClient({
     onError: (() => {
       let isRetry = false;
 
+
+
       return async (error: Error, query: Query<unknown, unknown, unknown, readonly unknown[]>) => {
         const axiosError = error as AxiosError;
+        const isUnauthenticatedRoute = Object.values(unauthenticatedRoutes).includes(window.location.pathname)
+        const isHomeRoute = window.location.pathname === routes.home
+
+        if (isUnauthenticatedRoute || isHomeRoute) return;
 
         if (axiosError?.response?.status === 401 && !isRetry) {
           try {

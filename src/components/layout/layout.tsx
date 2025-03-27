@@ -1,25 +1,19 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { useUserQuery } from '@/api/queries/auth'
 import { Aside } from '@/components/aside/aside.tsx'
-import { Header } from '@/components/header/header.tsx'
-import { cn } from '@/lib/utils.ts'
-import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
+import { Outlet } from 'react-router-dom'
+import { Card } from '../ui/card'
+
 export const Layout = () => {
+  const { isAuth } = useUserQuery()
+
   return (
-    <div className="h-screen grid grid-cols-[300px_1fr] grid-rows-[64px_minmax(0,1fr)]">
-      <div className="h-16 flex justify-center items-center border-b border-r">
-        <NavLink
-          to="/"
-          className={({ isActive }) => cn(isActive && 'text-accent-foreground')}
-        >
-          <h2 className="font-[600] text-center text-[24px] flex flex-col" onClick={() => toast.error('Hello')}>
-            Sales accounting
-          </h2>
-        </NavLink>
-      </div>
-      <Header />
-      <Aside />
-      <main className="p-4">
-        <Outlet />
+    <div className={cn('h-screen grid bg-accent', isAuth && 'grid-cols-[250px_1fr]')}>
+      {isAuth && <Aside />}
+      <main className="h-full p-4">
+        <Card className="h-full p-4">
+          <Outlet />
+        </Card>
       </main>
     </div>
   )

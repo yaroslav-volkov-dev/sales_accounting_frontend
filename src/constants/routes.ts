@@ -1,3 +1,8 @@
+export const unauthenticatedRoutes = {
+  registration: '/registration',
+  login: '/login',
+}
+
 export const routes = {
   profile: '/profile',
   editDatabase: {
@@ -8,8 +13,6 @@ export const routes = {
     stores: '/edit-database/stores',
   },
   shiftView: '/shift-view',
-  registration: '/registration',
-  login: '/login',
   home: '/',
   products: '/products',
   categories: '/categories',
@@ -17,4 +20,5 @@ export const routes = {
   stores: '/stores',
   company: '/company',
   selectWorkspace: '/select-workspace',
+  ...unauthenticatedRoutes
 }
