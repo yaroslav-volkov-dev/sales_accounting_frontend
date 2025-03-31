@@ -1,4 +1,5 @@
 import { useLogoutMutation, useUserQuery } from '@/api/queries/auth'
+import { useCloseSessionMutation } from '@/api/queries/users'
 import { Button } from '@/components/ui/button.tsx'
 import { Separator } from '@/components/ui/separator.tsx'
 import { routes } from '@/constants/routes'
@@ -45,23 +46,24 @@ const workspaceLinks: Link[] = [
   ...authLinks,
 ]
 
-const generateLinks = ({ isAuth, isWorkspaceExists }: { isAuth: boolean, isWorkspaceExists: boolean }) => {
+const generateLinks = ({ isAuth, isSessionActive }: { isAuth: boolean, isSessionActive: boolean }) => {
   if (!isAuth) return []
-  if (!isWorkspaceExists) return authLinks
+  if (!isSessionActive) return authLinks
 
   return workspaceLinks
 }
 
 export const Aside = () => {
-  const { isAuth, isWorkspaceExists } = useUserQuery()
+  const { isAuth, isSessionActive } = useUserQuery()
   const { mutate: logout, isPending: isLogoutPending } = useLogoutMutation()
+  const { mutate: closeSession, isPending: isCloseSessionPending } = useCloseSessionMutation()
 
   return (
     <aside className="h-full flex flex-col">
       <Separator />
       <div className="flex flex-col grow p-4">
         <nav className="flex flex-col grow gap-2">
-          {generateLinks({ isAuth, isWorkspaceExists }).map(({ to, label, icon }) => (
+          {generateLinks({ isAuth, isSessionActive }).map(({ to, label, icon }) => (
             <NavLink
               to={to}
               key={to}
@@ -77,13 +79,23 @@ export const Aside = () => {
             </NavLink>
           ))}
         </nav>
-        <Button
-          className="w-full"
-          onClick={() => logout()}
-          isLoading={isLogoutPending}
-        >
-          Log out
-        </Button>
+        <div className="flex flex-col gap-2">
+          {isSessionActive && (
+            <Button
+              onClick={() => closeSession()}
+              isLoading={isCloseSessionPending}
+            >
+              Close current session
+            </Button>
+          )}
+          <Button
+            className="w-full"
+            onClick={() => logout()}
+            isLoading={isLogoutPending}
+          >
+            Log out
+          </Button>
+        </div>
       </div>
     </aside>
   )

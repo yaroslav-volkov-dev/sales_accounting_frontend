@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom"
 const ProtectedRouteLoader = () => <div className="flex justify-center items-center h-full"><Loader size={100} /></div>
 
 const WorkspaceRoute = ({ element }: { element: React.ReactNode }) => {
-  const { isAuth, isPending, data, isSessionActive } = useUserQuery()
+  const { isAuth, isPending, isSessionActive } = useUserQuery()
 
   if (isPending) return <ProtectedRouteLoader />
   if (!isAuth) return <Navigate to={routes.login} />

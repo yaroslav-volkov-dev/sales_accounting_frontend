@@ -104,7 +104,6 @@ const SelectWorkspaceBlock = ({ workspaces }: { workspaces: OrganizationMemberMo
 
 export const SelectWorkspacePage = () => {
   const { data: userData, isPending: isUserDataPending } = useUserQuery();
-  console.log(userData);
 
   if (isUserDataPending) {
     return (

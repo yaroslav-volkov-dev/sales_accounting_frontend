@@ -11,9 +11,9 @@ export const authQueryKey = {
   me: () => [...authQueryKey.all, 'me'] as const,
 }
 
-type UserQueryResponse = UserModel & {
+export type UserQueryResponse = UserModel & {
   memberOrganizations: OrganizationMemberModel[]
-  session: SessionModel
+  session: SessionModel | null
 }
 
 export const useUserQuery = () => {
