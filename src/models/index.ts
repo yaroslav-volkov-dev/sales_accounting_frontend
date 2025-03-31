@@ -15,15 +15,36 @@ export enum PaymentMethod {
   CARD = 'CARD',
 }
 
+export type SessionModel = {
+  id: string
+  profileId: string
+  membershipId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type OrganizationModel = {
+  id: string
+  name: string
+  createdAt: string
+  updatedAt: string
+}
+
 export type UserModel = {
   id: string
   firstName: string
   lastName: string
   email: string
   phoneNumber: string
-  ownedOrganizations: any[]
-  memberOrganizations: any[]
-  activeOrganizationId: string | null
+}
+
+export type OrganizationMemberModel = {
+  id: string
+  profileId: string
+  organizationId: string
+  createdAt: string
+  updatedAt: string
+  organization: OrganizationModel
 }
 
 export type CategoryModel = {

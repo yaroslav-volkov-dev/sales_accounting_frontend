@@ -24,6 +24,7 @@ export const ENDPOINTS = Object.freeze({
   USERS: {
     BASE: '/users',
     UPDATE: (id?: string) => `/users/update/${id}`,
+    START_SESSION: (workspaceId?: string) => `/users/start-session/${workspaceId}`,
   },
   COMPANY: {
     BASE: '/company',

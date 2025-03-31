@@ -6,35 +6,31 @@ import { Navigate } from "react-router-dom"
 const ProtectedRouteLoader = () => <div className="flex justify-center items-center h-full"><Loader size={100} /></div>
 
 const WorkspaceRoute = ({ element }: { element: React.ReactNode }) => {
-  const { isAuth, isPending, data } = useUserQuery()
+  const { isAuth, isPending, data, isSessionActive } = useUserQuery()
 
   if (isPending) return <ProtectedRouteLoader />
   if (!isAuth) return <Navigate to={routes.login} />
-  if (!data?.user?.activeOrganizationId) return <Navigate to={routes.selectWorkspace} />
+  if (!isSessionActive) return <Navigate to={routes.selectWorkspace} />
 
   return element
 }
 
 const IntermediateRoute = ({ element }: { element: React.ReactNode }) => {
-  const { isAuth, isPending, data } = useUserQuery()
+  const { isAuth, isPending, isSessionActive } = useUserQuery()
 
   if (isPending) return <ProtectedRouteLoader />
   if (!isAuth) return <Navigate to={routes.login} />
-  if (data?.user?.activeOrganizationId) return <Navigate to={routes.shiftView} />
+  if (isSessionActive) return <Navigate to={routes.shiftView} />
 
   return element
 }
 
 const UnauthorizedRoute = ({ element }: { element: React.ReactNode }) => {
-  const { isAuth, isPending, data } = useUserQuery()
+  const { isAuth, isPending, isSessionActive } = useUserQuery()
 
   if (isPending) return <ProtectedRouteLoader />
-
   if (!isAuth) return element
-
-  const hasActiveOrganization = !!data?.user?.activeOrganizationId
-
-  if (hasActiveOrganization) return <Navigate to={routes.shiftView} />
+  if (isSessionActive) return <Navigate to={routes.shiftView} />
 
   return <Navigate to={routes.selectWorkspace} />
 }

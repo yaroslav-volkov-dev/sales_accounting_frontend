@@ -4,6 +4,10 @@ import { toast } from "sonner"
 import { axiosInstance } from "../global-config"
 import { authQueryKey } from "./auth"
 
+export const usersQueryKey = {
+  all: ['users'],
+}
+
 type UpdateProfileDto = {
   firstName: string
   lastName: string
@@ -24,4 +28,19 @@ export const useUserUpdateMutation = () => {
       toast.error(error.message)
     },
   })
-} 
+}
+
+export const useStartSessionMutation = () => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ workspaceId }: { workspaceId: string }) => axiosInstance.put(ENDPOINTS.USERS.START_SESSION(workspaceId)),
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: authQueryKey.me() })
+      toast.success('Successfully started session')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+}
