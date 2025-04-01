@@ -38,13 +38,12 @@ export type UserModel = {
   phoneNumber: string
 }
 
-export type OrganizationMemberModel = {
+export type WorkspaceMemberModel = {
   id: string
   profileId: string
   organizationId: string
   createdAt: string
   updatedAt: string
-  organization: OrganizationModel
 }
 
 export type CategoryModel = {

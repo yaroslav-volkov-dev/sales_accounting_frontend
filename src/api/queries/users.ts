@@ -1,10 +1,10 @@
 import { ENDPOINTS } from "@/constants/endpoints"
+import { SessionModel } from "@/models"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AxiosResponse } from "axios"
+import { AxiosError } from "axios"
 import { toast } from "sonner"
 import { axiosInstance } from "../global-config"
 import { authQueryKey, UserQueryResponse } from "./auth"
-
 export const usersQueryKey = {
   all: ['users'],
 }
@@ -31,15 +31,19 @@ export const useUserUpdateMutation = () => {
   })
 }
 
+type StartSessionVariables = {
+  workspaceId: string
+}
+
 export const useStartSessionMutation = () => {
   const client = useQueryClient()
 
-  return useMutation({
-    mutationFn: ({ workspaceId }: { workspaceId: string }) => axiosInstance.post(ENDPOINTS.USERS.START_SESSION(workspaceId)),
-    onSuccess: (data) => {
-      client.setQueryData<AxiosResponse<UserQueryResponse>>(authQueryKey.me(), (oldData) => oldData ? {
+  return useMutation<SessionModel, AxiosError, StartSessionVariables>({
+    mutationFn: ({ workspaceId }: StartSessionVariables) => axiosInstance.post(ENDPOINTS.USERS.START_SESSION(workspaceId)),
+    onSuccess: (response) => {
+      client.setQueryData<UserQueryResponse>(authQueryKey.me(), (oldData) => oldData ? {
         ...oldData,
-        session: data.data,
+        session: response,
       } : oldData);
       toast.success('Successfully started session')
     },
@@ -55,8 +59,7 @@ export const useCloseSessionMutation = () => {
   return useMutation({
     mutationFn: () => axiosInstance.delete(ENDPOINTS.USERS.CLOSE_SESSION),
     onSuccess: () => {
-
-      client.setQueryData<AxiosResponse<UserQueryResponse>>(authQueryKey.me(), (oldData) => oldData ? ({
+      client.setQueryData<UserQueryResponse>(authQueryKey.me(), (oldData) => oldData ? ({
         ...oldData,
         session: null,
       }) : oldData);

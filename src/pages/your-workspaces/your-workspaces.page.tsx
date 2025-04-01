@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { OrganizationMemberModel } from "@/models";
+import { WorkspaceMemberModel } from "@/models";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -77,7 +77,7 @@ const AddWorkspaceBlock = () => {
   )
 }
 
-const SelectWorkspaceBlock = ({ workspaces }: { workspaces: OrganizationMemberModel[] }) => {
+const SelectWorkspaceBlock = ({ workspaces }: { workspaces: WorkspaceMemberModel[] }) => {
   const { mutate: startSession, isPending: isStartingSessionPending } = useStartSessionMutation()
 
   return (
@@ -113,7 +113,7 @@ export const SelectWorkspacePage = () => {
     )
   }
 
-  const memberOrganizations = userData?.memberOrganizations || []
+  const memberOrganizations = userData?.workspaces || []
 
   if (memberOrganizations.length === 0) {
     return (
