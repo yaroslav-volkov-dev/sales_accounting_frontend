@@ -39,12 +39,8 @@ export const useStartSessionMutation = () => {
     onSuccess: (data) => {
       client.setQueryData<AxiosResponse<UserQueryResponse>>(authQueryKey.me(), (oldData) => oldData ? {
         ...oldData,
-        data: {
-          ...oldData.data,
-          session: data.data,
-        },
+        session: data.data,
       } : oldData);
-      client.invalidateQueries({ queryKey: authQueryKey.me() })
       toast.success('Successfully started session')
     },
     onError: (error) => {
@@ -62,12 +58,8 @@ export const useCloseSessionMutation = () => {
 
       client.setQueryData<AxiosResponse<UserQueryResponse>>(authQueryKey.me(), (oldData) => oldData ? ({
         ...oldData,
-        data: {
-          ...oldData.data,
-          session: null,
-        },
+        session: null,
       }) : oldData);
-      client.invalidateQueries({ queryKey: authQueryKey.me() })
       toast.success('Successfully closed session')
     },
     onError: (error) => {

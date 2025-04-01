@@ -17,10 +17,9 @@ export type UserQueryResponse = UserModel & {
 }
 
 export const useUserQuery = () => {
-  const queryData = useQuery({
+  const queryData = useQuery<UserQueryResponse>({
     queryKey: authQueryKey.me(),
-    queryFn: async () => await axiosInstance.get<UserQueryResponse>(ENDPOINTS.AUTH.ME),
-    select: (response) => response?.data,
+    queryFn: async () => await axiosInstance.get(ENDPOINTS.AUTH.ME),
     retryOnMount: false,
   })
 

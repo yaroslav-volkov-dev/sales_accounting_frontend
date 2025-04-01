@@ -18,12 +18,11 @@ export const productQueryKey = {
   list: (filters?: Filters) => [...productQueryKey.lists(), filters] as const,
 }
 
-export const useProductsQuery = (filters?: Filters) => useQuery({
+export const useProductsQuery = (filters?: Filters) => useQuery<ProductsModel[]>({
   queryKey: productQueryKey.list(filters),
   queryFn: async () => {
     const url = getQueryStringParams(ENDPOINTS.PRODUCTS, { ...(filters || {}) }, { arrayFormat: 'comma' })
 
-    return axiosInstance.get<ProductsModel[]>(url)
+    return axiosInstance.get(url)
   },
-  select: (response) => response.data,
 })

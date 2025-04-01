@@ -14,13 +14,12 @@ export const categoriesQueryKey = {
 export const useCategoriesQuery = (args: { includeCount?: boolean } | void) => {
   const { includeCount } = args || {}
 
-  return useQuery({
+  return useQuery<CategoryModel[]>({
     queryKey: categoriesQueryKey.list({ includeCount }),
     queryFn: async () =>
-      axiosInstance.get<CategoryModel[]>(
+      axiosInstance.get(
         getQueryStringParams(ENDPOINTS.CATEGORIES, { includeCount })
       ),
-    select: (response) => response.data,
   })
 }
 

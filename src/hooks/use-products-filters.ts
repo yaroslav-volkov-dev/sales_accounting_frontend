@@ -30,11 +30,10 @@ export const useProductFiltersState = () => {
 
   const { data: categoriesData } = useCategoriesQuery()
 
-  const { data: suppliersData } = useQuery({
+  const { data: suppliersData } = useQuery<SupplierModel[]>({
     queryKey: [suppliersQueryKey.all],
     queryFn: async () =>
-      axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
-    select: (response) => response.data,
+      axiosInstance.get(ENDPOINTS.SUPPLIERS),
   })
 
   const queryParams = queryString.parse(location.search, {

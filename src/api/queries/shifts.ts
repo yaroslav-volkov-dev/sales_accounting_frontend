@@ -19,13 +19,12 @@ export type ActiveShiftResponse = ShiftModel & {
 export const useActiveShiftQuery = () => {
   const { userId } = useUserQuery()
 
-  return useQuery({
+  return useQuery<ActiveShiftResponse>({
     queryKey: shiftKeys.active(userId),
-    queryFn: async () => axiosInstance.get<ActiveShiftResponse>(
+    queryFn: async () => axiosInstance.get(
       ENDPOINTS.SHIFTS.ACTIVE(userId || '')
     ),
     enabled: !!userId,
-    select: (response) => response.data,
   })
 }
 

@@ -14,10 +14,9 @@ const salesKeys = {
 }
 
 export const useSalesByShiftQuery = (shiftId: Maybe<string | number>) => {
-  return useQuery({
+  return useQuery<SaleModel[]>({
     queryKey: salesKeys.list(shiftId || ''),
-    queryFn: () => axiosInstance.get<SaleModel[]>(ENDPOINTS.SALES.GET_ALL_BY_SHIFT(shiftId || '')),
-    select: (response) => response.data,
+    queryFn: () => axiosInstance.get(ENDPOINTS.SALES.GET_ALL_BY_SHIFT(shiftId || '')),
     enabled: !!shiftId,
   })
 }

@@ -14,13 +14,12 @@ export const suppliersQueryKey = {
 export const useSupplierQuery = (args: { includeCount: boolean }) => {
   const { includeCount } = args || {}
 
-  return useQuery({
+  return useQuery<SupplierModel[]>({
     queryKey: [suppliersQueryKey.list({ includeCount })],
     queryFn: async () =>
-      axiosInstance.get<SupplierModel[]>(
+      axiosInstance.get(
         getQueryStringParams(ENDPOINTS.SUPPLIERS, { includeCount })
       ),
-    select: (response) => response.data,
   })
 }
 

@@ -12,6 +12,10 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 })
 
+axiosInstance.interceptors.response.use((response) => {
+  return response.data
+})
+
 const refreshAuthToken = async () => {
   try {
     const response = await axiosInstance.post<{ user: UserModel }>(ENDPOINTS.AUTH.REFRESH)
@@ -38,8 +42,6 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (() => {
       let isRetry = false;
-
-
 
       return async (error: Error, query: Query<unknown, unknown, unknown, readonly unknown[]>) => {
         const axiosError = error as AxiosError;

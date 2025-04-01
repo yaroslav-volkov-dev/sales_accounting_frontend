@@ -10,10 +10,9 @@ export const storesQueryKey = {
 }
 
 export const useStoresQuery = () =>
-  useQuery({
+  useQuery<StoreModel[]>({
     queryKey: storesQueryKey.all,
-    queryFn: async () => axiosInstance.get<StoreModel[]>(ENDPOINTS.STORES),
-    select: (response) => response.data,
+    queryFn: async () => axiosInstance.get(ENDPOINTS.STORES),
   })
 
 export const useAddStoreMutation = (args: { onSuccess: () => void } | void) => {

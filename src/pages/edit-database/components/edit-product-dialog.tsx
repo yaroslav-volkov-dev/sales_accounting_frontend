@@ -58,18 +58,16 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
     },
   })
 
-  const { data: categoriesData } = useQuery({
+  const { data: categoriesData } = useQuery<CategoryModel[]>({
     queryKey: [ENDPOINTS.CATEGORIES],
     queryFn: async () =>
-      axiosInstance.get<CategoryModel[]>(ENDPOINTS.CATEGORIES),
-    select: (response) => response.data,
+      axiosInstance.get(ENDPOINTS.CATEGORIES),
   })
 
-  const { data: suppliersData } = useQuery({
+  const { data: suppliersData } = useQuery<SupplierModel[]>({
     queryKey: [suppliersQueryKey.all],
     queryFn: async () =>
-      axiosInstance.get<SupplierModel[]>(ENDPOINTS.SUPPLIERS),
-    select: (response) => response.data,
+      axiosInstance.get(ENDPOINTS.SUPPLIERS),
   })
 
   const categoriesOptions =
