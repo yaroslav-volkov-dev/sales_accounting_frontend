@@ -1,6 +1,6 @@
-import { NavLink, Outlet } from 'react-router-dom'
-import { cn } from '@/lib/utils.js'
 import { Card } from '@/components/ui/card.tsx'
+import { cn } from '@/lib/utils.js'
+import { NavLink, Outlet } from 'react-router-dom'
 
 const links = [
   {
@@ -10,10 +10,6 @@ const links = [
   {
     label: 'Categories',
     to: 'categories',
-  },
-  {
-    label: 'Suppliers',
-    to: 'suppliers',
   },
   {
     label: 'Stores',

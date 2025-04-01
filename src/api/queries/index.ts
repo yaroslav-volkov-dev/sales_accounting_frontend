@@ -8,11 +8,6 @@ export {
 } from './categories'
 
 export {
-  useAddSupplierMutation, useDeleteSupplierMutation, useEditSupplierMutation,
-  useSupplierQuery
-} from './suppliers'
-
-export {
   useProductsQuery
 } from './products.ts'
 

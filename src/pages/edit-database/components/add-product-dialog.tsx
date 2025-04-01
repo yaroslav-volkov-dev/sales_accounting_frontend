@@ -17,11 +17,9 @@ import { Label } from '@/components/ui/label.tsx'
 import { ENDPOINTS } from '@/constants/endpoints.js'
 import { CategoryModel } from '@/models/category.model.ts'
 import { CreateProductDto } from '@/models/products.model.ts'
-import { SupplierModel } from '@/models/supplier.model.ts'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { suppliersQueryKey } from '../queries.ts'
 
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false)
@@ -45,17 +43,8 @@ export const AddProductDialog = () => {
       axiosInstance.get(ENDPOINTS.CATEGORIES),
   })
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
-    queryKey: [suppliersQueryKey.all],
-    queryFn: async () =>
-      axiosInstance.get(ENDPOINTS.SUPPLIERS),
-  })
-
   const categoriesOptions =
     categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
-    []
-  const suppliersOptions =
-    suppliersData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
     []
 
   return (
@@ -107,23 +96,6 @@ export const AddProductDialog = () => {
                       onSelect={field.onChange}
                       triggerClassname="col-span-3"
                       placeholder="Select category"
-                    />
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="supplierId" className="text-right">
-                  Supplier
-                </Label>
-                <Controller
-                  control={control}
-                  name="supplierId"
-                  render={({ field }) => (
-                    <SelectInput
-                      options={suppliersOptions}
-                      onSelect={field.onChange}
-                      triggerClassname="col-span-3"
-                      placeholder="Select supplier"
                     />
                   )}
                 />

@@ -1,7 +1,6 @@
 export const ENDPOINTS = Object.freeze({
   PRODUCTS: '/products',
   CATEGORIES: '/categories',
-  SUPPLIERS: '/suppliers',
   STORES: '/stores',
   SHIFTS: {
     BASE: '/shifts',

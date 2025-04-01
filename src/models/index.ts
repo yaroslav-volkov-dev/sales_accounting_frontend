@@ -4,10 +4,6 @@ export type {
 } from './products.model.ts'
 export type { CreateSaleDto } from './sale.model.ts'
 export type { CreateStoreDto, EditStoreDto } from './store.model.ts'
-export type {
-  CreateSupplierDto,
-  EditSupplierDto
-} from './supplier.model.ts'
 export type { UpdateProfileDto } from './user-model.ts'
 
 export enum PaymentMethod {
@@ -54,15 +50,6 @@ export type CategoryModel = {
   }
 }
 
-export type SupplierModel = {
-  name: string
-  id: number
-  phoneNumber: string
-  _count: {
-    product: number
-  }
-}
-
 export type StoreModel = {
   id: number
   name: string
@@ -76,7 +63,6 @@ export type ProductModel = {
   id: number
   name: string
   price: number
-  supplierId: number | null
   categoryId: number | null
 }
 

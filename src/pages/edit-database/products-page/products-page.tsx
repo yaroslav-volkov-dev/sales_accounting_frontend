@@ -22,9 +22,7 @@ const columnHelper = createColumnHelper<ProductsModel>()
 export const ProductsPage = () => {
   const {
     updateCategoryFilters,
-    updateSupplierFilters,
     state,
-    suppliersOptions,
     categoriesOptions,
   } = useProductFiltersState()
 
@@ -112,13 +110,7 @@ export const ProductsPage = () => {
               options={categoriesOptions}
               onSelect={updateCategoryFilters}
               controllerName="Categories filters"
-              initialOptionsIds={state.categoriesIds}
-            />
-            <FiltersController
-              options={suppliersOptions}
-              onSelect={updateSupplierFilters}
-              controllerName="Suppliers filters"
-              initialOptionsIds={state.suppliersIds}
+              initialOptionsIds={state.categoryIds}
             />
           </div>
           <div className="grow bg-white border rounded-lg">

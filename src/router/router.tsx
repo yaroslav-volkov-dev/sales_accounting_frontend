@@ -4,7 +4,6 @@ import { CompanyPage } from '@/pages/company/company-page.tsx'
 import { CategoriesPage } from '@/pages/edit-database/categories-page/categories-page.tsx'
 import { ProductsPage } from '@/pages/edit-database/products-page/products-page.tsx'
 import { StoresPage } from '@/pages/edit-database/stores-page/stores-page.tsx'
-import { SuppliersPage } from '@/pages/edit-database/suppliers-page/suppliers-page.tsx'
 import { HomePage } from '@/pages/home/home.page.tsx'
 import { Login } from '@/pages/login/login.tsx'
 import { ProfilePage } from '@/pages/profile/profile.page'
@@ -64,10 +63,7 @@ export const router = createBrowserRouter([
             path: routes.editDatabase.categories,
             element: <CategoriesPage />,
           },
-          {
-            path: routes.editDatabase.suppliers,
-            element: <SuppliersPage />,
-          },
+
           {
             path: routes.editDatabase.stores,
             element: <StoresPage />,

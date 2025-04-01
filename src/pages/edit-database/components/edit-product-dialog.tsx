@@ -1,6 +1,5 @@
 import { axiosInstance } from '@/api/global-config'
 import { productQueryKey } from '@/api/queries/products'
-import { suppliersQueryKey } from '@/api/queries/suppliers'
 import { SelectInput } from '@/components/select-input/select-input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import {
@@ -16,7 +15,7 @@ import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
 import { ENDPOINTS } from '@/constants/endpoints.ts'
 import { notify } from '@/lib/notify.ts'
-import { CategoryModel, SupplierModel } from '@/models'
+import { CategoryModel } from '@/models'
 import { EditProductDto, ProductsModel } from '@/models/products.model.ts'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -35,7 +34,6 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
       name: product.name,
       price: product.price,
       categoryId: product?.Category?.id,
-      supplierId: product?.Supplier?.id,
     },
   })
 
@@ -64,17 +62,8 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
       axiosInstance.get(ENDPOINTS.CATEGORIES),
   })
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
-    queryKey: [suppliersQueryKey.all],
-    queryFn: async () =>
-      axiosInstance.get(ENDPOINTS.SUPPLIERS),
-  })
-
   const categoriesOptions =
     categoriesData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
-    []
-  const suppliersOptions =
-    suppliersData?.map(({ name, id }) => ({ value: `${id}`, label: name })) ||
     []
 
   return (
@@ -126,24 +115,6 @@ export const EditProductDialog = ({ product }: EditProductDialogProps) => {
                     triggerClassname="col-span-3"
                     defaultValue={field?.value?.toString()}
                     placeholder="Select category"
-                  />
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="supplierId" className="text-right">
-                Supplier
-              </Label>
-              <Controller
-                control={control}
-                name="supplierId"
-                render={({ field }) => (
-                  <SelectInput
-                    options={suppliersOptions}
-                    onSelect={field.onChange}
-                    triggerClassname="col-span-3"
-                    defaultValue={field?.value?.toString()}
-                    placeholder="Select supplier"
                   />
                 )}
               />

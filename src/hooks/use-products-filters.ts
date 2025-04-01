@@ -1,10 +1,5 @@
-import { axiosInstance } from '@/api/global-config'
 import { useCategoriesQuery } from '@/api/queries/categories.ts'
-import { ENDPOINTS } from '@/constants/endpoints.ts'
-import { SupplierModel } from '@/models'
-import { suppliersQueryKey } from '@/pages/edit-database/queries.ts'
 import { ProductsQueryFilterKey } from '@/types/products-query.types.ts'
-import { useQuery } from '@tanstack/react-query'
 import queryString from 'query-string'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
@@ -30,12 +25,6 @@ export const useProductFiltersState = () => {
 
   const { data: categoriesData } = useCategoriesQuery()
 
-  const { data: suppliersData } = useQuery<SupplierModel[]>({
-    queryKey: [suppliersQueryKey.all],
-    queryFn: async () =>
-      axiosInstance.get(ENDPOINTS.SUPPLIERS),
-  })
-
   const queryParams = queryString.parse(location.search, {
     parseBooleans: true,
   })
@@ -51,16 +40,6 @@ export const useProductFiltersState = () => {
       label: 'Without Category',
       id: ProductsQueryFilterKey.WITHOUT_CATEGORY,
       group: ProductsQueryFilterKey.WITHOUT_CATEGORY,
-    },
-  ]
-
-  const suppliersOptions = [
-    ...(suppliersData?.map(({ name, id }) => ({ id: `${id}`, label: name })) ||
-      []),
-    {
-      label: 'Without Supplier',
-      id: ProductsQueryFilterKey.WITHOUT_SUPPLIER,
-      group: ProductsQueryFilterKey.WITHOUT_SUPPLIER,
     },
   ]
 
@@ -91,28 +70,9 @@ export const useProductFiltersState = () => {
     }))
   }
 
-  const updateSupplierFilters = ({
-    ungroupedFilters,
-    groupedFilters,
-  }: {
-    groupedFilters: Record<ProductsQueryFilterKey, string[]>
-    ungroupedFilters: string[]
-  }) =>
-    updateQueryState((state) => ({
-      ...state,
-      [ProductsQueryFilterKey.SUPPLIER_IDS]: ungroupedFilters,
-      [ProductsQueryFilterKey.WITHOUT_SUPPLIER]: groupedFilters[
-        ProductsQueryFilterKey.WITHOUT_SUPPLIER
-      ]
-        ? true
-        : undefined,
-    }))
-
   return {
     updateCategoryFilters,
-    updateSupplierFilters,
     state,
     categoriesOptions,
-    suppliersOptions,
   }
 }

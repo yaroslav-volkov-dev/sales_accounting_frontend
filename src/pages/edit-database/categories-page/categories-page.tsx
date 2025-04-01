@@ -1,22 +1,22 @@
-import { useCallback, useMemo } from 'react'
-import { AddCategoryDialog } from '../components/add-category-dialog.tsx'
+import { useCategoriesQuery, useDeleteCategoryMutation } from '@/api/queries'
+import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
+import { notify } from '@/lib/notify.ts'
+import { CategoryModel } from '@/models'
+import { EditCategoryDialog } from '@/pages/edit-database/components/edit-category-dialog.tsx'
+import { ProductsQueryFilterKey } from '@/types/products-query.types.ts'
+import { Maybe } from '@/types/utility.types.ts'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { getQueryStringParams } from '@/lib/get-query-string-params.ts'
-import { notify } from '@/lib/notify.ts'
-import { ConfirmationDialog } from '@/components/confirmation-modal/confirmation-dialog.tsx'
-import { CategoryModel } from '@/models'
-import { Maybe } from '@/types/utility.types.ts'
-import { Button } from '@/components/ui/button.tsx'
-import { EditCategoryDialog } from '@/pages/edit-database/components/edit-category-dialog.tsx'
-import { ProductsQueryFilterKey } from '@/types/products-query.types.ts'
-import { NavLink } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
-import { useCategoriesQuery, useDeleteCategoryMutation } from '@/api/queries'
+import { useCallback, useMemo } from 'react'
+import { NavLink } from 'react-router-dom'
+import { AddCategoryDialog } from '../components/add-category-dialog.tsx'
 
 const includeCount = true
 
@@ -45,13 +45,13 @@ export const CategoriesPage = () => {
         header: 'Name',
         cell: ({ getValue }) => getValue(),
       }),
-      columnHelper.accessor((originalRow) => originalRow?._count?.Product, {
+      columnHelper.accessor((originalRow) => originalRow?._count?.product, {
         header: 'In Category',
         cell: ({ getValue, row }) => {
           const value = getValue()
 
           const url = getQueryStringParams('/edit-database/products', {
-            [ProductsQueryFilterKey.CATEGORIES_IDS]: row.original.id,
+            [ProductsQueryFilterKey.CATEGORY_IDS]: row.original.id,
           })
 
           return (
@@ -114,9 +114,9 @@ export const CategoriesPage = () => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </th>
                   ))}
                 </tr>
