@@ -5,6 +5,7 @@ import { AxiosError } from "axios"
 import { toast } from "sonner"
 import { axiosInstance } from "../global-config"
 import { authQueryKey, UserQueryResponse } from "./auth"
+import { categoriesQueryKey } from "./categories"
 export const usersQueryKey = {
   all: ['users'],
 }
@@ -63,6 +64,13 @@ export const useCloseSessionMutation = () => {
         ...oldData,
         session: null,
       }) : oldData);
+
+      client.removeQueries({
+        queryKey: [
+          ...categoriesQueryKey.all,
+        ]
+      })
+
       toast.success('Successfully closed session')
     },
     onError: (error) => {

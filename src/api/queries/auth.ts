@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '@/constants/endpoints'
 import { routes } from '@/constants/routes'
-import { SessionModel, UserModel, WorkspaceMemberModel } from '@/models'
+import { OrganizationModel, UserModel, WorkspaceMemberModel } from '@/models'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -13,8 +13,12 @@ export const authQueryKey = {
 
 export type UserQueryResponse = {
   user: UserModel
-  session: SessionModel | null
-  workspaces: WorkspaceMemberModel[]
+  session: {
+    id: string
+    workspaceId: string
+    memberId: string
+  } | null
+  memberships: (WorkspaceMemberModel & { organization: OrganizationModel })[]
 }
 
 export const useUserQuery = () => {
@@ -88,8 +92,9 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: () => axiosInstance.post(ENDPOINTS.AUTH.LOGOUT),
     onSuccess: () => {
-      client.setQueryData(authQueryKey.me(), null)
       toast.success('Successfully logged out')
+
+      client.clear()
     },
     onError: () => {
       toast.error('Something went wrong, cannot logout')

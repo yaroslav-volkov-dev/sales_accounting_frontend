@@ -8,12 +8,13 @@ export type CreateWorkspaceDto = {
   organizationName: string
 }
 
-export const useCreateWorkspaceMutation = () => {
+export const useCreateWorkspaceMutation = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const client = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CreateWorkspaceDto) => axiosInstance.post(ENDPOINTS.WORKSPACES.CREATE, data),
     onSuccess: () => {
+      onSuccess?.()
       client.invalidateQueries({ queryKey: authQueryKey.me() })
 
       toast.success('Workspace created successfully')
