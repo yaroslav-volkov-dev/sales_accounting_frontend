@@ -10,11 +10,6 @@ const querySchema = z.object({
     .transform((val) => (val ? (Array.isArray(val) ? val : [val]) : []))
     .optional(),
   [ProductsQueryFilterKey.WITHOUT_CATEGORY]: z.boolean().optional(),
-  [ProductsQueryFilterKey.SUPPLIER_IDS]: z
-    .union([z.string(), z.array(z.string())])
-    .transform((val) => (val ? (Array.isArray(val) ? val : [val]) : []))
-    .optional(),
-  [ProductsQueryFilterKey.WITHOUT_SUPPLIER]: z.boolean().optional(),
 })
 
 type ProductsFiltersQueryState = z.infer<typeof querySchema>

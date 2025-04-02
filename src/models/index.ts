@@ -43,11 +43,8 @@ export type WorkspaceMemberModel = {
 }
 
 export type CategoryModel = {
+  id: string
   name: string
-  id: number
-  _count: {
-    product: number
-  }
 }
 
 export type StoreModel = {
@@ -60,7 +57,7 @@ export type StoreModel = {
 }
 
 export type ProductModel = {
-  id: number
+  id: string
   name: string
   price: number
   categoryId: number | null

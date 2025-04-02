@@ -6,7 +6,6 @@ import { OverlayLoader } from '@/components/OverlayLoader/OverlayLoader.js'
 import { Button } from '@/components/ui/button.tsx'
 import { ENDPOINTS } from '@/constants/endpoints.js'
 import { useProductFiltersState } from '@/hooks/use-products-filters.ts'
-import { ProductsModel } from '@/models'
 import { EditProductDialog } from '@/pages/edit-database/components/edit-product-dialog.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
@@ -16,8 +15,20 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useCallback, useMemo } from 'react'
+import { toast } from 'sonner'
 import { AddProductDialog } from '../components/add-product-dialog.tsx'
-const columnHelper = createColumnHelper<ProductsModel>()
+
+type ProductTableRow = {
+  id: string
+  name: string
+  price: number
+  category: {
+    id: string
+    name: string
+  }
+}
+
+const columnHelper = createColumnHelper<ProductTableRow>()
 
 export const ProductsPage = () => {
   const {
@@ -36,15 +47,14 @@ export const ProductsPage = () => {
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [productQueryKey.all] })
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const deleteProduct = useCallback(
-    (product: ProductsModel) => {
-      const { id } = product || {}
-
-      if (!id) return
-
-      deleteProductMutation(id)
+    (productId: string) => {
+      deleteProductMutation(productId)
     },
     [deleteProductMutation]
   )
@@ -59,12 +69,8 @@ export const ProductsPage = () => {
         header: 'Price',
         cell: ({ getValue }) => getValue(),
       }),
-      columnHelper.accessor((originalRow) => originalRow?.Category?.name, {
+      columnHelper.accessor((originalRow) => originalRow?.category?.name, {
         header: 'Category',
-        cell: ({ getValue }) => getValue(),
-      }),
-      columnHelper.accessor((originalRow) => originalRow?.Supplier?.name, {
-        header: 'Supplier',
         cell: ({ getValue }) => getValue(),
       }),
       columnHelper.display({
@@ -74,7 +80,7 @@ export const ProductsPage = () => {
           return (
             <div className="flex gap-4">
               <ConfirmationDialog
-                onConfirm={() => deleteProduct(row.original)}
+                onConfirm={() => deleteProduct(row.original.id)}
                 message={`Do you really want to delete '${row.original?.name || ''}' product?`}
                 trigger={<Button variant="outline">Delete</Button>}
               />
