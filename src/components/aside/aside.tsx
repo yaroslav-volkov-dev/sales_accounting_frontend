@@ -1,5 +1,5 @@
 import { useLogoutMutation, useUserQuery } from '@/api/queries/auth'
-import { useCloseSessionMutation } from '@/api/queries/users'
+import { useCloseSessionMutation } from '@/api/queries/sessions'
 import { Button } from '@/components/ui/button.tsx'
 import { Separator } from '@/components/ui/separator.tsx'
 import { routes } from '@/constants/routes'

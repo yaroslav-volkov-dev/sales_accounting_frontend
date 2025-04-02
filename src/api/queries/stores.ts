@@ -26,10 +26,10 @@ export const useAddStoreMutation = (args: { onSuccess: () => void } | void) => {
     onSuccess: () => {
       onSuccess?.()
       client.invalidateQueries({ queryKey: storesQueryKey.all })
-      notify({ message: 'Store successfully added!' })
+      toast.success('Store successfully added!')
     },
     onError: (error) => {
-      notify({ message: error.message })
+      toast.error(error.message)
     },
   })
 }

@@ -1,5 +1,5 @@
-import { UserQueryResponse, useUserQuery } from "@/api/queries/auth";
-import { useStartSessionMutation } from "@/api/queries/users";
+import { useUserQuery } from "@/api/queries/auth";
+import { useStartSessionMutation } from "@/api/queries/sessions";
 import { useCreateWorkspaceMutation } from "@/api/queries/workspaces";
 import { Loader } from "@/components/loader/loader";
 import { Button } from "@/components/ui/button";
@@ -128,7 +128,7 @@ const AddWorkspaceBlock = () => {
   )
 }
 
-const SelectWorkspaceBlock = ({ workspaces }: { workspaces: UserQueryResponse['memberships'] }) => {
+const SelectWorkspaceBlock = ({ workspaces }: { workspaces: { id: string, name: string }[] }) => {
   const { mutate: startSession, variables } = useStartSessionMutation()
 
   return (
@@ -140,11 +140,11 @@ const SelectWorkspaceBlock = ({ workspaces }: { workspaces: UserQueryResponse['m
       <div className="grid grid-cols-3 gap-4 mt-10">
         {workspaces?.map((memberOrganization) => (
           <Card key={memberOrganization?.id}>
-            <CardHeader className="text-lg font-semibold">{memberOrganization?.organization?.name}</CardHeader>
+            <CardHeader className="text-lg font-semibold">{memberOrganization?.name}</CardHeader>
             <CardContent>
               <Button
-                onClick={() => startSession({ workspaceId: memberOrganization?.organizationId })}
-                isLoading={variables?.workspaceId === memberOrganization?.organizationId}
+                onClick={() => startSession({ workspaceId: memberOrganization?.id })}
+                isLoading={variables?.workspaceId === memberOrganization?.id}
               >
                 Start Session
               </Button>
@@ -167,7 +167,7 @@ export const SelectWorkspacePage = () => {
     )
   }
 
-  const memberOrganizations = userData?.memberships || []
+  const memberOrganizations = userData?.workspaces || []
 
   if (memberOrganizations.length === 0) {
     return (

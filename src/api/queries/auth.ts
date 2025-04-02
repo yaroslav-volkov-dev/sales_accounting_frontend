@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '@/constants/endpoints'
 import { routes } from '@/constants/routes'
-import { OrganizationModel, UserModel, WorkspaceMemberModel } from '@/models'
+import { UserModel } from '@/models'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -12,27 +12,29 @@ export const authQueryKey = {
 }
 
 export type UserQueryResponse = {
-  user: UserModel
-  session: {
-    id: string
-    workspaceId: string
-    memberId: string
-  } | null
-  memberships: (WorkspaceMemberModel & { organization: OrganizationModel })[]
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  workspaces: {
+    id: string;
+    name: string;
+  }[];
+  isSessionActive: boolean;
 }
 
 export const useUserQuery = () => {
-  const queryData = useQuery<UserQueryResponse>({
+  const query = useQuery<UserQueryResponse>({
     queryKey: authQueryKey.me(),
     queryFn: async () => await axiosInstance.get(ENDPOINTS.AUTH.ME),
     retryOnMount: false,
   })
 
   return {
-    ...queryData,
-    userId: queryData?.data?.user?.id || '',
-    isAuth: !!queryData?.data,
-    isSessionActive: !!queryData?.data?.session?.id,
+    ...query,
+    userId: query?.data?.id || '',
+    isAuth: !!query?.data,
+    isSessionActive: !!query?.data?.isSessionActive,
   }
 }
 
